@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+</head>
+
+<body>
+    <h1>Bem Vindo a DUTOTech</h1>
+    <br>
+    <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fbr%2Ffotos%2Foleoduto&psig=AOvVaw1hChYr-DhQ7g96DPMPOGS9&ust=1741346539365000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCOiO38Gr9YsDFQAAAAAdAAAAABAJ"
+        alt="">
+    <h3>Calculadora de Barris</h3>
+    <p>Insira a quantidade de litros de petróleo produzidos em um dia</p>
+    <input type="number" id="ipt_litros">
+    <button onclick="Calcular ()">Calcular quantidade de barris de petróleo</button>
+    <div id="div_exibir"></div>
+    <br>
+    <br>
+    <br>
+    <h3>Calculadora de vazão</h3>
+    <p>Insira a vazão do seu duto(quantos litros de petróleo por segundo passam pelo duto)</p>
+    <input type="number" id="ipt_vazão">
+    <button onclick="Calcular_vazão ()">Calcular quantidade de petróleo obtido em um dia</button>
+    <div id="div_mostrar"></div>
+    <br>
+    <br>
+    <br>
+    <h3>Simulador de vazamento - prejuízo</h3>
+    <p>Insira quanto tempo ficou vazando em segundos</p>
+    <input type="number" id="ipt_tempo">
+    <p>Insira a vazão do vazamento</p>
+    <input type="number" id="ipt_vazamento">
+    <button onclick="Calcular_vazamento ()">Calcular vazamento</button>
+    <div id="div_aparecer"></div>
+    <br>
+    <br>
+    <br>
+    <h4>conversor de minutos - segundos</h4>
+    <p>Insira quantos minutos você deseja</p>
+    <input type="number" id="ipt_minuto">
+    <button onclick="Converter_min ()">Converter minutos</button>
+    <br>
+    <br>
+    <br>
+    <h4>conversor de horas - segundos</h4>
+    <input type="number" id="ipt_horas">
+    <button onclick="Converter_horas ()">Converter horas</button>
+    <div id="div_surgir"></div>
+</body>
+
+</html>
+<script>
+    function Calcular() {
+        var litros = ipt_litros.value;
+        barris = litros / 159;
+        div_exibir.innerHTML = `São produzidos ${barris.toFixed(2)} barris de petróleo em um dia`
+    }
+
+    function Calcular_vazão() {
+        var vazão = ipt_vazão.value;
+        petroleo_dia = vazão * 86.400;
+        div_mostrar.innerHTML = `São Produzidos ${petroleo_dia.toFixed(2)} litros de petróleo por dia na sua plataforma`
+    }
+    function Calcular_vazamento() {
+        var tempo = ipt_tempo.value;
+        var vazamento = ipt_vazamento.value;
+        prejuizo = 69 * (tempo * vazamento)
+        valor_litro = 69
+        div_aparecer.innerHTML = `Houve um prejuizo de ${prejuizo.toFixed(4)}`
+    }
+
+    function Converter_min () {
+           minutos = ipt_minuto.value
+            segundos_min = minutos * 60
+            alert (`${minutos} minutos equivalem a ${segundos_min} segundos`)    }
+
+    function Converter_horas () {
+        horas = ipt_horas.value
+        segundos_hor = horas * 3600
+            alert (`${horas} equivalem a ${segundos_hor} segundos`)
+    }
+</script>
