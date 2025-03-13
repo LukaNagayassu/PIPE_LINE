@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Vazão</title>
+    
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Calculadora de Vazão</h2>
+        <p>Vazão Mensal (litros):</p>
+        <input type="number" id="ipt_vazao" placeholder="Digite a vazão mensal">
+<br>
+        <p>Fluxo Anual Total (litros):</p>
+        <input type="number" id="ipt_fluxo" placeholder="Digite o fluxo anual total">
+<br>
+
+        <p>Preço do barril (R$):</p>
+        <input type="number" id="ipt_preco" placeholder="Digite o preço do barril">
+<br>
+<br>
+
+        <button onclick="calcularPerda()">Calcular</button>
+        <br>
+        <br>
+
+        <div id="output"></div>
+    </div>
+
+    <script>
+        function calcularPerda() {
+            var vazao = Number(ipt_vazao.value) * 12; // Anual
+            var fluxo = Number(ipt_fluxo.value);
+            var preco = Number(ipt_preco.value);
+            
+            var porcentagem = ((vazao / fluxo) * 100).toFixed(2);
+            var perdaFinanceira = (vazao * preco).toFixed(2);
+            var economia = (perdaFinanceira * 0.15).toFixed(2);
+            
+            output.innerHTML = `
+                Sua empresa tem um fluxo anual de <b>${fluxo.toLocaleString()} L</b> e uma vazão de <b>${vazao.toLocaleString()} L</b>.<br>
+                Isso representa uma perda de <b>R$ ${perdaFinanceira}</b> anualmente.<br>
+                Essa vazão equivale a <b>${porcentagem}%</b> do fluxo total.<br>
+                Nosso sistema pode reduzir essa perda em até <b>R$ ${economia}</b>!
+            `;
+        }
+    </script>
+</body>
+</html>
