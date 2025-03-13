@@ -8,7 +8,7 @@ USE ProjetoPi;
 CREATE TABLE cadastro_empresas (
     id INT AUTO_INCREMENT PRIMARY KEY,  -- ID único para cada empresa
     nome VARCHAR(255) NOT NULL,         -- Nome da empresa
-    cnpj VARCHAR(18) NOT NULL,         -- CNPJ da empresa
+    cnpj CHAR(18) NOT NULL,         -- CNPJ da empresa
     endereco VARCHAR(255),              -- Endereço da empresa
     cidade VARCHAR(100),               -- Cidade da empresa
     estado VARCHAR(50),                -- Estado da empresa
@@ -33,7 +33,7 @@ CREATE TABLE funcionarios (
     nome VARCHAR(255) NOT NULL,            -- Nome do funcionário
     cargo VARCHAR(100),                    -- Cargo do funcionário
     data_nascimento DATE,                  -- Data de nascimento do funcionário
-    cpf VARCHAR(14) NOT NULL,              -- CPF do funcionário
+    cpf CHAR(14) NOT NULL,              -- CPF do funcionário
     email VARCHAR(100),                    -- E-mail de contato
     telefone VARCHAR(15),                  -- Telefone de contato
     empresa_id INT,                        -- Relacionamento com a empresa
@@ -51,22 +51,38 @@ INSERT INTO funcionarios (nome, cargo, data_nascimento, cpf, email, telefone, em
 ('Pedro Almeida', 'Técnico de Manutenção', '1987-06-25', '567.890.123-44', 'pedro.almeida@empresa.com', '(11) 94567-8901', 5, 4, '2024-03-15');
 
 
+
 CREATE TABLE dutos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,        -- Nome do duto
     comprimento DECIMAL(10, 2),        -- Comprimento do duto em quilômetros
     diamentro DECIMAL(5, 2),           -- Diâmetro do duto
-    material VARCHAR(100),             -- Material do duto (ex: aço, PVC, etc.)
-    localizacao_inicio VARCHAR(255),   -- Local de início do duto
-    localizacao_fim VARCHAR(255),      -- Local de término do duto
-    data_instalacao DATE               -- Data de instalação do duto
+    data_instalacao   DATE               -- Data de instalação do duto
 );
 
-INSERT INTO dutos (nome, comprimento, diamentro, material, localizacao_inicio, localizacao_fim, data_instalacao) VALUES
-('Duto Petrobras SP-RJ', 300.50, 1.80, 'Aço carbono', 'São Paulo', 'Rio de Janeiro', '2020-06-01'),
-('Duto Raízen SP-MG', 150.75, 1.60, 'Aço inoxidável', 'São Paulo', 'Minas Gerais', '2021-07-15'),
-('Duto PRIO RJ-ES', 200.00, 1.90, 'Aço carbono', 'Rio de Janeiro', 'Espírito Santo', '2022-03-22'),
-('Duto Shell BR Norte', 400.25, 2.10, 'Aço carbono', 'Amazonas', 'Pará', '2023-01-10'),
-('Duto Eneva SP-BA', 500.00, 2.30, 'PVC', 'São Paulo', 'Bahia', '2022-12-05');
+INSERT INTO dutos (nome, comprimento, diamentro, data_instalacao) VALUES
+('Duto Petrobras SP-RJ', 300.50, 1.80, '2020-06-01'),
+('Duto Raízen SP-MG', 150.75, 1.60, '2021-07-15'),
+('Duto PRIO RJ-ES', 200.00, 1.90, '2022-03-22'),
+('Duto Shell BR Norte', 400.25, 2.10,'2023-01-10'),
+('Duto Eneva SP-BA', 500.00, 2.30, '2022-12-05');
+
+CREATE TABLE sensores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    numeracao_arduino    int,
+    localizacao_inicio INT,
+    localizacao_fim INT,
+    FOREIGN KEY (localizacao_inicio) REFERENCES dutos(id),
+    FOREIGN KEY (localizacao_fim) REFERENCES dutos(id)
+);
+
+INSERT INTO sensores (numeracao_arduino, localizacao_inicio, localizacao_fim) VALUES
+(1001, 1, 2),
+(1002, 2, 3),
+(1003, 3, 4),
+(1004, 4, 5),
+(1005, 1, 5);
+
+
 
 
