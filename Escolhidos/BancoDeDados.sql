@@ -27,55 +27,28 @@ INSERT INTO cadastro_empresas (nome, cnpj, endereco, cidade, estado, telefone, e
 ('BP Energy', '77.888.999/0001-55', 'Alameda Santos, 200', 'São Paulo', 'SP', '(11) 4004-7070', 'clientes@bpenergy.com.br', '2024-03-12'),
 ('Shell Brasil', '11.222.333/0001-44', 'Praia do Flamengo, 200', 'Rio de Janeiro', 'RJ', '(21) 3804-9000', 'suporte@shell.com.br', '2024-03-12');
 
-
--- Criação da tabela funcionarios
-CREATE TABLE funcionarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,    -- ID único para cada funcionário
-    nome VARCHAR(255) NOT NULL,            -- Nome do funcionário
-    cargo VARCHAR(100),                    -- Cargo do funcionário
-    data_nascimento DATE,                  -- Data de nascimento do funcionário
-    cpf CHAR(14) NOT NULL,              -- CPF do funcionário
-    email VARCHAR(100),                    -- E-mail de contato
-    telefone VARCHAR(15),                  -- Telefone de contato
-    empresa_id INT,                        -- Relacionamento com a empresa
-    representante_id INT,                  -- Representante associado ao funcionário (ou seja, o superior)
-    data_admissao DATE,                    -- Data de admissão
-    FOREIGN KEY (empresa_id) REFERENCES cadastro_empresas(id),   -- Chave estrangeira para a empresa
-    FOREIGN KEY (representante_id) REFERENCES funcionarios(id)    -- Chave estrangeira para o representante
+drop database ProjetoPi;
+-- Criação da tabela Representantes
+create table Representante(
+id  		int auto_increment primary key,
+nome 		VARCHAR(255) NOT NULL,
+cpf 		char(14) Not null,
+telefone 	VARCHAR(15)
 );
+-- inserir dados na table Representantes
+INSERT INTO Representante (nome, cpf, telefone) VALUES
+('João Silva', '123.456.789-00', '(11) 99999-8888'),
+('Maria Oliveira', '987.654.321-00', '(21) 98888-7777'),
+('Carlos Santos', '456.789.123-00', '(11) 95555-6666'),
+('Ana Souza', '321.654.987-00', '(21) 94444-5555'),
+('Pedro Lima', '654.987.321-00', '(11) 93333-4444');
 
-INSERT INTO funcionarios (nome, cargo, data_nascimento, cpf, email, telefone, empresa_id, representante_id, data_admissao) VALUES
-('João Silva', 'Engenheiro de Dutos', '1985-07-15', '123.456.789-00', 'joao.silva@empresa.com', '(11) 98765-4321', 1, NULL, '2024-01-10'),
-('Maria Oliveira', 'Técnica de Monitoramento', '1990-09-30', '234.567.890-11', 'maria.oliveira@empresa.com', '(21) 91234-5678', 2, 1, '2024-02-01'),
-('Carlos Souza', 'Supervisor de Equipe', '1980-03-20', '345.678.901-22', 'carlos.souza@empresa.com', '(11) 92345-6789', 3, 2, '2024-02-20'),
-('Ana Costa', 'Analista de Sistema', '1995-12-10', '456.789.012-33', 'ana.costa@empresa.com', '(21) 93456-7890', 4, 3, '2024-03-05'),
-('Pedro Almeida', 'Técnico de Manutenção', '1987-06-25', '567.890.123-44', 'pedro.almeida@empresa.com', '(11) 94567-8901', 5, 4, '2024-03-15');
-
-
-CREATE TABLE dutos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,        -- Nome do duto
-    comprimento DECIMAL(10, 2),        -- Comprimento do duto em quilômetros
-    diametro DECIMAL(5, 2),           -- Diâmetro do duto
-    material VARCHAR(100),             -- Material do duto
-    data_instalacao DATE               -- Data de instalação do duto
-);
-
-INSERT INTO dutos (nome, comprimento, diamentro, material, data_instalacao) VALUES
-('Duto Petrobras SP-RJ', 300.50, 1.80, 'Aço carbono', '2020-06-01'),
-('Duto Raízen SP-MG', 150.75, 1.60, 'Aço inoxidável', '2021-07-15'),
-('Duto PRIO RJ-ES', 200.00, 1.90, 'Aço carbono',  '2022-03-22'),
-('Duto Shell BR Norte', 400.25, 2.10, 'Aço carbono', '2023-01-10'),
-('Duto Eneva SP-BA', 500.00, 2.30, 'PVC', '2022-12-05');
-
+-- Criação da tabela sensores
 CREATE TABLE sensores (
     id INT AUTO_INCREMENT PRIMARY KEY,
     numeracao_arduino    int,
     localizacao_inicio INT,
-    localizacao_fim INT,
-    FOREIGN KEY (localizacao_inicio) REFERENCES dutos(id),
-    FOREIGN KEY (localizacao_fim) REFERENCES dutos(id)
-);
+    localizacao_fim INT);
 
 INSERT INTO sensores (numeracao_arduino, localizacao_inicio, localizacao_fim) VALUES
 (1001, 1, 2),
@@ -84,4 +57,24 @@ INSERT INTO sensores (numeracao_arduino, localizacao_inicio, localizacao_fim) VA
 (1004, 4, 5),
 (1005, 1, 5);
 
+-- Criação da tabela dutos
+CREATE TABLE dutos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,        -- Nome do duto
+    comprimento DECIMAL(10, 2),        -- Comprimento do duto em quilômetros
+    diametro DECIMAL(5, 2),            -- Diâmetro do duto
+    material VARCHAR(100),             -- Material do duto
+    data_instalacao DATE,              -- Data de instalação do duto
+    Localizacao_inicio INT,
+    Localizacao_fim INT
+);
 
+
+-- Inserção de dados na tabela dutos
+INSERT INTO dutos (nome, comprimento, diametro, material, data_instalacao, Localizacao_inicio, Localizacao_fim) VALUES
+('Duto Petrobras SP-RJ', 300.50, 1.80, 'Aço carbono', '2020-06-01', 1, 2),
+('Duto Raízen SP-MG', 150.75, 1.60, 'Aço inoxidável', '2021-07-15', 2, 3),
+('Duto PRIO RJ-ES', 200.00, 1.90, 'Aço carbono', '2022-03-22', 3, 4),
+('Duto Shell BR Norte', 400.25, 2.10, 'Aço carbono', '2023-01-10', 4, 5);
+
+ 
