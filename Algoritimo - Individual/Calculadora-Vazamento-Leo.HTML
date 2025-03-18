@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline Consultancy</title>
+</head>
+
+<body>
+    <h1>Bem Vindo a Pipeline Consultancy</h1>
+    <h3>Simulador de vazamento - prejuízo</h3>
+    <p>Insira quanto tempo ficou vazando em segundos</p>
+    <input type="number" id="ipt_tempo">
+    <p>Insira a vazão do vazamento</p>
+    <input type="number" id="ipt_vazamento">
+    <button onclick="Calcular_vazamento ()">Calcular vazamento</button>
+    <div id="div_aparecer"></div>
+    <br>
+    <br>
+    <br>
+    <h4>Conversores de tempo</h4>
+    <br>
+    <h5>conversor de minutos - segundos</h5>
+    <p>Insira a quantidade de minutos</p>
+    <input type="number" id="ipt_minuto">
+    <button onclick="Converter_min ()">Converter minutos</button>
+    <br>
+    <br>
+    <br>
+    <h5>conversor de horas - segundos</h5>
+    <p>Insira a qauntidade de horas</p>
+    <input type="number" id="ipt_horas">
+    <button onclick="Converter_horas ()">Converter horas</button>
+    <div id="div_surgir"></div>
+    <br>
+    <br>
+    <br>
+    <h5>conversor de dias - segundos</h5>
+    <p>Insira a quantidade de dias</p>
+    <input type="number" id="ipt_dias">
+    <button onclick="Converter_dias ()">Converter dias</button>
+    <br>
+    <br>
+</body>
+</html>
+<script>
+    function Calcular_vazamento() {
+        var tempo = ipt_tempo.value;
+        var vazamento = ipt_vazamento.value;
+        prejuizo = 2.5 * (tempo * vazamento)
+        valor_litro = 2.5
+        div_aparecer.innerHTML = `Houve um prejuizo de ${prejuizo.toFixed(2)}`
+    }
+    function Converter_min() {
+        minutos = ipt_minuto.value
+        segundos_min = minutos * 60
+        alert(`${minutos} minutos equivalem a ${segundos_min} segundos`)
+    }
+
+    function Converter_horas() {
+        horas = ipt_horas.value
+        segundos_hor = horas * 3600
+        alert(`${horas} horas equivalem a ${segundos_hor} segundos`)
+    }
+    function Converter_dias() {
+        dias = ipt_dias.value
+        horas_dias = dias * 86400
+        alert(`${dias} dias equivalem a ${horas_dias} segundos`)
+    }
+</script>
