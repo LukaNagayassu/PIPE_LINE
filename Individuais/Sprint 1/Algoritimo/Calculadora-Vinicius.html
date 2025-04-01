@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="calculadora.css">
+    <title>Calculadora Financeira</title>
+</head>
+<body>
+
+    <h3>Qual o nome da sua empresa?</h3>
+    <input type="text" id="ipt_nomeEmpresa">
+
+    <h3>Qual é o CNPJ da empresa</h3>
+    <input type="text" id="ipt_cnpj" maxlength="18" placeholder="00.000.000/0000-00" >
+
+
+    <h3>Qual é o nome do representante da empresa</h3>
+    <input type="text" id="ipt_nomeRepresentante">
+
+    <h3>Indique a quantidade de Petróleo perdida anualmente (Em Litros)</h3>
+    <input type="number" id="ipt_quantidadePerdidaAnualmente">
+
+    <h3>Selecione o método no qual há uma maior perda de Petróleo</h3>
+    <select id="ipt_perdaFrequente">
+
+        <option value="Vazamento">Vazamento</option>
+        <option value="Entupimento">Entupimento</option>
+        <option value="Ambos">Ambos</option>
+    </select>
+    <br>
+    <br>
+
+    <button onclick="Calcular()"> Calcular Vantagens </button>
+
+    <div id="exibir"></div>
+    
+</body>
+</html>
+
+
+<script>
+
+function Calcular(){
+
+    var perdaAnualPetroleo = Number(ipt_quantidadePerdidaAnualmente.value)
+    var tipoPerdaFrequente = ipt_perdaFrequente.value
+    var nomeEmpresa = ipt_nomeEmpresa.value
+    var cnpjEmpresa = Number(ipt_cnpj.value)
+    var nomeRepresentante = ipt_nomeRepresentante.value
+    var calcularPerda = perdaAnualPetroleo
+    var beneficioVazamento = calcularPerda *= 0.90
+    var beneficioEntupimento = calcularPerda *= 0.70
+    var valorPetroleo = calcularPerda * 406
+    var valorPetroleoPorcentagem = (valorPetroleo) 
+
+
+    if(tipoPerdaFrequente == "Vazamento"){
+        var porcentagem = 10
+        var total = beneficioVazamento
+
+        } else if (tipoPerdaFrequente == "Entupimento"){
+            var porcentagem = 30
+            var total = beneficioEntupimento
+
+            } else if (tipoPerdaFrequente == "Ambos"){
+                var porcentagem = (((beneficioEntupimento + beneficioVazamento)/2) /perdaAnualPetroleo) *10
+                var beneficioAmbos = (beneficioEntupimento + beneficioVazamento)/2
+                var total = beneficioAmbos
+    }
+
+    exibir.innerHTML = `A empresa ${nomeEmpresa}, de cnpj ${cnpjEmpresa} representada por ${nomeRepresentante} 
+    têm uma perda de ${perdaAnualPetroleo} Litros de petróleo por ano, porém, 
+    ao utilizar do nosso sensor essa perda passará a diminuir em cerca de ${porcentagem.toFixed(2)}%,
+    assim, igualando o valor total a ${total}`
+}
+
+</script>

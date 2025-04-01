@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline Consultancy</title>
+</head>
+
+<body>
+    <h1>Bem Vindo a Pipeline Consultancy</h1>
+    <br>
+    <p> O principal propósito dessas calculadoras será calcular o prejuizo caso ocorra um vazamento, <br>
+        tendo ainda meios para que possa ser calculado outras medidas a fim de facilitar o controle do usuário com a sua
+        empresa.</p>
+    <h3>Calculadora de vazão</h3>
+    <p>insira a quantidade de petróleo obtido em um dia</p>
+    <input type="number" id="ipt_vazão">
+    <p>(Vale ressaltar que a vazão do duto é medida em segundos)</p>
+    <button onclick="Calcular_vazão ()">Calcular vazão</button>
+    <div id="div_mostrar"></div>
+    <br>
+    <br>
+    <br>
+    <h4>Mini calculadora</h4>
+    <p>Insira a quantidade de litros de petróleo e tempo respectivamente (em dias)
+    <br>
+    <p>Exemplo: obtenho 20000 litros de petróleo em 20 dias(divida 20000 por 20).<br>
+    Adote o mês como se ele tivesse 30 dias e o ano 365 dias</p>
+    <input type="number" id="ipt_numb1">
+    <input type="number" id="ipt_numb2">
+    <button onclick="Calculadora ()">Dividir</button>
+    <div id="div_exibir"></div>
+</body>
+
+</html>
+<script>
+    function Calcular_vazão() {
+        var vazão = ipt_vazão.value;
+        petroleo_dia = vazão / 86400;
+        div_mostrar.innerHTML = `A sua vazão é de ${petroleo_dia.toFixed(4)} litros de petróleo por sergundo`
+    }
+
+    function Calculadora() {
+        var numero1 = ipt_numb1.value
+        var numero2 = ipt_numb2.value
+        var resultado = numero1 / numero2
+
+        div_exibir.innerHTML = ` A quantidade de petróleo é de ${resultado.toFixed(2)}`
+
+    }
+</script>

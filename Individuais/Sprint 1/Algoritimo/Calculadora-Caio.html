@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Sensores de Petróleo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 300px;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #div_calc {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculadora de Sensores de Petróleo</h1>
+    <p>Insira o Nome/CNPJ da sua empresa:</p>
+    <input type="text" id="ipt_nome" placeholder="Nome ou CNPJ">
+    
+    <p>Insira a extensão dos dutos de petróleo (em Km):</p>
+    <input type="number" id="ipt_distancia" placeholder="Quilômetros">
+    
+    <p>Insira o total de petróleo perdido por mês (em Litros):</p>
+    <input type="number" id="ipt_prejuizo" placeholder="Litros">
+    
+    <button onclick="calcular()">Calcular</button>
+    
+    <div id="div_calc"></div>
+
+    <script>
+      function calcular(){
+        var nome = ipt_nome.value
+        var distancia = Number(ipt_distancia.value)
+        var prejuizo = Number(ipt_prejuizo.value)
+        
+        var valorPrejuizoReduzido = Math.round(((prejuizo / 160) * 70 * 100) / 100); //como fazer para arrendodar o valor
+
+        div_calc.innerHTML = `Olá, ${nome} <br> 
+        o número de sensores que serão utilizados no processo é de 2.<br>
+        Com esses sensores o prejuizo sera reduzido, <br>
+        assim evitando um prejuizo em aproximadamente $${valorPrejuizoReduzido*12} anuals`
+    }
+    </script>
+</body>
+</html>

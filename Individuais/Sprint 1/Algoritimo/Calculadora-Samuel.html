@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Petróleo</title>
+</head>
+<body>
+    <h1>Bem-vindo à Calculadora de Petróleo</h1>
+    <p>Esta calculadora permite estimar a quantidade de barris de petróleo com base na quantidade de litros e calcular o prejuízo financeiro causado por vazamentos. 
+    <br>Basta inserir a quantidade de petróleo, o custo por litro e a quantidade vazada para ver o impacto financeiro de vazamentos.</p>
+
+    <h3>Calculadora de Barris de Petróleo</h3>
+    <p>Insira a quantidade de litros de petróleo que você possui.</p>
+    <input type="number" id="ipt_litros" placeholder="Quantidade de litros">
+    <p>"Um barril de petróleo equivale a aproximadamente 159 litros." </p>
+
+    <p>Digite o Custo por Litro: </p>
+    <input type="number" id="ipt_custo_por_litro" placeholder="ex: 5">
+
+    <h3>Calculadora de Prejuízo por Vazamento</h3>
+    <p>Insira a quantidade de litros vazados.</p>
+    <input type="number" id="ipt_litros_vazamento" placeholder="Litros vazados">
+
+    <p>Digite o número de vazamentos no ano: </p>
+    <input type="number" id="ipt_num_vazamentos_ano" placeholder="Número de vazamentos no ano">
+
+    <button onclick="Calcular()">Calcular o Seu Prejuízo</button>
+    <div id="div_resultado"></div>
+</body>
+</html>
+
+<script>
+    function Calcular(){
+        var litros = Number(ipt_litros.value);
+        var litrosVazados = Number(ipt_litros_vazamento.value);
+        var barril = litros / 159; // Convertendo para barris
+
+        // Exibir o resultado de barris de petróleo
+        div_resultado.innerHTML = "Você tem " + barril.toFixed(2) + " barris de petróleo.";
+
+        // Supondo que o custo por litro seja inserido pelo usuário
+        var precoPorLitro = Number(ipt_custo_por_litro.value)
+        var prejuizo = litrosVazados * precoPorLitro;
+
+        // Exibir o resultado do prejuízo por vazamento
+        div_resultado.innerHTML += "<br>O prejuízo por vazamento é de R$ " + prejuizo.toFixed(2);
+
+        // Calcular o prejuízo anual com base no número de vazamentos
+        var numVazamentosAno = Number(ipt_num_vazamentos_ano.value);
+        var prejuizoAnual = prejuizo * numVazamentosAno;
+
+        // Exibir o prejuízo anual
+        div_resultado.innerHTML += "<br>O prejuízo anual com vazamentos é de R$ " + prejuizoAnual.toFixed(2);
+    }
+</script>
