@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline Consultancy | Petroquímica</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="nav-container">
+                <div class="logo">
+                    <a href="home.html">
+                        <img src="./img/logo.png" alt="Pipeline Consultancy">
+                    </a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="/sobre.html">Sobre Nós</a></li>
+                    <li><a href="petroquimica.html">Petroquímica</a></li>
+                    <li><a href="/calculadora.html">Orçamento</a></li>
+                </ul>
+                <a href="login.html" class="btn-entrar">Entrar ></a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="villain">
+        <div class="villain-content">
+            <h1>Petroquímica</h1>
+            <p>Entenda um pouco sobre o Petróleo e como funciona o seu mercado</p>
+            <a href="#petroquimica-info" id="scroll-btn" class="btn-saiba-mais">Saiba Mais</a>
+        </div>
+    </section>
+
+    <section id="petroquimica-info" class="petroquimica-info">
+        <div class="text-container">
+            <h2>O que é a Petroquímica?</h2>
+            <p>
+                A <strong>petroquímica</strong> é o ramo da <strong>química</strong> que estuda e processa os derivados do 
+                <strong>petróleo</strong> e do gás natural para a produção de uma ampla variedade de produtos essenciais. 
+                Através de processos como a destilação, o craqueamento e a polimerização, a indústria petroquímica transforma 
+                matérias-primas em insumos que estão presentes no nosso dia a dia.
+            </p>
+        </div>
+        <div class="image-container">
+            <img src="./img/barril.png" alt="Barril de petróleo">
+        </div>
+    </section>
+    
+    
+
+</body>
+</html>
+
+<script>
+    // Armazena a posição anterior da rolagem
+    var lastScrollTop = 0;
+    const header = document.querySelector('header');
+
+    // Função para ocultar ou mostrar o cabeçalho com base no movimento de rolagem
+    window.addEventListener('scroll', function () {
+        var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (currentScroll > lastScrollTop) {
+            // Rolando para baixo, esconde o cabeçalho
+            header.style.top = "-100px"; // Ajuste o valor conforme necessário para o tamanho do seu cabeçalho
+        } else {
+            // Rolando para cima, mostra o cabeçalho
+            header.style.top = "0";
+        }
+
+        // Atualiza a posição anterior da rolagem
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    });
+</script>
+

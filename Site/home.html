@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pipeline Consultancy</title>
+    <title>Pipeline Consultancy | Home</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -12,13 +12,17 @@
     <header>
         <nav>
             <div class="nav-container">
-                <div class="logo"><img src="logo.png" alt=""></div>
+                <div class="logo">
+                    <a href="home.html">
+                        <img src="./img/logo.png" alt="">
+                    </a>
+                </div>
                 <ul class="nav-links">
-                    <li><a href="#">Sobre Nós</a></li>
-                    <li><a href="#">Petroquímica</a></li>
-                    <li><a href="#">Orçamento</a></li>
+                    <li><a href="/sobre.html">Sobre Nós</a></li>
+                    <li><a href="petroquimica.html">Petroquímica</a></li>
+                    <li><a href="/calculadora.html">Orçamento</a></li>
                 </ul>
-                <a href="#" class="btn-entrar">Entrar ></a>
+                <a href="login.html" class="btn-entrar">Entrar ></a>
             </div>
         </nav>
     </header>
@@ -31,53 +35,85 @@
             <button class="btn-mais">Saiba Mais</button>
         </div>
         <div class="wave-container">
-            <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
-                <path fill="#222" fill-opacity="1"
-                    d="M0,160L60,149.3C120,139,240,117,360,128C480,139,600,181,720,186.7C840,192,960,160,1080,138.7C1200,117,1320,107,1380,101.3L1440,96L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z">
-                </path>
-            </svg>
+            <img src="./img/wave.svg" style="width: 100%;" alt="">
         </div>
     </section>
 
+    <div class="container">
+        <section class="after-hero">
+            <h2>PipeLine</h2>
+            <p>Realize o monitoramento de suas tubulações de petróleo e diminua suas perdas e vazamentos.</p>
+            <div class="cards">
+                <div class="card">
+                    <h3>DashBoard</h3>
+                    <p>Um ambiente para o monitoramento dos dados de cada estação.</p>
+                    <img class="img1" src="./img/icon3.png" alt="">
+                </div>
+                <div class="card">
+                    <h3>Sensores</h3>
+                    <p>Responsáveis pela coleta dos dados de cada tubulação.</p>
+                    <img class="img2" src="./img/icon1.png" alt="">
+                </div>
+                <div class="card">
+                    <h3>Eficiência de Tubulações</h3>
+                    <p>Com as estatísticas se pode observar a eficiência e possíveis gargalos.</p>
+                    <img class="img3" src="./img/icon2.png" alt="">
+                </div>
+            </div>
+        </section>
+        
+            <div class="canos-container">
+                <img src="./img/canos.png" alt="Canos">
+            </div>
+    
+        <section class="before-hero">
+            <p>Diminua os vazamentos e <b>aumente</b> seus <b>lucros</b></p>
+            <div class="cards">
+                <div class="card2">
+                    <h3>Encontre a raiz do problema</h3>
+                    <p>Muitos medicamentos possuem componentes petroquímicos em sua composição.</p>
+                </div>
+                <div class="card2">
+                    <h3>Tome a decisão correta</h3>
+                    <p>Muitos medicamentos possuem componentes petroquímicos em sua composição.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    
 
-    <section class="after-hero">
-        <h2>PipeLine</h2>
-        <p>Realize o monitoramento de suas tubulações de petróleo e diminua suas perdas e vazamentos.</p>
-        <div class="cards">
-            <div class="card">
-                <h3>DashBoard</h3>
-                <p>Um ambiente para o monitoramento dos dados de cada estação.</p>
-                <img class="img1" src="icon3.png" alt="">
+    <div class="sobrePetro">
+        <div class="content">
+            <div class="text">
+                <p>Conheça mais sobre a</p>
+                <h2>Petróquimica</h2>
             </div>
-            <div class="card">
-                <h3>Sensores</h3>
-                <p>Responsáveis pela coleta dos dados de cada tubulação.</p>
-                <img class="img2" src="icon1.png" alt="">
-            </div>
-            <div class="card">
-                <h3>Eficiência de Tubulações</h3>
-                <p>Com as estatísticas se pode observar a eficiência e possíveis gargalos.</p>
-                <img class="img3" src="icon2.png" alt="">
-            </div>
+            <a href="petroquimica.html" class="btn">Saiba mais</a>
         </div>
-    </section>
-
-    <section class="after-hero">
-        <p>Realize o monitoramento de suas tubulações de petróleo e diminua suas perdas e vazamentos.</p>
-        <div class="cards"> 
-            <div class="card2">
-                <h3>Encontre a raiz do problema</h3>
-                <p>Muitos medicamentos possuem componentes petroquímicos em sua composição.</p>
-            </div>
-            <div class="card2">
-                <h3>Tome a decisão correta</h3>
-                <p>Muitos medicamentos possuem componentes petroquímicos em sua composição.</p>
-            </div>
-        </div>
-    </section>
-
-
-
+    </div>
+    
 </body>
 
 </html>
+
+<script>
+    // Armazena a posição anterior da rolagem
+    var lastScrollTop = 0;
+    const header = document.querySelector('header');
+
+    // Função para ocultar ou mostrar o cabeçalho com base no movimento de rolagem
+    window.addEventListener('scroll', function () {
+        var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (currentScroll > lastScrollTop) {
+            // Rolando para baixo, esconde o cabeçalho
+            header.style.top = "-100px"; // Ajuste o valor conforme necessário para o tamanho do seu cabeçalho
+        } else {
+            // Rolando para cima, mostra o cabeçalho
+            header.style.top = "0";
+        }
+
+        // Atualiza a posição anterior da rolagem
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    });
+</script>

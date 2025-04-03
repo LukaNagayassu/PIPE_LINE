@@ -11,7 +11,7 @@ body {
 }
 
 header {
-    background: #0000007c;
+    background: #00000054;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -21,11 +21,12 @@ header {
     top: 0;
     z-index: 1000;
     font-family: "Poppins";
+    transition: top 0.5s ease-in-out;
 }
 
 .logo {
-    margin-left: -2vw;
-    margin-top: -3.5vh;
+    margin-left: -1.5vw;
+    margin-top: -2.5vh;
     height: 3vh;
     width: 6vh;
 }
@@ -46,7 +47,7 @@ header {
     gap: 20px;
     margin: 0;
     padding: 0;
-    margin-left: 63vw;
+    margin-left: 73vw;
 }
 
 .nav-links li {
@@ -67,6 +68,14 @@ header {
     text-decoration: none;
     border-radius: 5px;
     font-size: 1rem;
+    box-shadow: 0px 0px 15px rgba(246, 197, 0, 0.452); 
+    transition: all 0.4s ease-in-out;
+}
+
+.btn-entrar:hover{
+    box-shadow: 0px 0px 25px rgba(246, 197, 0, 0.8); 
+    background: yellow;
+    color: black;
 }
 
 .hero {
@@ -78,7 +87,7 @@ header {
     justify-content: center;
     align-items: center;
     text-align: center;
-    background: url('backgroundHomePage.png') no-repeat center center/cover;
+    background: url('./img/backgroundHomePage.png') no-repeat center center/cover;
 }
 
 
@@ -109,33 +118,60 @@ h1 {
     color: black;
     font-size: 1.2rem;
     cursor: pointer;
+    font-family: "Epilogue";
+    transition: all 0.4s ease-in-out;
 }
 
-.wave-container{
+.btn-mais:hover{
+    color: white;
+    border: solid white 2px;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.wave-container {
     height: 5vh;
     width: 100%;
 }
 
-.after-hero {
+.container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.after-hero,
+.before-hero {                                                                                                                                                                                                                                                                                                                                                                                                                                   
     text-align: center;
     padding: 50px 20px;
-    background-color: #222;
+    background-color: #161616;
     height: 50vh;
     justify-content: center;
     align-items: center;
     display: flex;
     flex-direction: column;
+    font-family: "Poppins";
+    position: relative;
+    z-index: 2;
 }
 
-.after-hero h2 {
-    font-size: 2rem;
+.after-hero h2,
+.before-hero h2 {
+    font-size: 3rem;
     font-weight: bold;
 }
 
 .after-hero p {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-    width: 40%;
+    font-size: 1.7rem;
+    margin-top: -3vh;
+    margin-bottom: 6vh;
+    width: 50%;
+}
+
+.before-hero p {
+    font-size: 2.5rem;
+    margin-top: -3vh;
+    margin-bottom: 6vh;
+    width: 60%;
 }
 
 .cards {
@@ -145,60 +181,276 @@ h1 {
 }
 
 .card {
-    background: #333;
+    display: flex;
+    flex-direction: column;
+    background: #33333300;
     padding: 20px;
     border-radius: 10px;
-    width: 25vw;
+    border: solid white 2px;
+    width: 23vw;
     height: 21vh;
     text-align: left;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.315);
+    transition: all 0.4s ease-in-out; 
+    margin-bottom: 4vh;
 }
 
-.card2 {
-    background: #333;
-    padding: 20px;
-    border-radius: 10px;
-    width: 25vw;
-    height: 21vh;
-    text-align: left;
+.card:hover {
+    width: 24vw; 
+    height: 22vh; 
+    box-shadow: 0px 0px 25px rgba(255, 255, 255, 0.712); 
+    transform: scale(1.05); 
 }
+
 
 .card h3 {
-    font-size: 1.3rem;
-    margin-bottom: 10px;
-    width: 22vw;
-}
-
-.card2 h3 {
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     margin-bottom: 10px;
     width: 22vw;
 }
 
 .card p {
-    font-size: 1rem;
+    font-size: 1.2rem;
+    margin-top: 1.5vh;
     color: #ccc;
+    width: 19vw;
+}
+
+.card .img1,
+.card .img2,
+.card .img3 {
+    align-self: flex-end;
+}
+
+.card .img1 {
+    height: 10vh;
+    margin-top: -9vh;
+}
+
+.card .img2 {
+    height: 12.5vh;
+    margin-top: -9vh;
+    margin-right: -0.2vw;
+}
+
+.card .img3 {
+    height: 5vh;
+    margin-top: -8vh;
+    margin-right: 0.5vw;
+    width: 2.5vw;
+}
+
+.card2 {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
     width: 21vw;
+    height: 23vh;
+    text-align: left;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.315);
+    transition: all 0.4s ease-in-out; /* Suaviza todas as mudanças */
+}
+
+.card2:hover {
+    width: 21.5vw; /* Aumenta a largura */
+    height: 23.5vh; /* Aumenta a altura */
+    box-shadow: 0px 0px 25px rgba(255, 255, 255, 0.712); 
+    transform: scale(1.05); /* Suaviza o crescimento */
+}
+
+
+.card2 h3 {
+    font-size: 1.6rem;
+    width: 22vw;
+    color: black;
 }
 
 .card2 p {
-    font-size: 1rem;
-    color: #ccc;
-    width: 21vw;
+    font-size: 1.2rem;
+    margin-top: 0vh;
+    color: black;
+    width: 20vw;
 }
 
-.card .img1{
-    margin-left: 21.5vw;
-    margin-top: -7vh;
+.canos-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    z-index: 999;
 }
 
-.card .img2{
-    margin-left: 21.5vw;
-    margin-top: -7vh;
+.canos-container img {
+    margin-top: 45vh;
+    width: 10vw;
+    height: 100%;
+    opacity: 0.8;
 }
 
-.card .img3{
-    margin-left: 21.5vw;
-    margin-top: -22vh;
+
+.sobrePetro {
+    background: url('./img/petroHome.png') no-repeat center center/cover;
+    height: 50vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
 }
+
+.sobrePetro::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.233); 
+}
+
+.sobrePetro .content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    margin-left: 15vw;
+}
+
+.text {
+    color: white;
+}
+
+.text p {
+    font-size: 1.5rem;
+    margin-bottom: -2vh;
+    margin-top: 5.5vh;
+}
+
+.text h2 {
+    font-size: 3.3rem;
+    font-weight: bold;
+}
+
+.sobrePetro .content .btn {
+    padding: 10px 20px;
+    border: 2px solid white;
+    color: white;
+    font-size: 1.2rem;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s;
+    margin-right: -5vw;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.445);
+    transition: all 0.4s ease-in-out;
+}
+
+.sobrePetro .content  .btn:hover {
+    background: white;
+    color: black;
+}
+
+.villain {
+    background: url('./img/backgroundPetro.png') no-repeat center center/cover;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 10vw;
+    position: relative;
+}
+
+.villain-content {
+    max-width: 90%;
+}
+
+.villain h1 {
+    font-size: 4rem;
+    font-weight: bold;
+    color: black;
+    font-family: "Epilogue";
+}
+
+.villain p {
+    color: black;
+    font-size: 1.5rem;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    max-width: 60%;
+    font-family: "Epilogue";
+    margin-top: -3vh;
+    width: 55vw;
+}
+
+.btn-saiba-mais {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border: 2px solid black;
+    color: black;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    font-family: "Epilogue";
+}
+
+.btn-saiba-mais:hover {
+    background: #fff;
+    color: #000;
+}
+
+.scroll-down .arrow {
+    font-size: 2rem;
+    animation: bounce 1.5s infinite;
+}
+
+.petroquimica-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #171717;
+    padding: 60px 10vw;
+    color: white;
+    height: 70vh;
+    font-family: "Epilogue";
+}
+
+.text-container {
+    max-width: 50%;
+}
+
+.text-container h2 {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.text-container p {
+    margin-top: 6vh;
+    font-size: 1.5rem;
+    line-height: 1.6;
+}
+
+.image-container {
+    max-width: 80%;
+}
+
+.image-container img {
+    width: 30vw;
+    height: 60vh;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 
 
