@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 body {
     margin: 0;
     padding: 0;
@@ -16,6 +20,7 @@ header {
     height: 10vh;
     top: 0;
     z-index: 1000;
+    font-family: "Poppins";
 }
 
 .logo {
@@ -81,6 +86,7 @@ header {
     position: relative;
     z-index: 2;
     width: 65vw;
+    font-family: "Epilogue";
 }
 
 h1 {
@@ -115,6 +121,10 @@ h1 {
     padding: 50px 20px;
     background-color: #222;
     height: 50vh;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
 }
 
 .after-hero h2 {
@@ -125,6 +135,7 @@ h1 {
 .after-hero p {
     font-size: 1.2rem;
     margin-bottom: 30px;
+    width: 40%;
 }
 
 .cards {
@@ -142,13 +153,34 @@ h1 {
     text-align: left;
 }
 
+.card2 {
+    background: #333;
+    padding: 20px;
+    border-radius: 10px;
+    width: 25vw;
+    height: 21vh;
+    text-align: left;
+}
+
 .card h3 {
     font-size: 1.3rem;
     margin-bottom: 10px;
     width: 22vw;
 }
 
+.card2 h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    width: 22vw;
+}
+
 .card p {
+    font-size: 1rem;
+    color: #ccc;
+    width: 21vw;
+}
+
+.card2 p {
     font-size: 1rem;
     color: #ccc;
     width: 21vw;
