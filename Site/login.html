@@ -28,26 +28,66 @@
         </nav>
     </header>
 
-   <main class="container-background">
-    <div class="left-black-panel">
-        <div class="login-box">
-            <h2>Login</h2>
-            <input type="email" placeholder="Email" class="input-field">
-            <input type="password" placeholder="Senha" class="input-field">
-            <button class="btn-entrar-login">Entrar</button>
-        </div>
-    </div>
+    <main class="container-background">
+        <div class="left-black-panel" id="leftPanel">
+            <div class="login-box" id="loginBox">
+                <h2>Login</h2>
+                <input type="email" placeholder="Email" class="input-field">
+                <input type="password" placeholder="Senha" class="input-field">
+                <button class="btn-entrar-login">Entrar</button>
+            </div>
 
-    <div class="right-content">
-        <div class="text-box">
-            <h2>Ainda não possui Login?</h2>
-            <button class="btn-cadastrar">Cadastrar</button>
         </div>
-    </div>
-</main>
+        
+        <div class="text-voltar-login" id="textVoltarLogin">
+            <h2>Já possui login?</h2>
+            <button class="btn-login-voltar" id="btnVoltarLogin">Entrar</button>
+        </div>
 
-    
-    
+        <div class="right-content" id="rightContent">
+            <div class="text-box" id="textBoxDefault">
+                <h2>Ainda não possui Login?</h2>
+                <button class="btn-cadastrar" id="btnCadastrar">Cadastrar</button>
+            </div>
+            <div class="cadastro-box" id="cadastroBox" style="display: none;">
+                <h2>Cadastre-se</h2>
+                <input type="text" placeholder="Nome" class="input-field">
+                <input type="tel" placeholder="Telefone" class="input-field">
+                <input type="email" placeholder="Email" class="input-field">
+                <input type="text" placeholder="Cargo" class="input-field">
+                <input type="password" placeholder="Senha" class="input-field">
+                <input type="password" placeholder="Confirmar Senha" class="input-field">
+                <button class="btn-entrar-login" id="btnVoltarLoginForm">Login</button> 
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const btnCadastrar = document.getElementById("btnCadastrar");
+        const btnVoltarLogin = document.getElementById("btnVoltarLogin");
+        const container = document.querySelector(".container-background");
+        const cadastroBox = document.getElementById("cadastroBox");
+        const textBoxDefault = document.getElementById("textBoxDefault");
+
+        btnCadastrar.addEventListener("click", () => {
+            container.classList.add("modo-cadastro");
+
+            setTimeout(() => {
+                cadastroBox.style.display = "flex";
+                textBoxDefault.style.display = "none";
+            }, 300);
+        });
+
+        btnVoltarLogin.addEventListener("click", () => {
+            cadastroBox.style.display = "none";
+            container.classList.remove("modo-cadastro");
+
+            setTimeout(() => {
+                textBoxDefault.style.display = "flex";
+            }, 300);
+        });
+        
+    </script>
 
 </body>
 
