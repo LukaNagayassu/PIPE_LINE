@@ -23,7 +23,7 @@
 /* Estiliza o body da página */
 body {
     background-color: #161616;         /* Cor de fundo escura para toda a página */
-    font-family: "Poppins", sans-serif;  /* Define a fonte principal do site como "Poppins" */
+    font-family: "Poppins";              /* Define a fonte principal do site como "Poppins" */
     color: white;                      /* Define a cor do texto como branca */
 }
 
