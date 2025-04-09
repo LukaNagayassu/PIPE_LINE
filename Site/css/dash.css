@@ -145,16 +145,16 @@ select {
     gap: 20px;
     width: 15vw;
     height: 30vh;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .indicator {
     flex: 1;
     background-color: #f3f3f3;
-    padding: 20px;
+    padding: 15px;
     border-radius: 10px;
     text-align: center;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 16px;
 }
 
@@ -188,7 +188,7 @@ select {
     background-color: #f0f0f0;
     border-radius: 10px;
     padding: 20px;
-    height: 30vh; 
+    height: 35vh; 
     box-sizing: border-box;
     display: flex;
     align-items: center;
