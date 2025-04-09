@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline Consultancy | DashBoard Home</title>
+    <link rel="stylesheet" href="../css/dash.css">
+</head>
+<body>
+
+    <div class="sidebar">
+        <img src="../css/img/logo.png" alt="">
+
+        <div class="user-section">
+            <img src="../css/img/user.webp" alt="Usuário" class="user-icon">
+            <p class="user-role">Analista</p>
+        </div>
+   
+        <div class="menu">
+            <button class="menu-btn" onclick="redirecionarHome()">Home</button>
+            <button class="menu-btn" onclick="redirecionarAlerta()">Alertas</button>
+            <button class="menu-btn" onclick="redirecionarComparar()">Comparação</button>
+        </div>
+    
+        <div class="logout-section">
+            <button class="logout-btn" onclick="sair()">Sair</button>
+        </div>
+    </div>
+    
+</body>
+</html>
+
+<script>
+
+function redirecionarHome() { window.location.href = 'dashHome.html' };
+function redirecionarAlerta() { window.location.href = 'dashAlerta.html' };
+function redirecionarComparacao() { window.location.href = 'dashComparacao.html' };
+function sair(){ window.location.href = '../home.html' }
+
+
+
+</script>

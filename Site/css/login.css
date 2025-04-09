@@ -23,7 +23,7 @@
 /* Estiliza o body da página */
 body {
     background-color: #161616;         /* Cor de fundo escura para toda a página */
-    font-family: "Poppins";              /* Define a fonte principal do site como "Poppins" */
+    font-family: Arial, sans-serif;             /* Define a fonte principal do site como "Arial" e sans-serif    */
     color: white;                      /* Define a cor do texto como branca */
 }
 
@@ -83,6 +83,7 @@ header {
     text-decoration: none; /* Remove o sublinhado padrão */
     color: white;        /* Cor do texto branca */
     font-size: 1rem;       /* Tamanho da fonte */
+    font-family: "Epilogue"; 
 }
 
 /* Botão "Entrar" no header */
@@ -194,9 +195,10 @@ header {
 }
 
 /* Quando o input está em foco */
-.input-field:focus, input:focus {
+.input-field:focus, input:focus, .input-field:hover, input:hover {
     box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);    /* Aumenta a sombra branca */
 }
+
 
 /* Botão de login */
 .btn-entrar-login {
@@ -220,6 +222,13 @@ header {
     color: black;                                   /* Muda a cor do texto para preto */
     background-color: #ffd700;                      /* Fundo amarelo */
     box-shadow: 0 8px 20px rgba(255, 217, 0, 0.7);  /* Sombra mais intensa */
+}
+
+.msg{
+    display: flex; 
+    justify-content: center; 
+    width: 40vw;
+    color: red;
 }
 
 /* ================================

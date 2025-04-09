@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Petro</title>
-    <link rel="stylesheet" href="login.css" />
+    <title>Pipeline Consultancy | Login</title>
+    <link rel="stylesheet" href="./css/login.css" />
 </head>
 
 <body>
@@ -15,13 +15,13 @@
             <div class="nav-container">
                 <div class="logo">
                     <a href="home.html">
-                        <img src="./img/logo.png" alt="Logo">
+                        <img src="./css/img/logo.png" alt="Logo">
                     </a>
                 </div>
                 <ul class="nav-links">
-                    <li><a href="/sobre.html">Sobre Nós</a></li>
+                    <li><a href="sobre.html">Sobre Nós</a></li>
                     <li><a href="petroquimica.html">Petroquímica</a></li>
-                    <li><a href="/calculadora.html">Orçamento</a></li>
+                    <li><a href="calculadora.html">Orçamento</a></li>
                 </ul>
                 <a href="login.html" class="btn-entrar">Entrar ></a>
             </div>
@@ -34,9 +34,9 @@
                 <h2>Login</h2>
                 <input type="email" placeholder="Email" class="input-field">
                 <input type="password" placeholder="Senha" class="input-field">
-                <button class="btn-entrar-login">Entrar</button>
+                <button class="btn-entrar-login" onclick="entrar()">Entrar</button>
+                <div class="msg" id="msg"></div>
             </div>
-
         </div>
         
         <div class="text-voltar-login" id="textVoltarLogin">
@@ -68,26 +68,60 @@
         const container = document.querySelector(".container-background");
         const cadastroBox = document.getElementById("cadastroBox");
         const textBoxDefault = document.getElementById("textBoxDefault");
-
+    
+        const btnEntrar = document.querySelector(".btn-entrar-login");
+        const msg = document.getElementById("msg");
+    
+        let tentativasRestantes = 3;
+    
         btnCadastrar.addEventListener("click", () => {
             container.classList.add("modo-cadastro");
-
+    
             setTimeout(() => {
                 cadastroBox.style.display = "flex";
                 textBoxDefault.style.display = "none";
             }, 300);
         });
-
+    
         btnVoltarLogin.addEventListener("click", () => {
             cadastroBox.style.display = "none";
             container.classList.remove("modo-cadastro");
-
+    
             setTimeout(() => {
                 textBoxDefault.style.display = "flex";
             }, 300);
         });
-        
+    
+        function entrar() {
+            const email = document.querySelector('.login-box input[type="email"]').value;
+            const senha = document.querySelector('.login-box input[type="password"]').value;
+    
+            if (tentativasRestantes <= 0) {
+                msg.innerHTML = "Acesso bloqueado. Tente novamente mais tarde.";
+                msg.style.color = "red";
+                return;
+            }
+    
+            if (email === "pipeline@gmail.com" && senha === "123456") {
+                window.location.href = "./dashboard/dashHome.html"; 
+            } else {
+                tentativasRestantes--;
+    
+                if (tentativasRestantes > 0) {
+                    msg.innerHTML = `Email ou senha incorretos! Você ainda tem ${tentativasRestantes} tentativa(s).`;
+                    msg.style.color = "red";
+                    msg.style.marginTop = "20px";
+                } else {
+                    msg.innerHTML = "Você errou 3 vezes. Acesso bloqueado.";
+                    btnEntrar.disabled = true;
+                    btnEntrar.style.opacity = "0.5";
+                    btnEntrar.style.cursor = "not-allowed";
+                }
+            }
+        }
     </script>
+    
+    
 
 </body>
 

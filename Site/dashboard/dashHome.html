@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline Consultancy | DashBoard Home</title>
+    <link rel="stylesheet" href="../css/dash.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <img src="../css/img/logo.png" alt="">
+
+        <div class="user-section">
+            <img src="../css/img/user.webp" alt="Usuário" class="user-icon">
+            <p class="user-role">Analista</p>
+        </div>
+
+        <div class="menu">
+            <button class="menu-btn" onclick="redirecionarHome()">Home</button>
+            <button class="menu-btn" onclick="redirecionarAlerta()">Alertas</button>
+            <button class="menu-btn" onclick="redirecionarComparar()">Comparação</button>
+        </div>
+
+        <div class="logout-section">
+            <button class="logout-btn" onclick="sair()">Sair</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="filters">
+            <select id="sensorSelect">
+                <option value="" disabled>Escolha um sensor</option>
+                <option value="Sensor 1" selected>Sensor 1</option>
+                <option value="Sensor 2">Sensor 2</option>
+                <option value="Sensor 3">Sensor 3</option>
+            </select>
+
+            <select id="timeSelect">
+                <option value="" disabled>Escolha o tempo</option>
+                <option value="Tempo real" selected>Tempo real</option>
+                <option value="Horas do Dia">Horas do Dia</option>
+                <option value="Dias da Semana">Dias da Semana</option>
+                <option value="Semanas do Mês">Semanas do Mês</option>
+            </select>
+
+        </div>
+
+        <div class="dashboard">
+            <div class="left-panel">
+                <div class="indicator-row">
+                    <div class="indicator-wrapper">
+                        <div class="indicator">Maior Métrica</div>
+                        <div class="indicator">Menor Métrica</div>
+                    </div>
+                    <div class="middle-panel">
+                        <p>Possivel Ranking</p>
+                    </div>
+                </div>
+                <div class="chart-area">
+                    <canvas id="realtimeChart" height="100" width="250"></canvas>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <p>Possivel Status Sensor</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+
+    function redirecionarHome() { window.location.href = 'dashHome.html' };
+    function redirecionarAlerta() { window.location.href = 'dashAlerta.html' };
+    function redirecionarComparacao() { window.location.href = 'dashComparacao.html' };
+    function sair() { window.location.href = '../home.html' }
+
+</script>
+
+<script>
+    const ctx = document.getElementById('realtimeChart').getContext('2d');
+
+    // Valores simulados para os sensores
+    const sensores = {
+        "Sensor 1": { min: 15, max: 40 },
+        "Sensor 2": { min: 25, max: 60 },
+        "Sensor 3": { min: 30, max: 80 }
+    };
+
+    const selectSensor = document.getElementById('sensorSelect');
+    const selectTempo = document.getElementById('timeSelect');
+
+    // Datasets
+    var data = {
+        labels: [],
+        datasets: [
+            {
+                label: 'Distância',
+                borderColor: 'yellow',
+                backgroundColor: 'rgba(0,0,255,0.1)',
+                data: [],
+                tension: 0.4
+            },
+            {
+                label: 'Máximo',
+                borderColor: 'red',
+                borderDash: [5, 5],
+                data: [],
+                fill: false,
+                pointRadius: 0
+            },
+            {
+                label: 'Mínimo',
+                borderColor: 'green',
+                borderDash: [5, 5],
+                data: [],
+                fill: false,
+                pointRadius: 0
+            }
+        ]
+    };
+
+    // Chart config com customização de cores para um fundo escuro
+    const config = {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            animation: false,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Horário',
+                        color: 'white'  // Cor do título do eixo X
+                    },
+                    ticks: {
+                        color: 'white'  // Cor dos rótulos do eixo X
+                    },
+                    grid: {
+                        color: 'rgba(255,255,255,0.2)'  // Cor das linhas da grade no eixo X
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Distância (cm)',
+                        color: 'white' // Cor do título do eixo Y
+                    },
+                    ticks: {
+                        color: 'white'  // Cor dos rótulos do eixo Y
+                    },
+                    grid: {
+                        color: 'rgba(255,255,255,0.2)'  // Cor das linhas da grade no eixo Y
+                    },
+                    beginAtZero: false
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'white' // Cor dos textos da legenda
+                    }
+                }
+            }
+        }
+    };
+
+
+    const realtimeChart = new Chart(ctx, config);
+
+    var intervalo;
+
+    function gerarDado() {
+        const sensor = sensores[selectSensor.value];
+        const min = sensor.min;
+        const max = sensor.max;
+        const now = new Date();
+        const hora = now.toLocaleTimeString('pt-BR');
+
+        const valor = Math.floor(Math.random() * (max - min + 10)) + (min - 5);
+
+        data.labels.push(hora);
+        data.datasets[0].data.push(valor);
+
+        // Linhas horizontais de mínimo/máximo
+        data.datasets[1].data.push(max);
+        data.datasets[2].data.push(min);
+
+        // Limitar quantidade de pontos exibidos (rolagem)
+        if (data.labels.length > 20) {
+            data.labels.shift();
+            data.datasets.forEach(dataset => dataset.data.shift());
+        }
+
+        realtimeChart.update();
+    }
+
+    function iniciarGrafico() {
+        clearInterval(intervalo);
+
+        data.labels = [];
+        data.datasets.forEach(ds => ds.data = []);
+
+        if (selectTempo.value === "Tempo real") {
+            intervalo = setInterval(gerarDado, 1500);
+        } else {
+            // outros modos virão depois
+        }
+    }
+
+    // Configura padrão ao carregar a página
+    window.onload = () => {
+        selectSensor.value = "Sensor 1";
+        selectTempo.value = "Tempo real";
+        iniciarGrafico();
+    };
+
+    // Eventos para mudar os selects
+    selectSensor.addEventListener('change', iniciarGrafico);
+    selectTempo.addEventListener('change', iniciarGrafico);
+</script>
