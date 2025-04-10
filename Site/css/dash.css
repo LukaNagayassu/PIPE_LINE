@@ -113,6 +113,7 @@ body {
     display: flex;
     gap: 20px;
     margin-bottom: 20px;
+    justify-content: end;
 }
 
 select {
@@ -144,39 +145,127 @@ select {
     flex-direction: column;
     gap: 20px;
     width: 15vw;
-    height: 30vh;
+    height: 35vh;
     margin-bottom: 20px;
 }
 
 .indicator {
     flex: 1;
-    background-color: #f3f3f3;
+    background-color: black;
     padding: 15px;
+    height: 10vh;
     border-radius: 10px;
     text-align: center;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 1.1rem;
+}
+
+.indicator h4{
+    margin: 0;
+    font-weight: 0;
+}
+
+.indicator p{
+    margin: 0;
+    font-size: 1.6rem;
+    margin-top: 10px;
 }
 
 .chart-area {
     background-color: black;
     flex: 1;
-    height: auto;
+    height: 28vh;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: -5vh;
+}
+
+.chart-container {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+}
+
+.chart-title {
+    color: white;
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    margin-top: 5px;
 }
 
 .right-panel {
     flex: 1;
-    background-color: #d3d3d3;
+    background-color: black;
+    color: white;
     border-radius: 10px;
     padding: 20px;
     height: 100%;
     min-height: 280px;
     box-sizing: border-box;
 }
+
+.sensor-status-container {
+    width: 100%;
+}
+
+.sensor-status-container h3 {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 8px;
+}
+
+.sensor-status-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sensor-status-list li {
+    background-color: #1a1a1a;
+    padding: 10px 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sensor-name {
+    font-weight: 500;
+    color: white;
+}
+
+.status {
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.status.critical {
+    background-color: #ff3b30;
+    color: white;
+}
+
+.status.alert {
+    background-color: #ffd500;
+    color: black;
+}
+
+.status.stable {
+    background-color: #32cd32;
+    color: white;
+}
+
 
 .indicator-row {
     display: flex;
@@ -185,13 +274,61 @@ select {
 
 .middle-panel {
     flex: 1;
-    background-color: #f0f0f0;
+    background-color: black;
+    color: white;
     border-radius: 10px;
     padding: 20px;
-    height: 35vh; 
+    height: 47vh; 
     box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: -12vh;
+}
+
+.ranking-container {
+    color: white;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+}
+
+.ranking-container h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.ranking-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.ranking-list li {
+    background-color: #333;
+    padding: 15px;
+    border-radius: 10px;
+    transition: background 0.3s ease;
+    height: 5vh;
+}
+
+.ranking-list li:hover {
+    background-color: #444;
+}
+
+.rank-icon {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.sensors {
+    font-size: 14px;
+    color: #ccc;
 }
 

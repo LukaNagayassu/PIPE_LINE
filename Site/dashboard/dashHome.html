@@ -44,35 +44,70 @@
                 <option value="Tempo real" selected>Tempo real</option>
                 <option value="Horas do Dia">Horas do Dia</option>
                 <option value="Dias da Semana">Dias da Semana</option>
-                <option value="Semanas do Mês">Semanas do Mês</option>
             </select>
-
         </div>
 
         <div class="dashboard">
             <div class="left-panel">
                 <div class="indicator-row">
-                    <div class="indicator-wrapper">
-                        <div class="indicator">
-                            Quantidade de dutos criticos <br><br> 9
-                        </div>
-                        <div class="indicator">
-                            Quantidade de dutos em alerta <br> <br>10
-                        </div>
-                    </div>
+                   
                     <div class="middle-panel">
-                        <p>Possivel Ranking</p>
+                        <div class="ranking-container">
+                            <h3>📊 Ranking dos 3 Dutos com Mais Alertas</h3>
+                            <ul class="ranking-list">
+                                <li>
+                                    <span class="rank-icon">🥇</span>
+                                    <strong>Duto 7</strong>
+                                    <span class="sensors">| Sensores: Sensor 1, Sensor 2</span>
+                                </li>
+                                <li>
+                                    <span class="rank-icon">🥈</span>
+                                    <strong>Duto 3</strong>
+                                    <span class="sensors">| Sensores: Sensor 2, Sensor 3</span>
+                                </li>
+                                <li>
+                                    <span class="rank-icon">🥉</span>
+                                    <strong>Duto 1</strong>
+                                    <span class="sensors">| Sensores: Sensor 1</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
+
+                    <div class="indicator-wrapper">
+                        <div class="indicator" style="color: rgb(251, 38, 38); ">
+                            <span>Quantidade de dutos criticos</span>
+                            <p>9</p>
+                        </div>
+                        <div class="indicator" style="color: yellow;">
+                            <span>Quantidade de dutos em alerta</span>
+                            <p>10</p>
+                        </div>
+                    </div>
+                                       
                 </div>
                 <div class="chart-area">
-                    <canvas id="realtimeChart" height="100" width="250"></canvas>
+                    <div class="chart-container">
+                        <h3 class="chart-title">Fluxo do Petróleo</h3>
+                        <canvas id="realtimeChart" height="90" width="240"></canvas>
+                    </div>
                 </div>
             </div>
 
             <div class="right-panel">
-                <p>Possivel Status Sensor</p>
+                <div class="sensor-status-container">
+                    <h3>Status dos Sensores</h3>
+                    <ul class="sensor-status-list">
+                        <li><span class="sensor-name">Sensor 1</span> - Duto 1 - <span class="status critical">Crítico</span></li>
+                        <li><span class="sensor-name">Sensor 2</span> - Duto 1 - <span class="status critical">Crítico</span></li>
+                        <li><span class="sensor-name">Sensor 3</span> - Duto 2 - <span class="status alert">Alerta</span></li>
+                        <li><span class="sensor-name">Sensor 4</span> - Duto 2 - <span class="status stable">Estável</span></li>
+                        <li><span class="sensor-name">Sensor 5</span> - Duto 3 - <span class="status alert">Alerta</span></li>
+                        <li><span class="sensor-name">Sensor 6</span> - Duto 3 - <span class="status critical">Crítico</span></li>
+                        <li><span class="sensor-name">Sensor 7</span> - Duto 4 - <span class="status stable">Estável</span></li>
+                        <li><span class="sensor-name">Sensor 8</span> - Duto 4 - <span class="status alert">Alerta</span></li>
+                </div>
             </div>
-        </div>
     </div>
 
 </body>
@@ -156,15 +191,16 @@
                     title: {
                         display: true,
                         text: 'Distância (cm)',
-                        color: 'white' // Cor do título do eixo Y
+                        color: 'white'
                     },
                     ticks: {
-                        color: 'white'  // Cor dos rótulos do eixo Y
+                        color: 'white'
                     },
                     grid: {
-                        color: 'rgba(255,255,255,0.2)'  // Cor das linhas da grade no eixo Y
+                        color: 'rgba(255,255,255,0.2)'
                     },
-                    beginAtZero: false
+                    beginAtZero: false, // Mantém isso como false, pois usaremos suggestedMin
+                    suggestedMin: 0     // <== Garante que o 0 apareça sempre
                 }
             },
             plugins: {
@@ -213,11 +249,33 @@
         data.labels = [];
         data.datasets.forEach(ds => ds.data = []);
 
+        const sensor = sensores[selectSensor.value];
+        const min = sensor.min;
+        const max = sensor.max;
+
         if (selectTempo.value === "Tempo real") {
             intervalo = setInterval(gerarDado, 1500);
-        } else {
-            // outros modos virão depois
-        }
+        } else if (selectTempo.value === "Horas do Dia") {
+            for (let h = 0; h < 24; h++) {
+                const horaFormatada = `${h.toString().padStart(2, '0')}:00`;
+                data.labels.push(horaFormatada);
+                const valor = Math.floor(Math.random() * (max - min + 10)) + (min - 5);
+                data.datasets[0].data.push(valor);
+                data.datasets[1].data.push(max);
+                data.datasets[2].data.push(min);
+            }
+            realtimeChart.update();
+        } else if (selectTempo.value === "Dias da Semana") {
+            const dias = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            dias.forEach(dia => {
+                data.labels.push(dia);
+                const valor = Math.floor(Math.random() * (max - min + 10)) + (min - 5);
+                data.datasets[0].data.push(valor);
+                data.datasets[1].data.push(max);
+                data.datasets[2].data.push(min);
+            });
+            realtimeChart.update();
+        } 
     }
 
     // Configura padrão ao carregar a página
