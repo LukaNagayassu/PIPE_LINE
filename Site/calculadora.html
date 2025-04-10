@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <link rel="stylesheet" href="/css/styleCALCULADORA.css">
+</head>
+<body>
+        <header>
+            <nav class="navCabeca"> 
+                <div class="nav-container">
+                    <div class="logo">
+                        <a href="home.html">
+                            <img src="/css/img/logo.png">
+                        </a>
+                    </div>
+                    <ul class="nav-links">
+                        <li><a href="/sobre.html">Sobre Nós</a></li>
+                        <li><a href="petroquimica.html">Petroquímica</a></li>
+                        <li><a href="/calculadora.html">Orçamento</a></li>
+                    </ul>
+                </div>
+
+            </nav>
+        </header>
+
+
+            <section class="hero" >
+                <div class="hero-container-left">
+                        <p>Evasão Anual (litros):</p>
+                    <input type="number" id="ipt_vazao" placeholder="Digite a evasão anual"><br>
+
+                        <p>Fluxo Anual Total (Vazão em litros):</p>
+                    <input type="number" id="ipt_fluxo" placeholder="Digite o fluxo anual total"><br>
+
+                        <p>Preço do barril de pétroleo (R$):</p>
+                    <input type="number" id="ipt_preco" placeholder="Digite o preço do barril"><br><br>
+
+                        <button onclick="calcularPerda()">Analise</button>
+                </div>
+                <div id="divCalc" class="hero-container-right">
+
+                </div>
+
+
+            </section>
+            <script>
+                function calcularPerda() {
+                    var vazao = Number(ipt_vazao.value);
+                    var fluxo = Number(ipt_fluxo.value);
+                    var preco = Number(ipt_preco.value);
+            
+                    var porcentagem = ((vazao / fluxo) * 100).toFixed(2);
+                    var perdaBarris = (vazao / 159).toFixed(0); //159 L e a capacidade de um barril
+                    var perdaFinanceira = (perdaBarris * preco).toFixed(2);
+                    var economia = (perdaFinanceira * 0.15).toFixed(2);
+            
+                    divCalc.innerHTML = `
+                        <div class="txtFinal" style="text-align: center;">
+                            <table border="1" style="margin: 0 auto; border-collapse: collapse; text-align: left;">
+                                <tr>
+                                    <th colspan="2">Resumo da Análise</th>
+                                </tr>
+                                <tr>
+                                    <td>Fluxo Anual Total</td>
+                                    <td><b>${fluxo.toLocaleString()} L</b></td>
+                                </tr>
+                                <tr>
+                                    <td>Vazão Anual</td>
+                                    <td><b><span style="background-color: red; color: white;">${vazao.toLocaleString()} L</span></b></td>
+                                </tr>
+                                <tr>
+                                    <td>Perda Financeira</td>
+                                    <td><b><span style="background-color: red; color: white;">R$ ${perdaFinanceira}</span></b></td>
+                                </tr>
+                                <tr>
+                                    <td>Barris Perdidos</td>
+                                    <td><b><span style="background-color: red; color: white;">${perdaBarris}</span></b></td>
+                                </tr>
+                                <tr>
+                                    <td>Porcentagem de Vazão</td>
+                                    <td><b>${porcentagem}%</b></td>
+                                </tr>
+                                <tr>
+                                    <td>Economia Estimada</td>
+                                    <td><b>R$ ${economia}</b></td>
+                                </tr>
+                            </table>
+            
+                            <br>
+                            <b>Baixe o relatório detalhado:</b><br>
+                            <a href="https://drive.google.com/file/d/1fDI7LY49X_174gGMe612bAONmZQy_cjA/view?usp=sharing">
+                                <button>📥 Baixar Relatório</button>
+                            </a>
+                            <br><br>
+                            <a href="calculadora.html">
+                                <button>Voltar</button>
+                            </a>
+                        </div>
+                    `;
+                }
+            
+
+
+        // Armazena a posição anterior da rolagem
+        var lastScrollTop = 0;
+        const header = document.querySelector('header','total');
+
+        // Função para ocultar ou mostrar o cabeçalho com base no movimento de rolagem
+        window.addEventListener('scroll', function () {
+            var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (currentScroll > lastScrollTop) {
+                // Rolando para baixo, esconde o cabeçalho
+                header.style.top = "-100px";
+            } else {
+                // Rolando para cima, mostra o cabeçalho
+                header.style.top = "0";
+            }
+
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+        });
+    </script>
+</body>
+</html>
