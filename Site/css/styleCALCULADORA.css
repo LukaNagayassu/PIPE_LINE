@@ -71,7 +71,13 @@ header .navCabeca .nav-container .nav-links li{
     left:22%;
     background-size: cover;
     background-position: center;
-    
+    border-radius: 18px;
+    transition: transform 0.5s ease-in-out;
+
+}
+.hero:hover{
+    transform: scale(1.02);
+    box-shadow: 0px 0px 25px rgba(110, 110, 110, 0.39); 
 }
 .hero .hero-container-left{
     width: 60vh;
@@ -80,13 +86,42 @@ header .navCabeca .nav-container .nav-links li{
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.575);
+    background-color: rgba(0, 0, 0, 0.7);
     border: 20px;
     border-color: black;
-    border-radius: 10px;
+    border-radius: 15px;
     justify-content: center;
     position: absolute;
+    box-shadow: 0 0 10px #00000060;
+    font-family: "Poppins", sans-serif;
 }
+.hero .hero-container-left input{
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    color: #000;
+    outline: none;
+    transition: 0.2s;
+}
+
+.hero-container-left button {
+    margin-top: 10px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #0066cc;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.hero-container-left button:hover {
+    background-color: #0099ff;
+    transform: scale(1.02);
+}
+
 .hero .hero-container-right{
     right: 0;
     position: absolute;
@@ -97,5 +132,80 @@ header .navCabeca .nav-container .nav-links li{
     width: 60vh;
     height: 100%;
     background-color: #fa26264d;
+    border-radius : 18px;
+
+}
+
+.txtFinal table {
+    width: 90%;
+    max-width: 500px;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: "Poppins", sans-serif;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.txtFinal th {
+    background-color: #222;
+    color: white;
+    font-size: 1.2rem;
+    padding: 14px;
+    text-align: center;
+    border-bottom: 2px solid #ff4d4d;
+}
+
+.txtFinal td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #444;
+    font-size: 0.95rem;
+}
+
+.txtFinal tr:last-child td {
+    border-bottom: none;
+}
+
+.txtFinal span {
+    background-color: #ff2626;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    display: inline-block;
+}
+
+.txtFinal button {
+    padding: 8px 16px;
+    background-color: #ff2626;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease-in-out;
+}
+
+.txtFinal button:hover {
+    background-color: #c01d1d;
+    transform: scale(1.03);
+}
+
+.txtFinal a {
+    text-decoration: none;
+}
+
+.txtFinal {
+    text-align: center;
+    margin-top: 20px;
+}
+.hero .btnVoltar{
+    z-index:0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    position: relative;
 
 }
