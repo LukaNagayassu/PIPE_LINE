@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora</title>
-    <link rel="stylesheet" href="/css/styleCALCULADORA.css">
+    <link rel="stylesheet" href="./css/styleCALCULADORA.css">
 </head>
 <body>
         <header>
@@ -18,7 +18,7 @@
                     <ul class="nav-links">
                         <li><a href="/sobre.html">Sobre Nós</a></li>
                         <li><a href="petroquimica.html">Petroquímica</a></li>
-                        <li><a href="/calculadora.html">Orçamento</a></li>
+                        <li><a href="calculadora.html">Orçamento</a></li>
                     </ul>
                 </div>
 
@@ -104,27 +104,6 @@
                         </div>
                     `;
                 }
-            
-
-
-        // Armazena a posição anterior da rolagem
-        var lastScrollTop = 0;
-        const header = document.querySelector('header','total');
-
-        // Função para ocultar ou mostrar o cabeçalho com base no movimento de rolagem
-        window.addEventListener('scroll', function () {
-            var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-
-            if (currentScroll > lastScrollTop) {
-                // Rolando para baixo, esconde o cabeçalho
-                header.style.top = "-100px";
-            } else {
-                // Rolando para cima, mostra o cabeçalho
-                header.style.top = "0";
-            }
-
-            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
-        });
     </script>
 </body>
 </html>
