@@ -1,0 +1,581 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid rgb(31, 29, 29);
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: black;
+    color: white;
+    padding: 10px 20px;  
+}
+
+.lista_itens {
+    list-style: none;
+    display: flex;
+    gap: 20px; 
+}
+
+.logo {
+    font-weight: 800;
+    font-size: 25px;
+}
+
+.btn_login {
+    border: 2px solid yellow;
+    color: yellow;
+    background-color: black;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-weight: bold;
+}
+/* Tela Login */
+
+.login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.login h1{
+    align-self: center;
+}
+
+#btn_entrar{
+    background-color: rgba(246, 197, 0, 1);
+    color: black;
+    width: 500px;
+    height: 40px;
+    border-radius: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.login input{
+    width: 500px;
+    height: 40px;
+    border-radius: 8px;
+    margin: 12px;
+    margin-left: 25px;
+}
+
+.div_central {
+    display: flex;
+    align-items: center;      
+    justify-content: flex-start; 
+    height: 100vh;   
+    margin-left: 80px;         
+}
+
+#imagem_fundo {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    height: auto;
+    max-height: 100%;
+    z-index: -1; 
+    /* Usei o z-index para ficar atrás da navbar */
+}
+
+/* Tela petroquimica */
+.central_dadosPetroquimica{
+    background-image: url('./assets/img/imagemPetroquimica.png');
+    height: 85vh;
+    width: 100%;
+    background-repeat: no-repeat;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 20px;
+
+    background-size: cover; /* faz a imagem cobrir toda a área */
+    background-position: center; /* centraliza a imagem */
+}
+
+.titulo_petroquimica{
+    margin-bottom: 20px;
+}
+
+.dadosPetroquimica{
+    margin-left: 60px;
+    display: flex;
+    margin-top: 320px;
+    flex-direction: column;
+}
+
+.info_petroquimica{
+    background-color: black;
+    height: 70vh;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.button_saibamais{
+    background-color: rgba(255, 255, 255, 0);
+
+    width: 250px;
+    height: 40px;
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+.lista_itens a {
+    text-decoration: none;
+    color: inherit; /* herda a cor do pai (o <li>) */
+}
+/* Info Petroquimica */
+
+.info_petroquimica{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    flex-direction: row;
+}
+.titulo_petroquimica{
+    font-size: 70px;
+    color: black !important;
+}
+
+.petroh1{
+    font-size: 70px;
+    color: white !important;
+}
+
+
+.dados_petroquimica{
+    font-size: 30px;
+}
+
+.textos_divpreta{
+    margin-left: 120px;
+    margin-top: 50px;
+}
+
+.titulo_petroquimica{
+    color: white;
+    margin-bottom: 10px;
+    font-size: 50px;
+}
+
+.texto_petroquimica{
+    color: white;
+    line-height: 2.5;
+    font-size: 16px;
+}
+
+.info_petroquimica img{
+   align-self: flex-end; 
+   width: 600px;
+   height: 600px;
+   margin-bottom: 40px;
+}
+
+.importancia_petroquimica{
+    height: 950px;
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column; 
+}
+
+.container_img{
+    width: 450px;
+    height: 400px;
+    background-color: black;
+    border: 1PX SOLID white;
+    border-radius: 24px;
+    margin: 20px;
+}
+
+.container_img img{
+    width: 100%;
+    height: 50%;
+    
+}
+
+.cards{
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.container_img h1{
+    color: white;
+    font-size: 26px;
+}
+
+.container_img p {
+    color: white;
+    margin-top: 20px;
+    font-size: 20px;}
+
+    .funcionamento_petroquimica{
+        width: 100%;
+        height: 650px;
+        background-color: black;
+        
+    }
+
+.func_central{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.func_central h1{
+    color: white;
+    text-align: center;
+    margin-top: 35px;
+}
+
+.card_func{
+    width: 60%;
+    background-color: white;
+    height: 150px;
+    border-radius: 16px;
+    border: 2px solid black;
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   margin-top: 12px;
+}
+.card_inf{
+    margin-left: 16px;
+}
+.card_func h1{
+    text-align: start;
+    color: black;
+    font-size: 100px;
+}
+.card_inf h2{
+    font-size: 30px;
+}
+
+.card_inf p{
+    font-size:16px
+}
+
+.desafios_petroquimica{
+    width: 100%;
+    background-color: black;
+    color: white;
+    text-align: center;
+    height: 750px;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.desafios_petroquimica h1{
+    margin-top: 60px;
+
+}
+.column_desafios{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card_desafio{
+    width: 110%;
+    background-color: white;
+    height: 80px;
+    border-radius: 16px;
+    border: 2px solid black;
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   margin-top: 12px;
+   color: black;
+}
+
+.card_desafio img{
+    margin-left: 20px;
+}
+
+.text_desafio{
+    margin-left: 20px;
+}
+
+.tituloh1desafio{
+    align-self: flex-start;
+}
+
+.div_central_desafio{
+    display: flex;
+    flex-direction: row;
+   justify-content: space-around;
+   width: 100%;
+   height: 80%;
+   margin-top: 20px;
+}
+
+#cabecalhoSite{
+    width: 100%;
+    background-color: white;
+    height: 150px;
+}
+
+.info_contato{
+    display: flex;
+    flex-direction: row;
+}
+
+#div_central_footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Tela Sobre nós */
+
+
+.info_sobrenos {
+    background-color: black;
+    height: 70vh;
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.texto_sobrenos {
+    color: white;
+    line-height: 2.5;
+    font-size: 26px;
+}
+
+.sobrenosh1 {
+    font-size: 70px;
+    color: white !important;
+}
+
+.info_sobrenos img {
+    align-self: flex-end; 
+    width: 600px;
+    height: 600px;
+    margin-bottom: 40px;
+}
+
+.textos_divpreta {
+    margin-left: 120px;
+    margin-top: 100px;
+}
+
+.button_sobrenos{
+    background-color: rgba(255, 255, 255, 0);
+    color: white;
+    width: 250px;
+    height: 40px;
+    border-radius: 12px;
+    margin-top: 20px;
+    border: 2px solid white;
+}
+
+.fundoPreto{
+    width: 100%;
+    height: 200px;
+    background-color: black;
+}
+
+/* Tela Home */
+
+.home_central{
+    background-image: url("./assets/img/fundoHome.png");
+    width: 100%;
+    height: 600px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    text-align: center;
+}
+
+.solucao_home{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     flex-direction: column;
+     padding: 200px;
+}
+
+.solucao_home h1{
+    color: white;
+}
+
+.solucao_home span{
+    color: rgba(246, 197, 0, 1);
+}
+
+#btn_saibahome{
+    background-color: white;
+
+    width: 250px;
+    height: 40px;
+    border-radius: 12px;
+    margin-top: 20px;
+
+    font-size: 20px;
+}
+
+.div_infoprojeto{
+    background-color: black;
+    width: 100%;
+    height: 650px;
+    color: white;
+
+    text-align: center;
+    padding: 20px;
+}
+
+.card_triplo{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+    border-radius: 14px;
+}
+
+.cardPipeline{
+    width: 400px;
+    height: 150px;
+    background-color: rgba(255, 255, 255, 0);
+    margin-top: 30px;
+    
+    border: 2px solid white;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.card_duplo{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+.cardBrancoPipeline{
+    width: 400px;
+    height: 150px;
+    background-color: rgb(247, 247, 247);
+    margin-top: 30px;
+    color: black;
+    
+    border: 2px solid white;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+}
+
+.conhecaMais{
+    width: 100%;
+    height: 300px;
+    background-image: url("./assets/img/fundoHome.png");
+}´
+
+.conhecaMais h1{
+    color: white !important;
+}
+
+.contato{
+    width: 100%;
+    height: 700px;
+    background-color: white;
+}
+
+.fundoPretoHome{
+    width: 100%;
+    height: 700px;
+    background-color: black;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.tituloPad{
+    margin-top: 60px;
+}
+
+.esquerda{
+    padding: 60px;
+}
+
+
+
+.textoLogo{
+    display: flex;
+    flex-direction: row;
+    margin-left:60px;
+    margin-top: 20px;
+}
+
+.faleConosco {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.faleConosco img{
+    margin-right: 40px;
+}
+
+.textoLogo h1{
+    font-size: 60px;
+}
+
+.formularios{
+    display: flex;
+    flex-direction: column;
+    margin-left: 60px;
+    width: 50%;
+}
+
+.formularios input{
+    width: 800px;
+    height: 40px;
+    border-radius: 20px;
+    margin-top: 25px;
+}
+
+.formularios button{
+    width: 200px;
+    height: 40px;
+    border-radius: 12px;
+    background-color: rgba(246, 197, 0, 1);
+    margin-top: 20px;
+    align-self: flex-start;
+    
+}
