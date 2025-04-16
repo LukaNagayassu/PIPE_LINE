@@ -146,7 +146,7 @@ select {
     gap: 20px;
     width: 15vw;
     height: 35vh;
-    margin-bottom: 20px;
+    margin-top: -7vh;
 }
 
 .indicator {
@@ -173,13 +173,11 @@ select {
 
 .chart-area {
     background-color: black;
-    flex: 1;
-    height: 28vh;
+    height: 60vh;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: -5vh;
 }
 
 .chart-container {
@@ -273,18 +271,32 @@ select {
 }
 
 .middle-panel {
-    flex: 1;
     background-color: black;
     color: white;
     border-radius: 10px;
     padding: 20px;
-    height: 47vh; 
-    box-sizing: border-box;
+    height: 32vh; 
+    width: 25vw;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: -12vh;
+    margin-top: -8vh;
 }
+
+.pizza-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    margin-top: -2vh;
+}
+
+.pizza-container canvas {
+    max-width: 400px;
+    max-height: 200px;
+}
+
 
 .ranking-container {
     color: white;

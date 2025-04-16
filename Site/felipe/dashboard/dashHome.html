@@ -50,29 +50,6 @@
         <div class="dashboard">
             <div class="left-panel">
                 <div class="indicator-row">
-                   
-                    <div class="middle-panel">
-                        <div class="ranking-container">
-                            <h3>📊 Ranking dos 3 Dutos com Mais Alertas</h3>
-                            <ul class="ranking-list">
-                                <li>
-                                    <span class="rank-icon">🥇</span>
-                                    <strong>Duto 7</strong>
-                                    <span class="sensors">| Sensores: Sensor 1, Sensor 2</span>
-                                </li>
-                                <li>
-                                    <span class="rank-icon">🥈</span>
-                                    <strong>Duto 3</strong>
-                                    <span class="sensors">| Sensores: Sensor 2, Sensor 3</span>
-                                </li>
-                                <li>
-                                    <span class="rank-icon">🥉</span>
-                                    <strong>Duto 1</strong>
-                                    <span class="sensors">| Sensores: Sensor 1</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
 
                     <div class="indicator-wrapper">
                         <div class="indicator" style="color: rgb(251, 38, 38); ">
@@ -84,7 +61,14 @@
                             <p>10</p>
                         </div>
                     </div>
-                                       
+
+                    <div class="middle-panel">
+                        <div class="pizza-container">
+                            <p style="font-size: 1.2rem;">Situação dos Sensores</p>
+                            <canvas id="pizzaChart" width="300" height="120"></canvas>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="chart-area">
                     <div class="chart-container">
@@ -98,17 +82,26 @@
                 <div class="sensor-status-container">
                     <h3>Status dos Sensores</h3>
                     <ul class="sensor-status-list">
-                        <li><span class="sensor-name">Sensor 1</span> - Duto 1 - <span class="status critical">Crítico</span></li>
-                        <li><span class="sensor-name">Sensor 2</span> - Duto 1 - <span class="status critical">Crítico</span></li>
-                        <li><span class="sensor-name">Sensor 3</span> - Duto 2 - <span class="status alert">Alerta</span></li>
-                        <li><span class="sensor-name">Sensor 4</span> - Duto 2 - <span class="status stable">Estável</span></li>
-                        <li><span class="sensor-name">Sensor 5</span> - Duto 3 - <span class="status alert">Alerta</span></li>
-                        <li><span class="sensor-name">Sensor 6</span> - Duto 3 - <span class="status critical">Crítico</span></li>
-                        <li><span class="sensor-name">Sensor 7</span> - Duto 4 - <span class="status stable">Estável</span></li>
-                        <li><span class="sensor-name">Sensor 8</span> - Duto 4 - <span class="status alert">Alerta</span></li>
+                        <li><span class="sensor-name">Sensor 1</span> - Duto 1 - <span
+                                class="status critical">Crítico</span></li>
+                        <li><span class="sensor-name">Sensor 2</span> - Duto 1 - <span
+                                class="status critical">Crítico</span></li>
+                        <li><span class="sensor-name">Sensor 3</span> - Duto 2 - <span
+                                class="status alert">Alerta</span></li>
+                        <li><span class="sensor-name">Sensor 4</span> - Duto 2 - <span
+                                class="status stable">Estável</span></li>
+                        <li><span class="sensor-name">Sensor 5</span> - Duto 3 - <span
+                                class="status alert">Alerta</span></li>
+                        <li><span class="sensor-name">Sensor 6</span> - Duto 3 - <span
+                                class="status critical">Crítico</span></li>
+                        <li><span class="sensor-name">Sensor 7</span> - Duto 4 - <span
+                                class="status stable">Estável</span></li>
+                        <li><span class="sensor-name">Sensor 8</span> - Duto 4 - <span
+                                class="status alert">Alerta</span></li>
                 </div>
             </div>
-    </div>
+        </div>
+
 
 </body>
 
@@ -213,6 +206,40 @@
         }
     };
 
+    const ctxPizza = document.getElementById('pizzaChart').getContext('2d');
+
+    new Chart(ctxPizza, {
+        type: 'pie',
+        data: {
+            labels: ['Crítico', 'Alerta', 'Estável'],
+            datasets: [{
+                data: [3, 3, 2],
+                backgroundColor: [
+                    'rgba(255, 59, 48, 0.4)',   // Crítico - fundo translúcido
+                    'rgba(255, 213, 0, 0.4)',   // Alerta  - fundo translúcido
+                    'rgba(50, 205, 50, 0.4)'    // Estável - fundo translúcido
+                ],
+                borderColor: [
+                    '#FF3B30',   // Crítico - borda sólida
+                    '#FFD500',   // Alerta  - borda sólida
+                    '#32CD32'    // Estável - borda sólida
+                ],
+                borderWidth: 3
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'white'
+                    }
+                }
+            }
+        }
+    });
+
+
+
 
     const realtimeChart = new Chart(ctx, config);
 
@@ -275,7 +302,7 @@
                 data.datasets[2].data.push(min);
             });
             realtimeChart.update();
-        } 
+        }
     }
 
     // Configura padrão ao carregar a página

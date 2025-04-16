@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pipeline Consultancy | DashBoard Home</title>
     <link rel="stylesheet" href="../css/dash.css">
 </head>
+
 <body>
 
     <div class="sidebar">
@@ -15,27 +17,49 @@
             <img src="../css/img/user.webp" alt="Usuário" class="user-icon">
             <p class="user-role">Analista</p>
         </div>
-   
+
         <div class="menu">
             <button class="menu-btn" onclick="redirecionarHome()">Home</button>
             <button class="menu-btn" onclick="redirecionarAlerta()">Alertas</button>
             <button class="menu-btn" onclick="redirecionarComparar()">Comparação</button>
         </div>
-    
+
         <div class="logout-section">
             <button class="logout-btn" onclick="sair()">Sair</button>
         </div>
     </div>
-    
+
+    <div class="ranking-container">
+        <h3>📊 Ranking dos 3 Dutos com Mais Alertas</h3>
+        <ul class="ranking-list">
+            <li>
+                <span class="rank-icon">🥇</span>
+                <strong>Duto 7</strong>
+                <span class="sensors">| Sensores: Sensor 1, Sensor 2</span>
+            </li>
+            <li>
+                <span class="rank-icon">🥈</span>
+                <strong>Duto 3</strong>
+                <span class="sensors">| Sensores: Sensor 2, Sensor 3</span>
+            </li>
+            <li>
+                <span class="rank-icon">🥉</span>
+                <strong>Duto 1</strong>
+                <span class="sensors">| Sensores: Sensor 1</span>
+            </li>
+        </ul>
+    </div>
+
 </body>
+
 </html>
 
 <script>
 
-function redirecionarHome() { window.location.href = 'dashHome.html' };
-function redirecionarAlerta() { window.location.href = 'dashAlerta.html' };
-function redirecionarComparacao() { window.location.href = 'dashComparacao.html' };
-function sair(){ window.location.href = '../home.html' }
+    function redirecionarHome() { window.location.href = 'dashHome.html' };
+    function redirecionarAlerta() { window.location.href = 'dashAlerta.html' };
+    function redirecionarComparacao() { window.location.href = 'dashComparacao.html' };
+    function sair() { window.location.href = '../home.html' }
 
 
 
