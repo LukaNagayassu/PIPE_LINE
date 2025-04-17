@@ -147,20 +147,22 @@ select {
     width: 15vw;
     height: 35vh;
     margin-top: -7vh;
+    margin-left: 7vw;
 }
 
 .indicator {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
     background-color: black;
-    padding: 15px;
-    height: 10vh;
+    padding: 25px;
+    height: 15vh;
     border-radius: 10px;
     text-align: center;
     font-weight: 500;
     font-size: 1.1rem;
 }
 
-.indicator h4{
+.indicator span{
     margin: 0;
     font-weight: 0;
 }
@@ -295,48 +297,6 @@ select {
 .pizza-container canvas {
     max-width: 400px;
     max-height: 200px;
-}
-
-
-.ranking-container {
-    color: white;
-    width: 100%;
-    font-family: 'Poppins', sans-serif;
-}
-
-.ranking-container h3 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 18px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    padding-bottom: 10px;
-    text-align: center;
-}
-
-.ranking-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.ranking-list li {
-    background-color: #333;
-    padding: 15px;
-    border-radius: 10px;
-    transition: background 0.3s ease;
-    height: 5vh;
-}
-
-.ranking-list li:hover {
-    background-color: #444;
-}
-
-.rank-icon {
-    font-size: 20px;
-    margin-right: 10px;
 }
 
 .sensors {

@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pipeline Consultancy | DashBoard Home</title>
-    <link rel="stylesheet" href="../css/dash.css">
+    <link rel="stylesheet" href="../css/dashAlerta.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -29,25 +30,36 @@
         </div>
     </div>
 
-    <div class="ranking-container">
-        <h3>📊 Ranking dos 3 Dutos com Mais Alertas</h3>
-        <ul class="ranking-list">
-            <li>
-                <span class="rank-icon">🥇</span>
-                <strong>Duto 7</strong>
-                <span class="sensors">| Sensores: Sensor 1, Sensor 2</span>
-            </li>
-            <li>
-                <span class="rank-icon">🥈</span>
-                <strong>Duto 3</strong>
-                <span class="sensors">| Sensores: Sensor 2, Sensor 3</span>
-            </li>
-            <li>
-                <span class="rank-icon">🥉</span>
-                <strong>Duto 1</strong>
-                <span class="sensors">| Sensores: Sensor 1</span>
-            </li>
-        </ul>
+    <div class="main-content">
+        <div class="top-bar">
+            <select id="periodoSelect" onchange="atualizarDashboard()">
+                <option value="dia">Hoje</option>
+                <option value="semana">Esta Semana</option>
+                <option value="mes">Este Mês</option>
+            </select>
+        </div>
+
+        <div class="painel-alertas">
+            <!-- Ranking -->
+            <div class="ranking-box">
+                <h3>🏆 Top 3 Sensores com Mais Alertas</h3>
+                <div id="rankingContainer"></div>
+            </div>
+        
+            <!-- Histórico -->
+            <div class="historico-box">
+                <h3>📋 Histórico de Alertas</h3>
+                <div class="historico-item">⚠️ Alerta de Alta distância | Sensor 1 | Duto 1 | 17/04/2025 16:00</div>
+                <div class="historico-item">⚠️ Alerta de Baixa distância | Sensor 2 | Duto 1 | 17/04/2025 15:50</div>
+                <div class="historico-item">⚠️ Alerta de Alta distância | Sensor 4 | Duto 2 | 17/04/2025 15:40</div>
+                <div class="historico-item">⚠️ Alerta de Alta distância | Sensor 8 | Duto 4 | 17/04/2025 15:30</div>
+            </div>
+        </div>
+        
+        <div class="grafico">
+            <h2>📊 Quantidade de Alertas por Sensor</h2>
+            <canvas id="graficoAlertas"></canvas>
+        </div>
     </div>
 
 </body>
@@ -56,11 +68,115 @@
 
 <script>
 
+    const dadosSimulados = {
+        dia: gerarDadosAleatorios(),
+        semana: gerarDadosAleatorios(),
+        mes: gerarDadosAleatorios()
+    };
+
+    function gerarDadosAleatorios() {
+        let sensores = {};
+        for (let i = 1; i <= 8; i++) {
+            const alertaBaixo = Math.floor(Math.random() * 10);
+            const alertaAlto = Math.floor(Math.random() * 10);
+            sensores[`Sensor ${i}`] = {
+                alertaBaixo,
+                alertaAlto,
+                peso: alertaBaixo * 1 + alertaAlto * 2 // peso do alerta alto é 2
+            };
+        }
+        return sensores;
+    }
+
+    function atualizarDashboard() {
+        const periodo = document.getElementById("periodoSelect").value;
+        const sensores = dadosSimulados[periodo];
+
+        const ranking = Object.entries(sensores)
+            .sort((a, b) => b[1].peso - a[1].peso)
+            .slice(0, 3);
+
+        const rankingContainer = document.getElementById("rankingContainer");
+        rankingContainer.innerHTML = ranking.map(([nome, dados], index) => `
+        <div class="ranking-item">
+            <strong>${index + 1}º -  ${nome}</strong><br>
+            Alertas Altos: ${dados.alertaAlto} | Alertas Baixos: ${dados.alertaBaixo} | <b>Peso:</b> ${dados.peso}
+        </div>
+    `).join('');
+
+        // Atualiza gráfico
+        const ctx = document.getElementById('graficoAlertas').getContext('2d');
+        const labels = Object.keys(sensores);
+        const data = {
+            labels,
+            datasets: [
+                {
+                    label: 'Alertas Altos',
+                    data: labels.map(label => sensores[label].alertaAlto),
+                    backgroundColor: 'rgba(255, 0, 0, 0.3)',
+                    borderColor: 'red',
+                    borderWidth: 2
+                },
+                {
+                    label: 'Alertas Baixos',
+                    data: labels.map(label => sensores[label].alertaBaixo),
+                    backgroundColor: 'rgba(255, 165, 0, 0.3)',
+                    borderColor: 'orange',
+                    borderWidth: 2
+                }
+            ]
+        };
+
+        const options = {
+            responsive: true,
+            scales: {
+                x: {
+                    ticks: { color: 'white' },
+                    grid: {
+                        color: 'rgba(255,255,255,0.2)', // grade mais suave
+                        drawOnChartArea: true,
+                        drawTicks: false,
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: { color: 'white' },
+                    grid: {
+                        color: 'rgba(255,255,255,0.2)', // grade mais suave
+                        drawOnChartArea: true,
+                        drawTicks: false,
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'white'
+                    }
+                }
+            }
+        };
+
+
+        if (window.graficoInstance) {
+            window.graficoInstance.data = data;
+            window.graficoInstance.options = options;
+            window.graficoInstance.update();
+        } else {
+            window.graficoInstance = new Chart(ctx, {
+                type: 'bar',
+                data,
+                options
+            });
+        }
+    }
+
+    // Inicializa ao carregar
+    window.onload = atualizarDashboard;
+
     function redirecionarHome() { window.location.href = 'dashHome.html' };
     function redirecionarAlerta() { window.location.href = 'dashAlerta.html' };
     function redirecionarComparacao() { window.location.href = 'dashComparacao.html' };
     function sair() { window.location.href = '../home.html' }
-
-
 
 </script>

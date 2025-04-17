@@ -5,12 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pipeline Consultancy | DashBoard Home</title>
-    <link rel="stylesheet" href="../css/dash.css">
+    <link rel="stylesheet" href="../css/dashHome.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
-
     <div class="sidebar">
         <img src="../css/img/logo.png" alt="">
 
@@ -50,15 +49,14 @@
         <div class="dashboard">
             <div class="left-panel">
                 <div class="indicator-row">
-
                     <div class="indicator-wrapper">
                         <div class="indicator" style="color: rgb(251, 38, 38); ">
                             <span>Quantidade de dutos criticos</span>
-                            <p>9</p>
+                            <p>3</p>
                         </div>
                         <div class="indicator" style="color: yellow;">
                             <span>Quantidade de dutos em alerta</span>
-                            <p>10</p>
+                            <p>3</p>
                         </div>
                     </div>
 
@@ -82,27 +80,17 @@
                 <div class="sensor-status-container">
                     <h3>Status dos Sensores</h3>
                     <ul class="sensor-status-list">
-                        <li><span class="sensor-name">Sensor 1</span> - Duto 1 - <span
-                                class="status critical">Crítico</span></li>
-                        <li><span class="sensor-name">Sensor 2</span> - Duto 1 - <span
-                                class="status critical">Crítico</span></li>
-                        <li><span class="sensor-name">Sensor 3</span> - Duto 2 - <span
-                                class="status alert">Alerta</span></li>
-                        <li><span class="sensor-name">Sensor 4</span> - Duto 2 - <span
-                                class="status stable">Estável</span></li>
-                        <li><span class="sensor-name">Sensor 5</span> - Duto 3 - <span
-                                class="status alert">Alerta</span></li>
-                        <li><span class="sensor-name">Sensor 6</span> - Duto 3 - <span
-                                class="status critical">Crítico</span></li>
-                        <li><span class="sensor-name">Sensor 7</span> - Duto 4 - <span
-                                class="status stable">Estável</span></li>
-                        <li><span class="sensor-name">Sensor 8</span> - Duto 4 - <span
-                                class="status alert">Alerta</span></li>
+                        <li><span class="sensor-name">Sensor 1</span> - Duto 1 - <span class="status critical">Crítico</span></li>
+                        <li><span class="sensor-name">Sensor 2</span> - Duto 1 - <span class="status critical">Crítico</span></li>
+                        <li><span class="sensor-name">Sensor 3</span> - Duto 2 - <span class="status alert">Alerta</span></li>
+                        <li><span class="sensor-name">Sensor 4</span> - Duto 2 - <span class="status stable">Estável</span></li>
+                        <li><span class="sensor-name">Sensor 5</span> - Duto 3 - <span class="status alert">Alerta</span></li>
+                        <li><span class="sensor-name">Sensor 6</span> - Duto 3 - <span class="status critical">Crítico</span></li>
+                        <li><span class="sensor-name">Sensor 7</span> - Duto 4 - <span class="status stable">Estável</span></li>
+                        <li><span class="sensor-name">Sensor 8</span> - Duto 4 - <span class="status alert">Alerta</span></li>
                 </div>
             </div>
         </div>
-
-
 </body>
 
 </html>
@@ -119,7 +107,6 @@
 <script>
     const ctx = document.getElementById('realtimeChart').getContext('2d');
 
-    // Valores simulados para os sensores
     const sensores = {
         "Sensor 1": { min: 15, max: 40 },
         "Sensor 2": { min: 25, max: 60 },
@@ -159,7 +146,6 @@
         ]
     };
 
-    // Chart config com customização de cores para um fundo escuro
     const config = {
         type: 'line',
         data: data,
@@ -171,13 +157,13 @@
                     title: {
                         display: true,
                         text: 'Horário',
-                        color: 'white'  // Cor do título do eixo X
+                        color: 'white'
                     },
                     ticks: {
-                        color: 'white'  // Cor dos rótulos do eixo X
+                        color: 'white'
                     },
                     grid: {
-                        color: 'rgba(255,255,255,0.2)'  // Cor das linhas da grade no eixo X
+                        color: 'rgba(255,255,255,0.2)'
                     }
                 },
                 y: {
@@ -192,14 +178,14 @@
                     grid: {
                         color: 'rgba(255,255,255,0.2)'
                     },
-                    beginAtZero: false, // Mantém isso como false, pois usaremos suggestedMin
-                    suggestedMin: 0     // <== Garante que o 0 apareça sempre
+                    beginAtZero: false, // 
+                    suggestedMin: 0
                 }
             },
             plugins: {
                 legend: {
                     labels: {
-                        color: 'white' // Cor dos textos da legenda
+                        color: 'white'
                     }
                 }
             }
@@ -239,8 +225,6 @@
     });
 
 
-
-
     const realtimeChart = new Chart(ctx, config);
 
     var intervalo;
@@ -257,11 +241,9 @@
         data.labels.push(hora);
         data.datasets[0].data.push(valor);
 
-        // Linhas horizontais de mínimo/máximo
         data.datasets[1].data.push(max);
         data.datasets[2].data.push(min);
 
-        // Limitar quantidade de pontos exibidos (rolagem)
         if (data.labels.length > 20) {
             data.labels.shift();
             data.datasets.forEach(dataset => dataset.data.shift());
@@ -305,7 +287,6 @@
         }
     }
 
-    // Configura padrão ao carregar a página
     window.onload = () => {
         selectSensor.value = "Sensor 1";
         selectTempo.value = "Tempo real";
