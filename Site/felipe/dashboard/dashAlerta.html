@@ -45,17 +45,43 @@
                 <h3>🏆 Top 3 Sensores com Mais Alertas</h3>
                 <div id="rankingContainer"></div>
             </div>
-        
+
+            <!-- Histórico -->
             <!-- Histórico -->
             <div class="historico-box">
                 <h3>📋 Histórico de Alertas</h3>
-                <div class="historico-item">⚠️ Alerta de Alta distância | Sensor 1 | Duto 1 | 17/04/2025 16:00</div>
-                <div class="historico-item">⚠️ Alerta de Baixa distância | Sensor 2 | Duto 1 | 17/04/2025 15:50</div>
-                <div class="historico-item">⚠️ Alerta de Alta distância | Sensor 4 | Duto 2 | 17/04/2025 15:40</div>
-                <div class="historico-item">⚠️ Alerta de Alta distância | Sensor 8 | Duto 4 | 17/04/2025 15:30</div>
+                <div id="historicoContainer" class="scroll-box">
+                    <div class="historico-item">
+                        <input type="checkbox" onchange="resolverAlerta(this)">
+                        ⚠️ Alerta de Alta distância | Sensor 1 | Duto 1 | 17/04/2025 16:00
+                    </div>
+                    <div class="historico-item">
+                        <input type="checkbox" onchange="resolverAlerta(this)">
+                        🚨 Alerta de Baixa distância | Sensor 2 | Duto 1 | 17/04/2025 15:50
+                    </div>
+                    <div class="historico-item">
+                        <input type="checkbox" onchange="resolverAlerta(this)">
+                        ⚠️ Alerta de Alta distância | Sensor 4 | Duto 2 | 17/04/2025 15:40
+                    </div>
+                    <div class="historico-item">
+                        <input type="checkbox" onchange="resolverAlerta(this)">
+                        ⚠️ Alerta de Alta distância | Sensor 8 | Duto 4 | 17/04/2025 15:30
+                    </div>
+                    <div class="historico-item">
+                        <input type="checkbox" onchange="resolverAlerta(this)">
+                        🚨 Alerta de Baixa distância | Sensor 9 | Duto 5 | 17/04/2025 15:30
+                    </div>
+                    <div class="historico-item">
+                        <input type="checkbox" onchange="resolverAlerta(this)">
+                        🚨 Alerta de Baixa distância | Sensor 11 | Duto 6 | 17/04/2025 15:30
+                    </div>
+                </div>
             </div>
+
+            <!-- Notificação flutuante -->
+            <div id="notificacaoResolvido" class="notificacao-resolvido"></div>
         </div>
-        
+
         <div class="grafico">
             <h2>📊 Quantidade de Alertas por Sensor</h2>
             <canvas id="graficoAlertas"></canvas>
@@ -89,20 +115,32 @@
     }
 
     function atualizarDashboard() {
+        // Pega o valor selecionado no select (dia, semana ou mês)
         const periodo = document.getElementById("periodoSelect").value;
+
+        // Busca os dados simulados para o período escolhido
         const sensores = dadosSimulados[periodo];
 
-        const ranking = Object.entries(sensores)
-            .sort((a, b) => b[1].peso - a[1].peso)
-            .slice(0, 3);
+        // Transforma o objeto 'sensores' em um array de pares [nome, dados],
+        // ordena pelo peso do maior para o menor, e pega apenas os 3 primeiros
+        const ranking = Object.entries(sensores)       // Converte o objeto em um array de arrays [nome, dados]
+            .sort((a, b) => b[1].peso - a[1].peso)     // Ordena pelo valor 'peso' de forma decrescente
+            .slice(0, 3);                              // Pega apenas os 3 primeiros (Top 3)
 
+        // Pega o container onde o ranking será exibido
         const rankingContainer = document.getElementById("rankingContainer");
+
+        // Monta o HTML de cada item do ranking usando map
+        // O map percorre cada item do ranking, onde:
+        // - 'nome' é o nome do sensor
+        // - 'dados' são os valores do sensor (alertaAlto, alertaBaixo, peso)
+        // - 'index' é a posição no ranking (0, 1, 2)
         rankingContainer.innerHTML = ranking.map(([nome, dados], index) => `
         <div class="ranking-item">
             <strong>${index + 1}º -  ${nome}</strong><br>
             Alertas Altos: ${dados.alertaAlto} | Alertas Baixos: ${dados.alertaBaixo} | <b>Peso:</b> ${dados.peso}
         </div>
-    `).join('');
+    `).join('');  // Junta tudo em uma string para colocar no innerHTML
 
         // Atualiza gráfico
         const ctx = document.getElementById('graficoAlertas').getContext('2d');
@@ -133,7 +171,7 @@
                 x: {
                     ticks: { color: 'white' },
                     grid: {
-                        color: 'rgba(255,255,255,0.2)', // grade mais suave
+                        color: 'rgba(255,255,255,0.2)', 
                         drawOnChartArea: true,
                         drawTicks: false,
                     }
@@ -142,7 +180,7 @@
                     beginAtZero: true,
                     ticks: { color: 'white' },
                     grid: {
-                        color: 'rgba(255,255,255,0.2)', // grade mais suave
+                        color: 'rgba(255,255,255,0.2)', 
                         drawOnChartArea: true,
                         drawTicks: false,
                     }
@@ -171,12 +209,33 @@
         }
     }
 
+    function resolverAlerta(checkbox) {
+        const alerta = checkbox.parentElement;
+        const notificacao = document.getElementById("notificacaoResolvido");
+
+        if (checkbox.checked) {
+            alerta.remove();
+
+            // Remove qualquer emoji no começo da string (inclusive ⚠️ ou 🚨)
+            let alertaSemEmoji = alerta.textContent.replace(/^[^\w]+/, '').trim();
+
+            notificacao.innerHTML = `✅ ${alertaSemEmoji}`;
+            notificacao.classList.add("mostrar");
+
+            setTimeout(() => {
+                notificacao.classList.remove("mostrar");
+                notificacao.innerHTML = "";
+            }, 5000);
+        }
+    }
+
+
     // Inicializa ao carregar
     window.onload = atualizarDashboard;
 
     function redirecionarHome() { window.location.href = 'dashHome.html' };
     function redirecionarAlerta() { window.location.href = 'dashAlerta.html' };
-    function redirecionarComparacao() { window.location.href = 'dashComparacao.html' };
+    function redirecionarComparar() { window.location.href = 'dashComparacao.html' };
     function sair() { window.location.href = '../home.html' }
 
 </script>

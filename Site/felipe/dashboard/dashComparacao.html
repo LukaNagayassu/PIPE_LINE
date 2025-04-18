@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pipeline Consultancy | DashBoard Home</title>
-    <link rel="stylesheet" href="../css/dash.css">
+    <link rel="stylesheet" href="../css/dashComparacao.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
 
     <div class="sidebar">
@@ -15,26 +18,161 @@
             <img src="../css/img/user.webp" alt="Usuário" class="user-icon">
             <p class="user-role">Analista</p>
         </div>
-    
+
         <div class="menu">
             <button class="menu-btn" onclick="redirecionarHome()">Home</button>
             <button class="menu-btn" onclick="redirecionarAlerta()">Alertas</button>
             <button class="menu-btn" onclick="redirecionarComparar()">Comparação</button>
         </div>
-    
+
         <div class="logout-section">
             <button class="logout-btn" onclick="sair()">Sair</button>
         </div>
     </div>
-    
+
+    <div class="main-content">
+        <div class="controls">
+            <select id="dutoSelect">
+                <option value="1">Duto 1</option>
+                <option value="2">Duto 2</option>
+                <option value="3">Duto 3</option>
+            </select>
+            <select id="periodoSelect">
+                <option value="horas">Horas do dia atual</option>
+                <option value="dias">Dias da semana</option>
+            </select>
+            <select id="metricaSelect">
+                <option value="Distancia">Distância (nível do duto)</option>
+                <option value="Alerta">Alertas</option>
+            </select>
+            <select id="tipoGraficoSelect">
+                <option value="linha">Gráfico de Linhas</option>
+                <option value="barra">Gráfico de Barras</option>
+            </select>
+        </div>
+
+        <h2 id="tituloGrafico">Gráfico</h2>
+
+        <div class="grafico-container">
+            <canvas id="meuGrafico"></canvas>
+        </div>
+    </div>
+
+
 </body>
+
 </html>
 
 <script>
+    const ctx = document.getElementById("meuGrafico").getContext("2d");
+    let chart;
 
-function redirecionarHome() { window.location.href = 'dashHome.html' };
-function redirecionarAlerta() { window.location.href = 'dashAlerta.html' };
-function redirecionarComparacao() { window.location.href = 'dashComparacao.html' };
-function sair(){ window.location.href = '../home.html' }
+    const dutoSelect = document.getElementById("dutoSelect");
+    const periodoSelect = document.getElementById("periodoSelect");
+    const metricaSelect = document.getElementById("metricaSelect");
+    const graficoSelect = document.getElementById("tipoGraficoSelect");
+    const tituloGrafico = document.getElementById("tituloGrafico");
+
+    function gerarLabels() {
+        if (periodoSelect.value === "horas") {
+            return Array.from({ length: 24 }, (_, i) => `${i}h`);
+        } else {
+            return ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+        }
+    }
+
+    function gerarDados(base) {
+        return gerarLabels().map(() => Math.floor(Math.random() * base) + 5);
+    }
+
+    function obterSensores() {
+        const duto = dutoSelect.value;
+        if (duto === "1") return ["Sensor 1", "Sensor 2"];
+        if (duto === "2") return ["Sensor 3", "Sensor 4"];
+        return ["Sensor 5", "Sensor 6"];
+    }
+
+    function atualizarGrafico() {
+        const labels = gerarLabels();
+        const sensores = obterSensores();
+        const tipoMetrica = metricaSelect.value;
+        const tipoGrafico = graficoSelect.value;
+
+        tituloGrafico.innerText = `${tipoMetrica} - Duto ${dutoSelect.value}`;
+
+        const cores = [
+            { cor: "rgba(255, 255, 0, 1)", corTransparente: "rgba(255, 255, 0, 0.2)" },  // amarelo
+            { cor: "rgba(255, 0, 0, 1)", corTransparente: "rgba(255, 0, 0, 0.2)" }   // vermelho
+        ];
+
+        const datasets = sensores.map((sensor, index) => {
+            const data = tipoMetrica === "distancia"
+                ? gerarDados(15)
+                : gerarDados(10);
+
+            if (tipoGrafico === "barra") {
+                return {
+                    label: sensor,
+                    data,
+                    backgroundColor: cores[index].corTransparente,
+                    borderColor: cores[index].cor,
+                    borderWidth: 2
+                };
+            } else {
+                return {
+                    label: sensor,
+                    data,
+                    borderColor: cores[index].cor,
+                    backgroundColor: cores[index].corTransparente,
+                    tension: 0
+                };
+            }
+        });
+
+        if (chart) chart.destroy();
+
+        chart = new Chart(ctx, {
+            type: tipoGrafico === "barra" ? "bar" : "line",
+            data: { labels, datasets },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: 'white' }
+                    },
+                    x: {
+                        ticks: { color: 'white' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: 'white' }
+                    },
+                    tooltip: {  // Adicionando tooltips
+                        enabled: true,
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)', // Cor de fundo da tooltip
+                        titleColor: 'white', // Cor do título
+                        bodyColor: 'white',  // Cor do corpo
+                        borderColor: 'rgba(255, 255, 255, 0.2)', // Borda da tooltip
+                        borderWidth: 1, // Espessura da borda
+                        displayColors: false // Não exibe as cores ao lado do valor
+                    }
+                }
+            }
+        });
+    }
+
+    dutoSelect.addEventListener("change", atualizarGrafico);
+    periodoSelect.addEventListener("change", atualizarGrafico);
+    metricaSelect.addEventListener("change", atualizarGrafico);
+    graficoSelect.addEventListener("change", atualizarGrafico);
+
+    atualizarGrafico();
+
+    function redirecionarHome() { window.location.href = 'dashHome.html' };
+    function redirecionarAlerta() { window.location.href = 'dashAlerta.html' };
+    function redirecionarComparar() { window.location.href = 'dashComparacao.html' };
+    function sair() { window.location.href = '../home.html' }
 
 </script>

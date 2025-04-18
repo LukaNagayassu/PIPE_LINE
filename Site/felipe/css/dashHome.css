@@ -118,10 +118,12 @@ body {
 
 select {
     padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Epilogue';
+    border-radius: 8px;
+    border: 1px solid yellow;
+    background-color: #333;
+    color: white;
+    box-shadow: 0 0 10px #ffff00a8;
 }
 
 /* Painel principal */
@@ -160,6 +162,7 @@ select {
     text-align: center;
     font-weight: 500;
     font-size: 1.1rem;
+    margin-top: 0.25vh;
 }
 
 .indicator span{
@@ -180,6 +183,7 @@ select {
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 0 10px #ffff00a8;
 }
 
 .chart-container {
@@ -205,6 +209,7 @@ select {
     height: 100%;
     min-height: 280px;
     box-sizing: border-box;
+    box-shadow: 0 0 10px #ffff00a8;
 }
 
 .sensor-status-container {
@@ -283,6 +288,7 @@ select {
     align-items: center;
     justify-content: center;
     margin-top: -8vh;
+    box-shadow: 0 0 10px #ffff00a8;
 }
 
 .pizza-container {
