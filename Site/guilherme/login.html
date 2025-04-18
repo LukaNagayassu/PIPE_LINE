@@ -12,9 +12,9 @@
     <nav>
         <div class="logo"><a href="home.html"><img src="./assets/img/logo.png" style="width: 300px; height: 80px;"></a></div>
         <ul class="lista_itens">
-                <li> <a href="petroquimica.html">Sobre Nós</a></li>
+                <li> <a href="sobrenos.html">Sobre Nós</a></li>
                 <li><a href="petroquimica.html">Petroquímica</a></li>
-                <li>Orçamento</li>
+                <li><a href="projeto.html">Projeto</a></li>
                 <li class="btn_login">Entrar ><li>
             </ul>
         </div>
@@ -25,8 +25,8 @@
     <div class="login">
         <h1>Login</h1>
         <input id="email">
-        <input id="senha">
-        <button id="btn_entrar">Entrar</button>
+        <input type="password" id="senha">
+        <button id="btn_entrar" onclick="login()">Entrar</button>
     </div>
 
     <img src="./assets/img/imgDash.png" id="imagem_fundo">
@@ -35,3 +35,15 @@
 </body>
 
 </html>
+
+<script>
+    function login(){
+        var emailUsuario = email.value
+        var senhaUsuario = senha.value
+
+        if(emailUsuario != 'pipeline@gmail.com' || senhaUsuario != 'Pipeline@2025'){
+            alert("Insira um email e/ou senha válidos!")
+            return
+        }
+    }
+</script>
