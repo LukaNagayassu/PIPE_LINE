@@ -136,6 +136,17 @@
             data: { labels, datasets },
             options: {
                 responsive: true,
+                interaction: {
+                    mode: 'nearest',
+                    intersect: false
+                },
+                elements: {
+                    point: {
+                        radius: 5,      // Tamanho visível do ponto (linha)
+                        hitRadius: 20,  // Área invisível de detecção do mouse
+                        hoverRadius: 7, // Tamanho ao passar o mouse
+                    }
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -149,14 +160,14 @@
                     legend: {
                         labels: { color: 'white' }
                     },
-                    tooltip: {  // Adicionando tooltips
+                    tooltip: {
                         enabled: true,
-                        backgroundColor: 'rgba(0, 0, 0, 0.7)', // Cor de fundo da tooltip
-                        titleColor: 'white', // Cor do título
-                        bodyColor: 'white',  // Cor do corpo
-                        borderColor: 'rgba(255, 255, 255, 0.2)', // Borda da tooltip
-                        borderWidth: 1, // Espessura da borda
-                        displayColors: false // Não exibe as cores ao lado do valor
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        titleColor: 'white',
+                        bodyColor: 'white',
+                        borderColor: 'rgba(255, 255, 255, 0.2)',
+                        borderWidth: 1,
+                        displayColors: false
                     }
                 }
             }
@@ -174,5 +185,5 @@
     function redirecionarAlerta() { window.location.href = 'dashAlerta.html' };
     function redirecionarComparar() { window.location.href = 'dashComparacao.html' };
     function sair() { window.location.href = '../home.html' }
-
 </script>
+
