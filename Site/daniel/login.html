@@ -34,7 +34,8 @@
                         <span id="senha_invalida"></span>
                     </label>
                     <input type="password" id="ipt_senha">
-                    <button onclick="login()">Entrar</button>
+                    <span id="msg"></span>
+                    <button onclick="login()" id="btnEntrar">Entrar</button>
                     <a href="cadastro.html">Fazer Cadastro</a>
                 </div>
             </div>
@@ -45,6 +46,7 @@
 </body>
 
 <script>
+    let tentativasRestantes = 3;
     function login(){
         const email = ipt_email.value;
         const senha = ipt_senha.value;
@@ -57,6 +59,29 @@
         if(senha.length < 8){
             senha_invalida.innerHTML = 'Senha Inválida*'
         }
-    }
+
+        if (tentativasRestantes <= 0) {
+            msg.innerHTML = "Acesso bloqueado. Tente novamente mais tarde.";
+            msg.style.color = "red";
+            return;
+        }
+
+        if (email === "pipeline@gmail.com" && senha === "123456") {
+            window.location.href = "./dashboard/dashHome.html"; 
+        } else {
+            tentativasRestantes--;
+
+            if (tentativasRestantes > 0) {
+                msg.innerHTML = `Email ou senha incorretos! Você ainda tem ${tentativasRestantes} tentativa(s).`;
+                msg.style.color = "red";
+                msg.style.marginTop = "20px";
+            } else {
+                msg.innerHTML = "Você errou 3 vezes. Acesso bloqueado.";
+                btnEntrar.disabled = true;
+                btnEntrar.style.opacity = "0.5";
+                btnEntrar.style.cursor = "not-allowed";
+            }
+        }
+}
 </script>
 </html>
