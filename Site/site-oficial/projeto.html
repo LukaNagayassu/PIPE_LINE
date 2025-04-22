@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <title>Projeto | PipeLine</title>
+</head>
+
+<body>
+    <div class="nav">
+        <div class="container">
+            <a href="index.html">
+                <img class="logo" src="./assets/images/logoNomeSemFundo.png" />
+            </a>
+            <div class="links">
+                <a href="./sobre-nos.html" class="link">Sobre Nós</a>
+                <a href="./petroquimica.html" class="link">Petróquimica</a>
+                <a href="./projeto.html" class="link active">Projeto</a>
+                <a href="./login.html" class="link btn-entrar">Entrar ></a>
+            </div>
+        </div>
+    </div>
+    <section class="sessao-heroi projeto">
+        <div class="container">
+            <div class="texto-chave">
+                <h1>Monitoramento de Fluxo em Dutos</h1>
+                <p>Monitore e colete dados formatados para uma visualização e uma tomada de decisão mais facil.</p>
+                <a href="#monitore" class="btn">Saiba Mais</a>
+            </div>
+            <img src="./assets/images/undraw_projeto-img.svg" alt="Dashboard">
+        </div>
+    </section>
+    <section class="sessao-monitore" id="monitore">
+        <div class="container">
+            <div class="lado texto">
+                <h1 class="titulo">Monitore seus dutos</h1>
+                <p>Através de nossa dashboard você pode monitorar cada sensor e análisar os gráficos indicados, também
+                    contendo quantidade de dutos em estado crítico, em alerta e estável, ambos também sendo representado
+                    por um gráfico de pizza. Principais recursos:</p>
+                <ul>
+                    <li><span>Monitoramento</span> em Tempo Real;</li>
+                    <li><span>Estado</span> dos dutos para identificação de problema (crítico, alerta e estável);</li>
+                </ul>
+            </div>
+            <div class="lado image">
+                <img src="./assets/images/dashboard-1.jpg">
+            </div>
+        </div>
+    </section>
+    <section class="sessao-alertas">
+        <div class="container">
+            <div class="lado image">
+                <img src="./assets/images/dashboard-2.jpg">
+            </div>
+            <div class="lado texto">
+                <h1 class="titulo">Receba alertas</h1>
+                <p>Através da aba alertas, será exibido avisos se duto entrar em algum estado que exija alguma
+                    manutênção ou um certo nível de atenção, possuindo um ranking de avisos por duto eum histórico:</p>
+                <ul>
+                    <li><span>Alertas</span> anunciando possivel irregularidade no duto;</li>
+                    <li><span>Ranking</span> dos dutos para identificação de problemas comuns;</li>
+                    <li><span>Histórico</span> para análise de movimentações e backup;</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section class="sessao-diferenciais">
+        <div class="container">
+            <h1>Por que a PipeLine é essencial?</h1>
+            <div class="cards">
+                <div class="card">
+                    <h2>Redução de Custos Operacionais</h2>
+                    <p>A detecção precoce de falhas evita manutenções corretivas dispendiosas e paradas de produção.</p>
+                </div>
+                <div class="card">
+                    <h2>Aumento da Segurança</h2>
+                    <p>Nosso sistema antecipa possíveis riscos, garantindo mais segurança para colaboradores e para o meio ambiente.</p>
+                </div>
+                <div class="card">
+                    <h2>Tomada de Decisão Baseada em Dados</h2>
+                    <p>Com dashboards em tempo real e alertas inteligentes, gestores tomam decisões estratégicas com confiança.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="sessao-orcamento">
+        <div class="container">
+            <div class="left">
+                <h1>Calculadora de Vazão</h1>
+                <p>Evasão Anual (litros):</p>
+                <input type="number" id="ipt_vazao" placeholder="Digite a evasão anual"><br>
+
+                <p>Fluxo Anual Total (Vazão em litros):</p>
+                <input type="number" id="ipt_fluxo" placeholder="Digite o fluxo anual total"><br>
+
+                <p>Preço do barril de pétroleo (R$):</p>
+                <input type="number" id="ipt_preco" placeholder="Digite o preço do barril"><br><br>
+
+                <button onclick="calcularPerda()">Analise</button>
+            </div>
+            <div id="divCalc" class="right"></div>
+        </div>
+    </section>
+    <div class="footer">
+        <div class="container">
+            <div class="logo-footer">
+                <img src="./assets/images/logoDark.png" alt="Logo PipeLine" class="logo">
+            </div>
+            <div class="links">
+                <b>Links</b>
+                <a href="./sobre-nos.html" class="link">Sobre Nós</a>
+                <a href="./petroquimica.html" class="link">Petróquimica</a>
+                <a href="./orcamento.html" class="link">Orçamento</a>
+                <a href="./login.html" class="link">GitHub</a>
+            </div>
+            <div class="contato">
+                <a href="#"><img src="./assets/images/github.png" alt="GitHub">pipeline.consultancy</a>
+                <a href="#"><img src="./assets/images/email.png" alt="Email"> pipeline.consultancy@pipe.com</a>
+                <a href="#"><img src="./assets/images/phone.png" alt="Linkedin"> +55 11 12345-6789</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+<script>
+    function calcularPerda() {
+        var vazao = Number(ipt_vazao.value);
+        var fluxo = Number(ipt_fluxo.value);
+        var preco = Number(ipt_preco.value);
+
+        var porcentagem = ((vazao / fluxo) * 100).toFixed(2);
+        var perdaBarris = (vazao / 159).toFixed(0); //159 L e a capacidade de um barril
+        var perdaFinanceira = (perdaBarris * preco).toFixed(2);
+        var economia = (perdaFinanceira * 0.15).toFixed(2);
+
+        divCalc.innerHTML = `
+            <div class="txtFinal" style="text-align: center;">
+                <table border="1" style="margin: 0 auto; border-collapse: collapse; text-align: left;">
+                    <tr>
+                        <th colspan="2">Resumo da Análise</th>
+                    </tr>
+                    <tr>
+                        <td>Fluxo Anual Total</td>
+                        <td><b>${fluxo.toLocaleString()} L</b></td>
+                    </tr>
+                    <tr>
+                        <td>Vazão Anual</td>
+                        <td><b><span style="background-color: red; color: white;">${vazao.toLocaleString()} L</span></b></td>
+                    </tr>
+                    <tr>
+                        <td>Perda Financeira</td>
+                        <td><b><span style="background-color: red; color: white;">R$ ${perdaFinanceira}</span></b></td>
+                    </tr>
+                    <tr>
+                        <td>Barris Perdidos</td>
+                        <td><b><span style="background-color: red; color: white;">${perdaBarris}</span></b></td>
+                    </tr>
+                    <tr>
+                        <td>Porcentagem de Vazão</td>
+                        <td><b>${porcentagem}%</b></td>
+                    </tr>
+                    <tr>
+                        <td>Economia Estimada</td>
+                        <td><b>R$ ${economia}</b></td>
+                    </tr>
+                </table>
+
+                <br>
+                <b>Baixe o relatório detalhado:</b><br>
+                <a href="https://drive.google.com/file/d/1fDI7LY49X_174gGMe612bAONmZQy_cjA/view?usp=sharing">
+                    <button>📥 Baixar Relatório</button>
+             
+            </div>
+        `;
+    }
+</script>
+</html>

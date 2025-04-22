@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline Consultancy | DashBoard Home</title>
+    <link rel="stylesheet" href="../assets/css/dashAlerta.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <img src="../assets/images/logoNomeSemFundo.png" alt="">
+        
+        <div class="user-section">
+            <img src="../assets/images/user.webp" alt="Usuário" class="user-icon">
+            <p class="user-role">Analista</p>
+        </div>
+
+        <div class="menu">
+            <button class="menu-btn" onclick="redirecionarHome()">Home</button>
+            <button class="menu-btn" onclick="redirecionarAlerta()">Alertas</button>
+            <button class="menu-btn" onclick="redirecionarComparar()">Comparação</button>
+        </div>
+
+        <div class="logout-section">
+            <button class="logout-btn" onclick="sair()">Sair</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <select id="periodoSelect" onchange="atualizarDashboard()">
+                <option value="dia">Hoje</option>
+                <option value="semana">Esta Semana</option>
+                <option value="mes">Este Mês</option>
+            </select>
+        </div>
+
+        <div class="painel-alertas">
+            <!-- Ranking -->
+            <div class="ranking-box">
+                <h3>🏆 Top 3 Sensores com Mais Alertas</h3>
+                <div id="rankingContainer"></div>
+            </div>
+
+            <!-- Histórico -->
+            <!-- Histórico -->
+            <div class="historico-box">
+                <h3>📋 Histórico de Alertas</h3>
+                <div id="historicoContainer" class="scroll-box">
+                    <div class="historico-item">
+                        <input type="checkbox" onchange="resolverAlerta(this)">
+                        ⚠️ Alerta de Alta distância | Sensor 1 | Duto 1 | 17/04/2025 16:00
+                    </div>
+                    <div class="historico-item">
+                        <input type="checkbox" onchange="resolverAlerta(this)">
+                        🚨 Alerta de Baixa distância | Sensor 2 | Duto 1 | 17/04/2025 15:50
+                    </div>
+                    <div class="historico-item">
+                        <input type="checkbox" onchange="resolverAlerta(this)">
+                        ⚠️ Alerta de Alta distância | Sensor 4 | Duto 2 | 17/04/2025 15:40
+                    </div>
+                    <div class="historico-item">
+                        <input type="checkbox" onchange="resolverAlerta(this)">
+                        ⚠️ Alerta de Alta distância | Sensor 8 | Duto 4 | 17/04/2025 15:30
+                    </div>
+                    <div class="historico-item">
+                        <input type="checkbox" onchange="resolverAlerta(this)">
+                        🚨 Alerta de Baixa distância | Sensor 9 | Duto 5 | 17/04/2025 15:30
+                    </div>
+                    <div class="historico-item">
+                        <input type="checkbox" onchange="resolverAlerta(this)">
+                        🚨 Alerta de Baixa distância | Sensor 11 | Duto 6 | 17/04/2025 15:30
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notificação flutuante -->
+            <div id="notificacaoResolvido" class="notificacao-resolvido"></div>
+        </div>
+
+        <div class="grafico">
+            <h2>📊 Quantidade de Alertas por Sensor</h2>
+            <canvas id="graficoAlertas"></canvas>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+
+    // Arrays fixos de dados mockados para cada período
+    const dadosDia = [
+        { sensor: "Sensor 1", alertaAlto: 5, alertaBaixo: 2 },
+        { sensor: "Sensor 2", alertaAlto: 3, alertaBaixo: 1 },
+        { sensor: "Sensor 3", alertaAlto: 7, alertaBaixo: 4 },
+        { sensor: "Sensor 4", alertaAlto: 2, alertaBaixo: 3 }
+    ];
+
+    const dadosSemana = [
+        { sensor: "Sensor 1", alertaAlto: 15, alertaBaixo: 10 },
+        { sensor: "Sensor 2", alertaAlto: 12, alertaBaixo: 8 },
+        { sensor: "Sensor 3", alertaAlto: 20, alertaBaixo: 11 },
+        { sensor: "Sensor 4", alertaAlto: 10, alertaBaixo: 7 }
+    ];
+
+    const dadosMes = [
+        { sensor: "Sensor 1", alertaAlto: 50, alertaBaixo: 30 },
+        { sensor: "Sensor 2", alertaAlto: 40, alertaBaixo: 25 },
+        { sensor: "Sensor 3", alertaAlto: 60, alertaBaixo: 35 },
+        { sensor: "Sensor 4", alertaAlto: 35, alertaBaixo: 20 }
+    ];
+
+    // Função para atualizar o dashboard
+    function atualizarDashboard() {
+        const periodo = document.getElementById("periodoSelect").value;
+
+        let dadosSelecionados = [];
+
+        // Decide qual array usar
+        if (periodo === "dia") {
+            dadosSelecionados = dadosDia;
+        } else if (periodo === "semana") {
+            dadosSelecionados = dadosSemana;
+        } else if (periodo === "mes") {
+            dadosSelecionados = dadosMes;
+        }
+
+        atualizarRanking(dadosSelecionados);
+        atualizarGrafico(dadosSelecionados);
+    }
+
+    // Função para atualizar o ranking
+    function atualizarRanking(dados) {
+        const rankingContainer = document.getElementById("rankingContainer");
+        rankingContainer.innerHTML = "";
+
+        // Calcula o peso (alertaAlto*2 + alertaBaixo)
+        for (let i = 0; i < dados.length; i++) {
+            dados[i].peso = dados[i].alertaAlto * 2 + dados[i].alertaBaixo;
+        }
+
+        // Ordena pelo peso (maior primeiro)
+        dados.sort((a, b) => b.peso - a.peso);
+
+        // Adiciona os 3 primeiros no ranking
+        for (let i = 0; i < 3; i++) {
+            const item = dados[i];
+            const div = document.createElement("div");
+            div.className = "ranking-item";
+            div.innerHTML = `<strong>${i + 1}º - ${item.sensor}</strong><br>
+            Alertas Altos: ${item.alertaAlto} | Alertas Baixos: ${item.alertaBaixo} | <b>Peso:</b> ${item.peso}`;
+            rankingContainer.appendChild(div);
+        }
+    }
+
+    // Função para atualizar o gráfico
+    function atualizarGrafico(dados) {
+        const ctx = document.getElementById('graficoAlertas').getContext('2d');
+
+        const labels = dados.map(d => d.sensor);
+        const alertasAltos = dados.map(d => d.alertaAlto);
+        const alertasBaixos = dados.map(d => d.alertaBaixo);
+
+        const data = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Alertas Altos',
+                    data: alertasAltos,
+                    backgroundColor: 'rgba(255, 0, 0, 0.3)',
+                    borderColor: 'red',
+                    borderWidth: 2
+                },
+                {
+                    label: 'Alertas Baixos',
+                    data: alertasBaixos,
+                    backgroundColor: 'rgba(255, 165, 0, 0.3)',
+                    borderColor: 'orange',
+                    borderWidth: 2
+                }
+            ]
+        };
+
+        const options = {
+            responsive: true,
+            scales: {
+                x: {
+                    ticks: { color: 'white' },
+                    grid: { color: 'rgba(255,255,255,0.2)' }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: { color: 'white' },
+                    grid: { color: 'rgba(255,255,255,0.2)' }
+                }
+            },
+            plugins: {
+                legend: { labels: { color: 'white' } }
+            }
+        };
+
+        // Atualiza ou cria o gráfico
+        if (window.graficoInstance) {
+            window.graficoInstance.data = data;
+            window.graficoInstance.update();
+        } else {
+            window.graficoInstance = new Chart(ctx, {
+                type: 'bar',
+                data,
+                options
+            });
+        }
+    }
+
+
+    function resolverAlerta(checkbox) {
+        const alerta = checkbox.parentElement;
+        const notificacao = document.getElementById("notificacaoResolvido");
+
+        if (checkbox.checked) {
+            alerta.remove();
+
+            // Remove qualquer emoji no começo da string (inclusive ⚠️ ou 🚨)
+            let alertaSemEmoji = alerta.textContent.replace(/^[^\w]+/, '').trim();
+
+            notificacao.innerHTML = `✅ ${alertaSemEmoji}`;
+            notificacao.classList.add("mostrar");
+
+            setTimeout(() => {
+                notificacao.classList.remove("mostrar");
+                notificacao.innerHTML = "";
+            }, 5000);
+        }
+    }
+
+
+    // Inicializa ao carregar
+    window.onload = atualizarDashboard;
+
+    function redirecionarHome() { window.location.href = 'dashHome.html' };
+    function redirecionarAlerta() { window.location.href = 'dashAlerta.html' };
+    function redirecionarComparar() { window.location.href = 'dashComparacao.html' };
+    function sair() { window.location.href = '../home.html' }
+
+</script>

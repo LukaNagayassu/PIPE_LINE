@@ -1,0 +1,1041 @@
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+*{
+    scroll-behavior: smooth;
+}
+body{
+    margin: 0;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
+    background-color: #161616;
+    color: #FFF;
+    font-size: clamp(16px, 1vw, 20px);
+}
+.container{
+    display: flex;
+    width: 80%;
+    margin: 0 auto;
+}
+
+/* HEADER */
+.nav{
+    width: 100%;
+    background-color: #0000003F;
+    position: fixed;
+    z-index: 1000;
+}
+.nav.dark{
+    background-color: #000;
+}
+.nav .container{
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0px;
+}
+.nav .logo{
+    min-width: 200px;
+    width: 20%;
+    margin: 12px 0;
+}
+.nav .links{
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+.nav .link{
+    color: #FFF;
+    text-decoration: none;
+    transition: .3s;
+}
+.nav .link.active{
+    font-weight: bold;
+}
+.nav .link:hover{
+    color: #F6C500;
+}
+.nav .link.btn-entrar{
+    padding: 4px 12px;
+    border: 1px solid #FFF;
+    border-radius: 4px;
+}
+.nav .link.btn-entrar:hover{
+    background-color: #F6C500;
+    color: #000;
+    border-color: #F6C500;
+}
+
+/* SESSÃO HERÓI */
+.sessao-heroi{
+    position: relative;
+    font-family: 'Epilogue';
+}
+.sessao-heroi.inicio{
+    background-image: url('../images/bg-home.jpg');
+    background-size: cover;
+    height: 125vh;
+}
+.sessao-heroi .container{
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    backdrop-filter: brightness(0.5);
+}
+.sessao-heroi .texto-chave{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    max-width: 780px;
+    color: #FFF;
+    font-size: 1.5em;
+}
+.sessao-heroi .texto-chave span{
+    color: #F6C500;
+    background-color: #252020;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+.sessao-heroi .texto-chave .btn{
+    color: #000;
+    background-color: #FFF;
+    padding: 8px 24px;
+    border-radius: 8px;
+    font-size: 28px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: .3s;
+}
+.sessao-heroi .texto-chave .btn:hover{
+    background-color: #F6C500;
+    color: #000;
+}
+.sessao-heroi .onda{
+    width: 100%;
+    height: 329px;
+    background-image: url('../images/wave.png');
+    background-size: cover;
+    z-index: 0;
+}
+
+/* SESSAO PIPELINE */
+.sessao-pipeline{
+    width: 100%;
+    min-height: 100vh;
+    font-size: 22px;
+    position: relative;
+    overflow: hidden;
+}
+.sessao-pipeline #pipe{
+    height: 100%;
+    width: 15vw;
+    position: absolute;
+    bottom: -52px;
+    right: -32px;
+    z-index: -1;
+    object-fit: cover;
+    object-position: left;
+    max-height: 100vh;
+}
+.sessao-pipeline .container{
+    padding: 52px 0px;
+    flex-direction: column;
+    text-align: center;
+}
+.sessao-pipeline .container .titulo{
+    margin-bottom: 0px;
+}
+.sessao-pipeline .container .subtitulo{
+    width: 65%;
+    min-width: 300px;
+    margin: 0 auto;
+}
+.sessao-pipeline .cards{
+    margin-top: 42px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+}
+.sessao-pipeline .cards .card{
+    display: flex;
+    flex: 1;
+    min-width: 200px;
+    max-width: 400px;
+    flex-direction: column;
+    text-align: left;
+    font-size: 20px;
+    border: 1px solid #FFF;
+    border-radius: 8px;
+    padding: 16px 16px;
+}
+.sessao-pipeline .cards .card h4{
+    font-size: 22px;
+    margin: 0px;
+}
+.sessao-pipeline .cards .card p{
+    margin-top: 4px;
+    margin-bottom: 0px;
+}
+.sessao-pipeline .cards .card img{
+    align-self: flex-end;
+}
+.sessao-pipeline .cards .card.bg-white{
+    background-color: #FFF;
+    color: #000;
+    border: 1px solid #000;
+    padding: 26px 16px;
+}
+
+/* BANNER PETROQUIMICA */
+.banner-petroquimica{
+    width: 100%;
+    height: 264px;
+    background-image: url('../images/petroquimica-card.png');
+    background-size: cover;
+    background-position: bottom;
+    position: relative;
+    font-family: 'Epilogue';
+}
+.banner-petroquimica .container{
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+.banner-petroquimica .container p{
+    font-size: 1em;
+    margin: 0;
+    margin-bottom: 4px;
+
+}
+.banner-petroquimica .container h1{
+    font-size: 2em;
+    color: #FFF;
+    margin: 0;
+}
+.banner-petroquimica .container a{
+    font-size: 1em;
+    text-decoration: none;
+    color: #FFF;
+    border: 1px solid #FFF;
+    border-radius: 8px;
+    align-self: flex-end;
+    margin-bottom: 32px;
+    padding: 8px 38px;
+    transition: .3s;
+}
+.banner-petroquimica .container a:hover{
+    background-color: #FFF;
+    color: #000;
+}
+
+/* SESSAO COMPROMISSO */
+.sessao-compromisso .container{
+    padding: 128px 0;
+    gap: 128px;
+    flex-wrap: wrap;
+}
+.sessao-compromisso .img-compromisso{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-width: 200px;
+}
+.sessao-compromisso .img-compromisso img{
+    width: 100%;
+    height: 100%;
+}
+.sessao-compromisso .container .texto{
+    flex: 1;
+}
+.sessao-compromisso .container span{
+    font-weight: bold;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+.sessao-compromisso .container span::before{
+    content: '';
+    display: block;
+    width: 4px;
+    height: 52px;
+    background-color: #F6C500;
+    left: 0px;
+    top: 0px;
+}
+.sessao-compromisso .onda{
+    width: 100%;
+    height: 129px;
+    background-image: url('../images/waveFaleConosco.png');
+    background-size: cover;
+    z-index: -1;
+}
+
+/* SESSAO FALE CONOSCO */
+.sessao-fale-conosco{
+    background-color: #FFF;
+    color: #000;
+    padding: 52px 0;
+}
+.sessao-fale-conosco .container{
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 42px;
+}
+.sessao-fale-conosco .lado-formulario{
+    display: flex;
+    flex-direction: column;
+    width: 45vw;
+    min-width:300px;
+}
+.sessao-fale-conosco .lado-formulario .titulo{
+    margin: 0;
+}
+.sessao-fale-conosco .lado-formulario p{
+    margin: 0;
+    margin-bottom: 24px;
+}
+.sessao-fale-conosco .formulario{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+.sessao-fale-conosco .formulario .input{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.sessao-fale-conosco .formulario .input input, .sessao-fale-conosco .formulario .input textarea{
+    font-size: 1em;
+    padding: 12px;
+    border: 1px solid #000;
+    border-radius: 8px;
+    background-color: transparent;
+    color: #000;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
+    transition: .3s;
+}
+.sessao-fale-conosco .formulario .input textarea{
+    height: 165px;
+    resize: none;
+}
+.sessao-fale-conosco .formulario .input input:focus, .sessao-fale-conosco .formulario .input textarea:focus{
+    outline: none;
+    border-color: #F6C500;
+}
+.sessao-fale-conosco .formulario .input label{
+    position: absolute;
+    top: -12px;
+    left: 8px;
+    font-size: 0.8em;
+    color: #000;
+    background-color: #FFF;
+    transition: .3s;
+}
+.sessao-fale-conosco .formulario .input:has(input:focus) label, .sessao-fale-conosco .formulario .input:has(textarea:focus) label{
+    font-weight: bold;
+}
+.sessao-fale-conosco .formulario button{
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
+    align-self: flex-end;
+    background-color: #F6C500;
+    color: #000;
+    padding: 12px 42px;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .3s;
+}
+.sessao-fale-conosco .img-fale-conosco{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20vw;
+    min-width:300px;
+}
+.sessao-fale-conosco .img-fale-conosco img{
+    width: 100%;
+}
+
+/* SESSAO FOOTER */
+.footer{
+    background-color: #FFF;
+}
+.footer .container{
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 0.75em;
+    padding: 24px;
+}
+.footer .logo{
+    height: 62px;
+}
+.footer .links, .footer .contato{
+    display: flex;
+    flex-direction: column;
+    color: #000;
+}
+.footer .links a, .footer .contato a{
+    color: #000;
+    text-decoration: none;
+    transition: .3s;
+}
+.footer .contato a{
+    display: flex;
+    align-items:  center;
+    gap: 12px;
+}
+
+
+/* PETROQUIMICA HTML */
+/* SESSAO HERÓI */
+.sessao-heroi.petroquimica{
+    height: 100vh;
+    background-image: url('../images/bg-petroquimica.jpg');
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #F7F7F7;
+}
+.sessao-heroi.petroquimica .container{
+    width: 80%;
+    backdrop-filter: none;
+    text-align: left;
+    align-items: flex-start;
+}
+.sessao-heroi.petroquimica .texto-chave{
+    color: #000;
+    align-items: flex-start;
+    width: 40%;
+    min-width: 320px;
+}
+.sessao-heroi.petroquimica .texto-chave h1, 
+.sessao-heroi.petroquimica .texto-chave p{
+    margin: 0;
+}
+.sessao-heroi.petroquimica .texto-chave p{
+    margin-bottom: 8px;
+}
+.sessao-heroi.petroquimica .texto-chave a{
+    border: 1px solid #000;
+    font-weight: normal;
+}
+
+/* O QUE É PETROQUIMICA */
+.sessao-oquee-petroquimica{
+    padding: 128px 0;
+}
+.sessao-oquee-petroquimica .container{
+    flex-wrap: wrap;
+    gap: 24px;
+}
+.sessao-oquee-petroquimica .texto-petroquimica{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 300px;
+}
+.sessao-oquee-petroquimica .texto-petroquimica .titulo{
+    font-family: 'Epilogue';
+    font-size: 3em;
+    margin-top: 0;
+}
+.sessao-oquee-petroquimica .img-petroquimica{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-width: 200px;
+}
+.sessao-oquee-petroquimica .img-petroquimica img{
+    width: 70%;
+    min-width: 260px;
+}
+
+/* IMPORTANCIA PETROQUIMICA */
+.sessao-importancia-petroquimica{
+    padding: 128px 0;
+    background-color: #F7F7F7;
+}
+.sessao-importancia-petroquimica .container{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+}
+.sessao-importancia-petroquimica h1{
+    font-family: 'Epilogue';
+    margin: 0;
+    margin-bottom: 62px;
+    font-size: 2em;
+}
+.sessao-importancia-petroquimica .cards{
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.sessao-importancia-petroquimica .card{
+    padding: 12px;
+    border: 1px solid black;
+    border-radius: 8px;
+    flex: 1;
+    min-width: 180px;
+}
+
+/* SESSAO MERCADO */
+.sessao-mercado-petroquimica{
+    padding: 128px 0;
+}
+.sessao-mercado-petroquimica .container{
+    flex-direction: column;
+}
+.sessao-mercado-petroquimica .titulo{
+    font-family: 'Epilogue';
+    font-size: 2em;
+    margin: 0;
+    margin-bottom: 62px;
+    width: 520px;
+    max-width: 100%;
+}
+.sessao-mercado-petroquimica .cards{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+.sessao-mercado-petroquimica .card{
+    width: 100%;
+    background-color: #FFF;
+    color: #000;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+    border-radius: 8px;
+}
+.sessao-mercado-petroquimica .card .num{
+    font-size: 4em;
+    font-weight: bold;
+    margin-left: 12px;
+    width: 62px;
+}
+.sessao-mercado-petroquimica .card h2{
+    margin-bottom: 0;
+}
+.sessao-mercado-petroquimica .card p{
+    margin-top: 0;
+    margin-right: 12px;
+}
+
+/* SESSAO SUSTENTABILIDADE */
+.sessao-sutentabilidade-petroquimica .container{
+    padding: 128px 0;
+    flex-direction: column;
+    align-items: center;
+}
+.sessao-sutentabilidade-petroquimica .titulo{
+    min-width: 300px;
+    display: flex;
+    font-family: 'Epilogue';
+    font-size: 2em;
+    margin: 0;
+    margin-bottom: 12px;
+    width: 35%;
+    text-align: center;
+}
+.sessao-sutentabilidade-petroquimica .desafio-sustentabilidade{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 24px;
+    text-align: center;
+    justify-content: center;
+}
+.sessao-sutentabilidade-petroquimica .desafios, .sessao-sutentabilidade-petroquimica .sustentabilidades{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+.sessao-sutentabilidade-petroquimica h2{
+    font-family: 'Epilogue';
+}
+.desafio-sustentabilidade .desafio, .desafio-sustentabilidade .sustentabilidade{
+    background-color: #FFF;
+    border-radius: 8px;
+    padding: 0 12px;
+    width: 40vw;
+    min-width: 400px;
+    max-width: 500px;
+    text-align: left;
+    color: #000;
+}
+
+.desafio-sustentabilidade .desafio p, .desafio-sustentabilidade .sustentabilidade p {
+    margin: 8px 0;
+}
+
+
+/* SOBRE-NOS HTML */
+/* SOBRE NÓS */
+.sessao-heroi.sobre-nos{
+    background: #252020;
+    height: 100vh;
+    overflow: hidden;
+}
+.sessao-heroi.sobre-nos .container{
+    width: 80%;
+    backdrop-filter: none;
+    flex-direction: row;
+    text-align: left;
+    align-items: center;
+}
+.sessao-heroi.sobre-nos .texto-chave{
+    flex: 1;
+    color: #FFF;
+    align-items: flex-start;
+}
+.sessao-heroi.sobre-nos .texto-chave h1{
+    margin-bottom: 0;
+}
+.sessao-heroi.sobre-nos .texto-chave span{
+    background: none;
+    font-weight: bold;
+    color: #FFF;
+}
+.sessao-heroi.sobre-nos .texto-chave .btn{
+    border: 1px solid #FFF;
+    background: none;
+    color: #FFF;
+    font-weight: normal;
+}
+.sessao-heroi.sobre-nos .texto-chave .btn:hover{
+    background-color: #FFF;
+    color: #000;
+}
+.sessao-heroi.sobre-nos img{
+    flex: 1;
+    width: 50%;
+}
+
+/* SESSAO QUEM SOMOS */
+.sessao-quem-somos{
+    padding-top: 120px;
+    display: flex;
+    align-items: center;
+}
+.sessao-quem-somos .container{
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 42px;
+}
+.sessao-quem-somos img{
+    flex: 1;
+    min-width: 200px;
+}
+.sessao-quem-somos .conteudo{
+    flex: 1;
+    min-width: 300px;
+}
+
+/* SESSAO SERVICOS */
+.sessao-nossos-servicos{
+    padding: 60px 0;
+    padding-bottom: 120px;
+}
+.sessao-nossos-servicos .container{
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+.sessao-nossos-servicos .servicos{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+.sessao-nossos-servicos .servicos .servico{
+    flex: 1;
+    border: 1px solid #FFF;
+    padding: 24px;
+    border-radius: 8px;
+    transition: .3s;
+    min-width: 220px;
+}
+.sessao-nossos-servicos .servicos .servico p{
+    flex: 1;
+}
+
+.sessao-nossos-servicos .servicos .servico:hover{
+    box-shadow: 0 0 10px #FFF;
+}
+
+
+/* SESSAO NOSSA EQUIPE */
+.sessao-nossa-equipe{
+    background-color: #FFF;
+    color: #000;
+    padding: 120px 0;
+}
+.sessao-nossa-equipe .container{
+    flex-direction: column;
+}
+.sessao-nossa-equipe .equipe{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+.sessao-nossa-equipe .equipe .membro{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 220px;
+    height: 100%;
+    padding: 12px;
+    border: 1px solid #000;
+    border-radius: 8px;
+    height: 100%;
+}
+.sessao-nossa-equipe .equipe .membro h2{
+    margin-bottom: 0px;
+}
+
+/* DEPOIMENTOS SESSAO */
+.sessao-depoimentos{
+    padding: 128px 0;
+}
+.sessao-depoimentos .container{
+    flex-direction: column;
+}
+.sessao-depoimentos .depoimentos{
+    display: flex;
+    gap: 12px;
+}
+.sessao-depoimentos .depoimentos .depoimento{
+    border-radius: 8px;
+    border: 1px solid #F6C500;
+    padding: 24px;
+}
+
+/* SESSAO PARCEIROS */
+.sessao-parceiros{
+    padding-bottom: 128px;
+}
+.sessao-parceiros .container{
+    flex-direction: column;
+}
+.sessao-parceiros .logos-parceiros{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.sessao-parceiros .logos-parceiros img{
+    width: 320px;
+    object-fit: cover;
+}
+
+/* HTML PROJETO */
+/* SESSAO PROJETO */
+.sessao-heroi.projeto {
+    min-height: 100vh;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+}
+.sessao-heroi.projeto .container{
+    flex: 1;
+    width: 80%;
+    backdrop-filter: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+}
+.sessao-heroi.projeto .container .texto-chave{
+    flex: 1;
+    align-items: flex-start;
+    max-width: 470px;
+}
+.sessao-heroi.projeto .container img{
+    flex: 1;
+    max-width: 520px;
+    width: 100%;
+}
+
+/* SESSAO MONITORE E ALERTAS*/
+.sessao-monitore{
+    padding-top: 128px;
+    padding-bottom: 64px;
+    border-bottom: 1px dashed #000;
+}
+.sessao-alertas{
+    padding-top: 64px;
+    padding-bottom: 128px;
+}
+.sessao-monitore{
+    background-color: #FFF;
+    color: #000;
+}
+.sessao-alertas{
+    background-color: #FFF;
+    color: #000;
+}
+.sessao-monitore .container{
+    gap: 42px;
+}
+.sessao-alertas .container{
+    gap: 42px;
+}
+.sessao-monitore .lado{
+    flex: 1;
+}
+.sessao-alertas .lado {
+    flex: 1;
+}
+.sessao-monitore .lado.image img{
+    width: 100%;
+    border-radius: 8px;
+}
+.sessao-alertas .lado.image img{
+    width: 100%;
+    border-radius: 8px;
+}
+.sessao-monitore li span{
+    font-weight: bold;
+}
+.sessao-alertas li span{
+    font-weight: bold;
+}
+
+/* ORÇAMENTO SESSAO - made by Luka */
+.sessao-orcamento{
+    background-image:url('../images/bg-calculadora.jpg');
+    background-size: cover;
+    background-position: center;
+}
+.sessao-orcamento .container{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    backdrop-filter: brightness(0.3);
+}
+.sessao-orcamento .left{
+    flex: 1;
+    padding: 128px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 20px;
+    border-color: black;
+    border-radius: 15px;
+    justify-content: center;
+    box-shadow: 0 0 10px #00000060;
+}
+.sessao-orcamento .left input{
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    color: #000;
+    outline: none;
+    transition: 0.2s;
+}
+.sessao-orcamento .left button {
+    margin-top: 10px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #F6C500;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.sessao-orcamento .left button:hover {
+    background-color: #000;
+    outline: 1px solid #F6C500;
+    transform: scale(1.02);
+}
+.sessao-orcamento .right{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius : 18px;
+
+}
+.sessao-orcamento .txtFinal table {
+    width: 90%;
+    max-width: 500px;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: "Poppins", sans-serif;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.644);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.sessao-orcamento .txtFinal th {
+    background-color: #222;
+    color: white;
+    font-size: 1.2rem;
+    padding: 14px;
+    text-align: center;
+    border-bottom: 2px solid #ff4d4d;
+}
+.sessao-orcamento .txtFinal td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #444;
+    font-size: 0.95rem;
+}
+.sessao-orcamento .txtFinal tr:last-child td {
+    border-bottom: none;
+}
+.sessao-orcamento .txtFinal span {
+    background-color: #ff2626;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    display: inline-block;
+}
+.sessao-orcamento .txtFinal button {
+    padding: 8px 16px;
+    background-color: #ff2626;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease-in-out;
+}
+.sessao-orcamento .txtFinal button:hover {
+    background-color: #c01d1d;
+    transform: scale(1.03);
+}
+.txtFinal a {
+    text-decoration: none;
+}
+.sessao-orcamento .txtFinal {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* SESSAO DIFERENCIAIS */
+.sessao-diferenciais{
+    padding: 128px 0;
+}
+.sessao-diferenciais .container{
+    flex-direction: column;
+}
+.sessao-diferenciais .cards{
+    display: flex;
+    gap: 24px;
+}
+.sessao-diferenciais .card{
+    flex: 1;
+    padding: 24px;
+    border: 1px solid #FFF;
+    border-radius: 8px;
+}
+
+/* HTML LOGIN */
+/* SESSAO LOGIN */
+.sessao-login{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.sessao-login .container{
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #FFF;
+}
+.sessao-login .container .lado{
+    position: relative;
+    color: #FFF;
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 82px;
+}
+.sessao-login .lado.form{
+    background-color: #000;
+}
+.sessao-login .formulario{
+    display: flex;
+    flex-direction: column;
+    min-width: 320px;
+}
+.sessao-login .formulario label{
+    display: flex;
+    justify-content: space-between;
+}
+.sessao-login .formulario label span{
+    color: rgb(238, 64, 64);
+}
+.sessao-login .formulario input{
+    color: #FFF;
+    font-family: 'Poppins';
+    padding: 8px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    background: none;
+    border: 1px solid #c2c2c2;
+}
+.sessao-login .formulario input:focus{
+    box-shadow: 0 0 5px 1px #F6C500;
+    outline: 1px solid #F6C500;
+}
+.sessao-login .formulario button{
+    padding: 12px 48px;
+    width: 100%;
+    font-weight: bold;
+    background-color: #F6C500;
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: .3s;
+}
+.sessao-login .formulario button:hover{
+    background-color: #FFF;
+}
+.sessao-login .formulario a{
+    margin-top: 12px;
+    color: #FFF;
+    font-size: 0.9em;
+    text-decoration: none;
+    align-self: center;
+    transition: .3s;
+}
+.sessao-login .formulario a:hover{
+    color: #F6C500;
+    scale: 1.075;
+}
+.sessao-login .lado.cadastro{
+    background-image: url('../images/bg-petroquimica.jpg');
+    background-size: cover;
+}

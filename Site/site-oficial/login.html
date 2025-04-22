@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <title>Login | PipeLine</title>
+</head>
+<body>
+    <div class="nav">
+        <div class="container">
+            <a href="index.html">
+                <img class="logo" src="./assets/images/logoNomeSemFundo.png"/>
+            </a>
+            <div class="links">
+                <a href="./sobre-nos.html" class="link">Sobre Nós</a>
+                <a href="./petroquimica.html" class="link">Petróquimica</a>
+                <a href="./projeto.html" class="link">Projeto</a>
+                <a href="./login.html" class="link btn-entrar">Entrar ></a>
+            </div>
+        </div>
+    </div>
+    <section class="sessao-login">
+        <div class="container">
+            <div class="lado form">
+                <h1>Login</h1>
+                <div class="formulario">
+                    <label for="ipt_email">Email:
+                        <span id="email_invalida"></span>
+                    </label>
+                    <input type="email" id="ipt_email">
+                    <label for="ipt_senha">
+                        Senha:
+                        <span id="senha_invalida"></span>
+                    </label>
+                    <input type="password" id="ipt_senha">
+                    <span id="msg"></span>
+                    <button onclick="login()" id="btnEntrar">Entrar</button>
+                    <a href="cadastro.html">Fazer Cadastro</a>
+                </div>
+            </div>
+            <div class="lado cadastro">
+            </div>
+        </div>
+    </section>
+</body>
+
+<script>
+    let tentativasRestantes = 3;
+    function login(){
+        const email = ipt_email.value;
+        const senha = ipt_senha.value;
+        if(email == ''){
+            email_invalida.innerHTML = 'Email Inválido*';
+            return;
+        }
+        email_invalida.innerHTML = '';
+
+        if(senha.length < 8){
+            senha_invalida.innerHTML = 'Senha Inválida*'
+        }
+
+        if (tentativasRestantes <= 0) {
+            msg.innerHTML = "Acesso bloqueado. Tente novamente mais tarde.";
+            msg.style.color = "red";
+            return;
+        }
+
+        if (email === "pipeline@gmail.com" && senha === "123456") {
+            window.location.href = "./dashboard/dashHome.html"; 
+        } else {
+            tentativasRestantes--;
+
+            if (tentativasRestantes > 0) {
+                msg.innerHTML = `Email ou senha incorretos! Você ainda tem ${tentativasRestantes} tentativa(s).`;
+                msg.style.color = "red";
+                msg.style.marginTop = "20px";
+            } else {
+                msg.innerHTML = "Você errou 3 vezes. Acesso bloqueado.";
+                btnEntrar.disabled = true;
+                btnEntrar.style.opacity = "0.5";
+                btnEntrar.style.cursor = "not-allowed";
+            }
+        }
+}
+</script>
+</html>
