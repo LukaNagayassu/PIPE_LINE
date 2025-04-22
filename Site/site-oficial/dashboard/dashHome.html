@@ -56,7 +56,7 @@
                         </div>
                         <div class="indicator" style="color: yellow; box-shadow: 0 0 10px rgb(255, 255, 0);">
                             <span>Quantidade de dutos em alerta</span>
-                            <p>3</p>
+                            <p>4</p>
                         </div>
                     </div>
 
@@ -80,16 +80,26 @@
                 <div class="sensor-status-container">
                     <h3>📡 Status dos Sensores</h3>
                     <ul class="sensor-status-list">
-                        <li><span class="sensor-name">Sensor 1 - Duto 1 </span><span class="status critical">Crítico</span></li>
-                        <li><span class="sensor-name">Sensor 2 - Duto 1 </span><span class="status critical">Crítico</span></li>
-                        <li><span class="sensor-name">Sensor 3 - Duto 2 </span><span class="status alert">Alerta</span></li>
-                        <li><span class="sensor-name">Sensor 4 - Duto 2 </span><span class="status stable">Estável</span></li>
-                        <li><span class="sensor-name">Sensor 5 - Duto 3 </span><span class="status alert">Alerta</span></li>
-                        <li><span class="sensor-name">Sensor 6 - Duto 3 </span><span class="status critical">Crítico</span></li>
-                        <li><span class="sensor-name">Sensor 7 - Duto 4 </span><span class="status stable">Estável</span></li>
-                        <li><span class="sensor-name">Sensor 8 - Duto 4 </span><span class="status alert">Alerta</span></li>
-                        <li><span class="sensor-name">Sensor 9 - Duto 5 </span><span class="status stable">Estável</span></li>
-                        <li><span class="sensor-name">Sensor 9 - Duto 5 </span><span class="status alert">Alerta</span></li>
+                        <li><span class="sensor-name">Sensor 1 - Duto 1 </span><span
+                                class="status critical">Crítico</span></li>
+                        <li><span class="sensor-name">Sensor 2 - Duto 1 </span><span
+                                class="status critical">Crítico</span></li>
+                        <li><span class="sensor-name">Sensor 3 - Duto 2 </span><span class="status alert">Alerta</span>
+                        </li>
+                        <li><span class="sensor-name">Sensor 4 - Duto 2 </span><span
+                                class="status stable">Estável</span></li>
+                        <li><span class="sensor-name">Sensor 5 - Duto 3 </span><span class="status alert">Alerta</span>
+                        </li>
+                        <li><span class="sensor-name">Sensor 6 - Duto 3 </span><span
+                                class="status critical">Crítico</span></li>
+                        <li><span class="sensor-name">Sensor 7 - Duto 4 </span><span
+                                class="status stable">Estável</span></li>
+                        <li><span class="sensor-name">Sensor 8 - Duto 4 </span><span class="status alert">Alerta</span>
+                        </li>
+                        <li><span class="sensor-name">Sensor 9 - Duto 5 </span><span
+                                class="status stable">Estável</span></li>
+                        <li><span class="sensor-name">Sensor 10 - Duto 5 </span><span class="status alert">Alerta</span>
+                        </li>
                 </div>
             </div>
         </div>
@@ -104,233 +114,215 @@
     function redirecionarComparar() { window.location.href = 'dashComparacao.html' };
     function sair() { window.location.href = '../home.html' }
 
-</script>
+    // Obtém o contexto do canvas onde será desenhado o gráfico de linha (gráfico de fluxo de petróleo)
+    const ctx = document.getElementById('realtimeChart').getContext('2d');
 
-<script>
-   // Funções para redirecionar para as páginas correspondentes do dashboard
-function redirecionarHome() { 
-    window.location.href = 'dashHome.html'; 
-};
-function redirecionarAlerta() { 
-    window.location.href = 'dashAlerta.html'; 
-};
-function redirecionarComparar() { 
-    window.location.href = 'dashComparacao.html'; 
-};
-function sair() { 
-    window.location.href = '../home.html'; 
-}
+    // Define os intervalos de valores mínimos e máximos para cada sensor
+    const sensores = {
+        "Sensor 1": { min: 15, max: 40 },
+        "Sensor 2": { min: 25, max: 60 },
+        "Sensor 3": { min: 30, max: 80 }
+    };
 
-// Obtém o contexto do canvas onde será desenhado o gráfico de linha (gráfico de fluxo de petróleo)
-const ctx = document.getElementById('realtimeChart').getContext('2d');
+    // Captura os elementos dos <select> de sensor e tempo
+    const selectSensor = document.getElementById('sensorSelect');
+    const selectTempo = document.getElementById('timeSelect');
 
-// Define os intervalos de valores mínimos e máximos para cada sensor
-const sensores = {
-    "Sensor 1": { min: 15, max: 40 },
-    "Sensor 2": { min: 25, max: 60 },
-    "Sensor 3": { min: 30, max: 80 }
-};
-
-// Captura os elementos dos <select> de sensor e tempo
-const selectSensor = document.getElementById('sensorSelect');
-const selectTempo = document.getElementById('timeSelect');
-
-// Estrutura base dos dados do gráfico de linha
-var data = {
-    labels: [],  // Eixo X: será preenchido com horários ou dias
-    datasets: [
-        {
-            // Linha principal com os valores de distância do sensor
-            label: 'Distância',
-            borderColor: 'yellow',
-            backgroundColor: 'rgba(0,0,255,0.1)',
-            data: [],
-            tension: 0.4 // Suaviza a curva do gráfico
-        },
-        {
-            // Linha de referência para o valor máximo
-            label: 'Máximo',
-            borderColor: 'red',
-            borderDash: [5, 5], // Linha tracejada
-            data: [],
-            fill: false,
-            pointRadius: 0 // Sem pontos visíveis
-        },
-        {
-            // Linha de referência para o valor mínimo
-            label: 'Mínimo',
-            borderColor: 'green',
-            borderDash: [5, 5], // Linha tracejada
-            data: [],
-            fill: false,
-            pointRadius: 0
-        }
-    ]
-};
-
-// Configurações do gráfico de linha (Chart.js)
-const config = {
-    type: 'line',  // Tipo de gráfico
-    data: data,    // Dados definidos acima
-    options: {
-        responsive: true,
-        animation: false, // Desativa animação para atualização rápida
-        scales: {
-            x: {
-                title: {
-                    display: true,
-                    text: 'Horário',
-                    color: 'white'
-                },
-                ticks: { color: 'white' },
-                grid: { color: 'rgba(255,255,255,0.2)' }
+    // Estrutura base dos dados do gráfico de linha
+    var data = {
+        labels: [],  // Eixo X: será preenchido com horários ou dias
+        datasets: [
+            {
+                // Linha principal com os valores de distância do sensor
+                label: 'Distância',
+                borderColor: 'yellow',
+                backgroundColor: 'rgba(0,0,255,0.1)',
+                data: [],
+                tension: 0.4 // Suaviza a curva do gráfico
             },
-            y: {
-                title: {
-                    display: true,
-                    text: 'Distância (cm)',
-                    color: 'white'
+            {
+                // Linha de referência para o valor máximo
+                label: 'Máximo',
+                borderColor: 'red',
+                borderDash: [5, 5], // Linha tracejada
+                data: [],
+                fill: false,
+                pointRadius: 0 // Sem pontos visíveis
+            },
+            {
+                // Linha de referência para o valor mínimo
+                label: 'Mínimo',
+                borderColor: 'green',
+                borderDash: [5, 5], // Linha tracejada
+                data: [],
+                fill: false,
+                pointRadius: 0
+            }
+        ]
+    };
+
+    // Configurações do gráfico de linha (Chart.js)
+    const config = {
+        type: 'line',  // Tipo de gráfico
+        data: data,    // Dados definidos acima
+        options: {
+            responsive: true,
+            animation: false, // Desativa animação para atualização rápida
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Horário',
+                        color: 'white'
+                    },
+                    ticks: { color: 'white' },
+                    grid: { color: 'rgba(255,255,255,0.2)' }
                 },
-                ticks: { color: 'white' },
-                grid: { color: 'rgba(255,255,255,0.2)' },
-                beginAtZero: false,  // Não começa no zero
-                suggestedMin: 0      // Valor mínimo sugerido para o eixo Y
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Distância (cm)',
+                        color: 'white'
+                    },
+                    ticks: { color: 'white' },
+                    grid: { color: 'rgba(255,255,255,0.2)' },
+                    beginAtZero: false,  // Não começa no zero
+                    suggestedMin: 0      // Valor mínimo sugerido para o eixo Y
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'white'  // Cor da legenda
+                    }
+                }
             }
+        }
+    };
+
+    // Configuração do gráfico de pizza (situação dos sensores)
+    const ctxPizza = document.getElementById('pizzaChart').getContext('2d');
+
+    // Criação do gráfico de pizza
+    new Chart(ctxPizza, {
+        type: 'pie',
+        data: {
+            labels: ['Crítico', 'Alerta', 'Estável'], // Legendas das fatias
+            datasets: [{
+                // Quantidade de cada categoria
+                data: [3, 4, 3  ],
+                backgroundColor: [
+                    'rgba(255, 59, 48, 0.4)',   // Crítico — translúcido
+                    'rgba(255, 213, 0, 0.4)',   // Alerta — translúcido
+                    'rgba(50, 205, 50, 0.4)'    // Estável — translúcido
+                ],
+                borderColor: [
+                    '#FF3B30',   // Crítico — sólido
+                    '#FFD500',   // Alerta — sólido
+                    '#32CD32'    // Estável — sólido
+                ],
+                borderWidth: 3
+            }]
         },
-        plugins: {
-            legend: {
-                labels: {
-                    color: 'white'  // Cor da legenda
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'white' // Cor das legendas
+                    }
                 }
             }
         }
+    });
+
+    // Instancia o gráfico de linha
+    const realtimeChart = new Chart(ctx, config);
+
+    // Variável para controlar o intervalo de atualização em tempo real
+    var intervalo;
+
+    // Função que gera um novo dado e atualiza o gráfico
+    function gerarDado() { // sensor que tem o min e o max do valor do select do sensor
+        const sensor = sensores[selectSensor.value]; // Pega o intervalo de min e max do sensor selecionado
+        const min = sensor.min;
+        const max = sensor.max;
+        const now = new Date(); // pega a data atual 
+        const hora = now.toLocaleTimeString('pt-BR'); // Pega o horário atual formatado 
+        // Gera valor aleatório dentro do intervalo ajustado (+-5 para flutuação)
+        const valor = Math.floor(Math.random() * (max - min + 10)) + (min - 5);
+
+        // Adiciona horário no eixo X
+        data.labels.push(hora);
+        // Adiciona valor do sensor no dataset principal
+        data.datasets[0].data.push(valor);
+        // Adiciona valores fixos de referência no dataset de máximo e mínimo
+        data.datasets[1].data.push(max);
+        data.datasets[2].data.push(min);
+
+        // Mantém o gráfico com no máximo 20 pontos (remove o mais antigo)
+        if (data.labels.length > 20) {
+            data.labels.shift();  // Remove O primeiro valor do grafico 
+            data.datasets.forEach(dataset => dataset.data.shift()); // Remove valor do vetor de distancia
+        }
+
+        // Atualiza o gráfico na tela
+        realtimeChart.update();
     }
-};
 
-// Configuração do gráfico de pizza (situação dos sensores)
-const ctxPizza = document.getElementById('pizzaChart').getContext('2d');
+    // Função que inicializa ou atualiza o gráfico conforme seleção de sensor e tempo
+    function iniciarGrafico() {
+        clearInterval(intervalo); // Limpa o intervalo anterior para evitar múltiplas execuções simultâneas
 
-// Criação do gráfico de pizza
-new Chart(ctxPizza, {
-    type: 'pie',
-    data: {
-        labels: ['Crítico', 'Alerta', 'Estável'], // Legendas das fatias
-        datasets: [{
-            // Quantidade de cada categoria
-            data: [3, 3, 2],
-            backgroundColor: [
-                'rgba(255, 59, 48, 0.4)',   // Crítico — translúcido
-                'rgba(255, 213, 0, 0.4)',   // Alerta — translúcido
-                'rgba(50, 205, 50, 0.4)'    // Estável — translúcido
-            ],
-            borderColor: [
-                '#FF3B30',   // Crítico — sólido
-                '#FFD500',   // Alerta — sólido
-                '#32CD32'    // Estável — sólido
-            ],
-            borderWidth: 3
-        }]
-    },
-    options: {
-        plugins: {
-            legend: {
-                labels: {
-                    color: 'white' // Cor das legendas
-                }
+        // Limpa os dados existentes no gráfico
+        data.labels = []; // LABELS => SEMPRE EIXO X ( ZERANDO O EIXO X)
+        data.datasets.forEach(ds => ds.data = []); // zerando o vetor com os valores de distancia
+
+        const sensor = sensores[selectSensor.value]; // Obtém os limites do sensor atual
+        const min = sensor.min; 
+        const max = sensor.max;
+
+        // Verifica o tipo de tempo selecionado e gera os dados correspondentes
+        if (selectTempo.value === "Tempo real") {
+            // Atualiza o gráfico a cada 1.5 segundos com novo valor aleatório
+            intervalo = setInterval(gerarDado, 1500);
+
+        } else if (selectTempo.value === "Horas do Dia") {
+            // Simula dados para cada hora cheia do dia
+            for (let h = 0; h < 24; h++) {
+                const horaFormatada = `${h.toString().padStart(2, '0')}:00`; // Formata '01:00', '02:00'...
+                data.labels.push(horaFormatada);
+                const valor = Math.floor(Math.random() * (max - min + 10)) + (min - 5);
+                data.datasets[0].data.push(valor);
+                data.datasets[1].data.push(max);
+                data.datasets[2].data.push(min);
             }
+            realtimeChart.update();//atualizações dos dados inserido do grafico
+
+        } else if (selectTempo.value === "Dias da Semana") {
+            // Simula dados para cada dia da semana
+            const dias = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            dias.forEach(dia => {
+                data.labels.push(dia);
+                const valor = Math.floor(Math.random() * (max - min + 10)) + (min - 5);
+                data.datasets[0].data.push(valor);
+                data.datasets[1].data.push(max);
+                data.datasets[2].data.push(min);
+            });
+            realtimeChart.update();
         }
     }
-});
 
-// Instancia o gráfico de linha
-const realtimeChart = new Chart(ctx, config);
+    // Evento executado quando a página termina de carregar
+    window.onload = () => {
+        // Define valores padrões
+        selectSensor.value = "Sensor 1";
+        selectTempo.value = "Horas do Dia";
+        // Inicia o gráfico com as configurações padrões
+        iniciarGrafico();
+    };
 
-// Variável para controlar o intervalo de atualização em tempo real
-var intervalo;
-
-// Função que gera um novo dado e atualiza o gráfico
-function gerarDado() {
-    const sensor = sensores[selectSensor.value]; // Pega o intervalo do sensor selecionado
-    const min = sensor.min;
-    const max = sensor.max;
-    const now = new Date();
-    const hora = now.toLocaleTimeString('pt-BR'); // Pega o horário atual formatado
-
-    // Gera valor aleatório dentro do intervalo ajustado (+-5 para flutuação)
-    const valor = Math.floor(Math.random() * (max - min + 10)) + (min - 5);
-
-    // Adiciona horário no eixo X
-    data.labels.push(hora);
-    // Adiciona valor do sensor no dataset principal
-    data.datasets[0].data.push(valor);
-    // Adiciona valores fixos de referência no dataset de máximo e mínimo
-    data.datasets[1].data.push(max);
-    data.datasets[2].data.push(min);
-
-    // Mantém o gráfico com no máximo 20 pontos (remove o mais antigo)
-    if (data.labels.length > 20) {
-        data.labels.shift();  // Remove primeiro item do eixo X
-        data.datasets.forEach(dataset => dataset.data.shift()); // Remove valores antigos
-    }
-
-    // Atualiza o gráfico na tela
-    realtimeChart.update();
-}
-
-// Função que inicializa ou atualiza o gráfico conforme seleção de sensor e tempo
-function iniciarGrafico() {
-    clearInterval(intervalo); // Limpa o intervalo anterior para evitar múltiplas execuções simultâneas
-
-    // Limpa os dados existentes no gráfico
-    data.labels = [];
-    data.datasets.forEach(ds => ds.data = []);
-
-    const sensor = sensores[selectSensor.value]; // Obtém os limites do sensor atual
-    const min = sensor.min;
-    const max = sensor.max;
-
-    // Verifica o tipo de tempo selecionado e gera os dados correspondentes
-    if (selectTempo.value === "Tempo real") {
-        // Atualiza o gráfico a cada 1.5 segundos com novo valor aleatório
-        intervalo = setInterval(gerarDado, 1500);
-
-    } else if (selectTempo.value === "Horas do Dia") {
-        // Simula dados para cada hora cheia do dia
-        for (let h = 0; h < 24; h++) {
-            const horaFormatada = `${h.toString().padStart(2, '0')}:00`; // Formata '01:00', '02:00'...
-            data.labels.push(horaFormatada);
-            const valor = Math.floor(Math.random() * (max - min + 10)) + (min - 5);
-            data.datasets[0].data.push(valor);
-            data.datasets[1].data.push(max);
-            data.datasets[2].data.push(min);
-        }
-        realtimeChart.update();
-
-    } else if (selectTempo.value === "Dias da Semana") {
-        // Simula dados para cada dia da semana
-        const dias = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-        dias.forEach(dia => {
-            data.labels.push(dia);
-            const valor = Math.floor(Math.random() * (max - min + 10)) + (min - 5);
-            data.datasets[0].data.push(valor);
-            data.datasets[1].data.push(max);
-            data.datasets[2].data.push(min);
-        });
-        realtimeChart.update();
-    }
-}
-
-// Evento executado quando a página termina de carregar
-window.onload = () => {
-    // Define valores padrões
-    selectSensor.value = "Sensor 1";
-    selectTempo.value = "Tempo real";
-    // Inicia o gráfico com as configurações padrões
-    iniciarGrafico();
-};
-
-// Adiciona eventos para atualizar o gráfico quando mudar o sensor ou o tempo
-selectSensor.addEventListener('change', iniciarGrafico);
-selectTempo.addEventListener('change', iniciarGrafico);
+    // Adiciona eventos para atualizar o gráfico quando mudar o sensor ou o tempo
+    selectSensor.addEventListener('change', iniciarGrafico);
+    selectTempo.addEventListener('change', iniciarGrafico);
 
 </script>
