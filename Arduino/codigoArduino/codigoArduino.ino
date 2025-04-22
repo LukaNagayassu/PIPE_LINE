@@ -2,8 +2,6 @@
 
 const int PINO_TRIGGER = 12; // Esta definindo trigger como uma constante (valor fixo)
 const int PINO_ECHO = 13; // Recebe o sinal mandado pelo Trigger
-float distanciaMax = 200.0;
-float distanciaMin = 20.0;
 
 HC_SR04 sensor(PINO_TRIGGER, PINO_ECHO); // Criando a classe HC_SR04 com os pinos de Trigger e Echo
 
