@@ -53,27 +53,27 @@
                 <div id="historicoContainer" class="scroll-box">
                     <div class="historico-item">
                         <input type="checkbox" onchange="resolverAlerta(this)">
-                        ⚠️ Alerta de Alta distância | Sensor 1 | Duto 1 | 17/04/2025 16:00
+                        ⚠️ Alerta de Vazamento | Sensor 1 | Duto 1 | 17/04/2025 16:00
                     </div>
                     <div class="historico-item">
                         <input type="checkbox" onchange="resolverAlerta(this)">
-                        🚨 Alerta de Baixa distância | Sensor 2 | Duto 1 | 17/04/2025 15:50
+                        🚨 Alerta de Entupimento | Sensor 2 | Duto 1 | 17/04/2025 15:50
                     </div>
                     <div class="historico-item">
                         <input type="checkbox" onchange="resolverAlerta(this)">
-                        ⚠️ Alerta de Alta distância | Sensor 4 | Duto 2 | 17/04/2025 15:40
+                        ⚠️ Alerta de Vazamento | Sensor 4 | Duto 2 | 17/04/2025 15:40
                     </div>
                     <div class="historico-item">
                         <input type="checkbox" onchange="resolverAlerta(this)">
-                        ⚠️ Alerta de Alta distância | Sensor 8 | Duto 4 | 17/04/2025 15:30
+                        ⚠️ Alerta de Vazamento | Sensor 8 | Duto 4 | 17/04/2025 15:30
                     </div>
                     <div class="historico-item">
                         <input type="checkbox" onchange="resolverAlerta(this)">
-                        🚨 Alerta de Baixa distância | Sensor 9 | Duto 5 | 17/04/2025 15:30
+                        🚨 Alerta de Entupimento | Sensor 9 | Duto 5 | 17/04/2025 15:30
                     </div>
                     <div class="historico-item">
                         <input type="checkbox" onchange="resolverAlerta(this)">
-                        🚨 Alerta de Baixa distância | Sensor 11 | Duto 6 | 17/04/2025 15:30
+                        🚨 Alerta de Entupimento | Sensor 11 | Duto 6 | 17/04/2025 15:30
                     </div>
                 </div>
             </div>
@@ -154,7 +154,7 @@
             const div = document.createElement("div");
             div.className = "ranking-item";
             div.innerHTML = `<strong>${i + 1}º - ${item.sensor}</strong><br>
-            Alertas Altos: ${item.alertaAlto} | Alertas Baixos: ${item.alertaBaixo} | <b>Peso:</b> ${item.peso}`;
+            Alertas Vazamento: ${item.alertaAlto} | Alertas Entupimento: ${item.alertaBaixo} | <b>Peso:</b> ${item.peso}`;
             rankingContainer.appendChild(div);
         }
     }
@@ -171,14 +171,14 @@
             labels: labels,
             datasets: [
                 {
-                    label: 'Alertas Altos',
+                    label: 'Alertas Vazamento',
                     data: alertasAltos,
                     backgroundColor: 'rgba(255, 0, 0, 0.3)',
                     borderColor: 'red',
                     borderWidth: 2
                 },
                 {
-                    label: 'Alertas Baixos',
+                    label: 'Alertas Entupimento',
                     data: alertasBaixos,
                     backgroundColor: 'rgba(255, 165, 0, 0.3)',
                     borderColor: 'orange',
