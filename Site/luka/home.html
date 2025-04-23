@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="PAGINAS/css/styleHome.css">
+</head>
+
+<body>
+    <header class="cabecalio">
+        <nav class="nav-cabecalio">
+            <div class="logo">
+                <img src="/PAGINAS/img/logo.png" alt="">
+            </div>
+            <ul class="cabecalio-Links">
+                
+                <li><a href="/sobre-nos.html">Sobre Nós</a></li>
+                <li><a href="#petroquimica-info" id="scroll-btn">Petroquímica</a></li>
+                <li><a href="/calculadora.html">Orçamento</a></li>
+            </ul>
+            <a href="" class="btn-Entrar">Entrar</a>
+        </nav>
+    </header>
+
+        <div class="corpo">
+                <div class="texto-Principal">
+                   <h2> A ação necessária para sua tubulação<br>
+                    e controle de fluido do seu petróleo.
+                </h2>
+                </div>
+
+                <div class="corpo-pescoco">
+                    <div class="container">
+                        <h2>Pipeline</h2>
+                        <p>Monitoramento de suas tubulações de petróleo	</p>
+                        <div class="card1">
+                            <p><H1>DashBoard</H1>
+                            <h4>um ambiente para monitoramento<br>
+                                dos dados de cada estação.</h4></p>
+                        </div>
+                        <div class="card2">
+                            <p><h1>Sensores</h1>
+                            <h4>Responsáveis pela coleta dos dados de cada tubulação.</p></h4>
+                        </div>
+                        <div class="card3">
+                            <p><h1>Eficiência de Tubulações</h1>
+                            <h4>Com as estatísticas se pode observar a eficiência e possíveis gargalos.</p></h4>
+                        </div>
+                    
+                    </div>
+                </div>
+                <div class="sobrenos">
+                    <div class="petroleo" id="petroquimica-info">
+
+                        <div class="containerpetr">
+                            <p> <h1>Petroquímica:
+                                <p>Entenda um pouco sobre o Petróleo
+                                     e como funciona o seu mercado
+                            </h1><br></p> <img class="desenho" src="/PAGINAS/img/barril.png" alt="">
+                        
+                        </p>
+                        </div>
+
+                       
+                    </div>
+                </div>
+                <div class="petroquimica2">
+                    <div class="textoPetro">
+                    <h1>O que é a Petroquímica?</h1> <h4>A petroquímica é o ramo 
+                        da química que estuda e processa os derivados do petróleo
+                         e do gás natural para a produção de uma ampla variedade de
+                          produtos essenciais. Através de processos como a destilação,
+                           o craqueamento e a polimerização, a indústria petroquímica 
+                           transforma matérias-primas em insumos que estão presentes no
+                            nosso dia a dia.</h4>
+                </div>
+            </div>
+            <div class="footer">
+            
+            </div>
+        </div>
+   
+</body>
+<script>
+
+</script>
+
+</html>
+
+
+<script>
+    // Armazena a posição anterior da rolagem
+    var lastScrollTop = 0;
+    const header = document.querySelector('header');
+
+    // Função para ocultar ou mostrar o cabeçalho com base no movimento de rolagem
+    window.addEventListener('scroll', function () {
+        var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (currentScroll > lastScrollTop) {
+            // Rolando para baixo, esconde o cabeçalho
+            header.style.top = "-100px"; // Ajuste o valor conforme necessário para o tamanho do seu cabeçalho
+        } else {
+            // Rolando para cima, mostra o cabeçalho
+            header.style.top = "0";
+        }
+
+        // Atualiza a posição anterior da rolagem
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    });
+</script>
