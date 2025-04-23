@@ -995,7 +995,7 @@ body{
 .sessao-login .formulario label span{
     color: rgb(238, 64, 64);
 }
-.sessao-login .formulario input{
+.sessao-login .formulario input, .sessao-login .formulario select{
     color: #FFF;
     font-family: 'Poppins';
     padding: 8px;
@@ -1004,6 +1004,10 @@ body{
     background: none;
     border: 1px solid #c2c2c2;
 }
+option {
+    background-color: #fff; /* fundo branco para as opções */
+    color: #000;            /* texto preto para as opções */
+  }
 .sessao-login .formulario input:focus{
     box-shadow: 0 0 5px 1px #F6C500;
     outline: 1px solid #F6C500;

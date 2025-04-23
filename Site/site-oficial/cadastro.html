@@ -28,29 +28,37 @@
             <div class="lado form">
                 <h1>Cadastro</h1>
                 <div class="formulario">
+                    <label for="ipt_nome">Nome:
+                        <span id="nome_invalido"></span>
+                    </label>
+                    <input type="text" id="ipt_nome">
+                    <label for="ipt_telefone">Telefone:
+                        <span id="telefone_invalido"></span>
+                    </label>
+                    <input type="text" id="ipt_telefone">
+                    <label for="slt_cargo">
+                        Cargo:
+                    </label>
+                    <select id="slt_cargo">
+                        <option value="analista">Analista</option>
+                        <option value="gestor">Gestor</option>
+                    </select>
                     <label for="ipt_email">Email:
                         <span id="email_invalida"></span>
                     </label>
                     <input type="email" id="ipt_email">
                     <label for="ipt_senha">
                         Senha:
-                        <span id="senha_invalida"></span>
+                        <span id="senha_invalido"></span>
                     </label>
-                    <input type="password" id="ipt_senha">
-                    <label for="ipt_email">Email:
-                        <span id="email_invalida"></span>
+                    <input type="password" id="ipt_senha" onchange="validarSenha()">
+                    <label for="ipt_senha_confirm">
+                        Confirmação de Senha:
+                        <span id="senha_confirm_invalido"></span>
                     </label>
-                    <input type="email" id="ipt_email">
-                    <label for="ipt_senha">
-                        Senha:
-                        <span id="senha_invalida"></span>
-                    </label>
-                    <input type="password" id="ipt_senha">
-                    <label for="ipt_email">Email:
-                        <span id="email_invalida"></span>
-                    </label>
-                    <input type="email" id="ipt_email">
-                    <button onclick="login()">Cadastrar</button>
+                    <input type="password" id="ipt_senha_confirm">
+                    <span id="msg"></span>
+                    <button onclick="cadastro()">Cadastrar</button>
                 </div>
             </div>
 
@@ -59,18 +67,55 @@
 </body>
 
 <script>
-    function login(){
+    function cadastro() {
+        const nome = ipt_nome.value;
+        const telefone = ipt_telefone.value;
         const email = ipt_email.value;
         const senha = ipt_senha.value;
-        if(email == ''){
-            email_invalida.innerHTML = 'Email Inválido*';
+        const senhaConfirm = ipt_senha_confirm.value;
+        const cargo = slt_cargo.value;
+
+        // Expressões regulares
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const senhaRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
+
+        // Verificação de campos vazios
+        if (nome === "" || telefone === "" || email === "" || senha === "" || senhaConfirm === "") {
+            msg.innerHTML = "Preencha todos os campos!";
+            msg.style.color = "red";
             return;
         }
-        email_invalida.innerHTML = '';
 
-        if(senha.length < 8){
-            senha_invalida.innerHTML = 'Senha Inválida*'
+        // Validação de email
+        if (!emailRegex.test(email)) {
+            msg.innerHTML = "Email inválido!";
+            msg.style.color = "red";
+            return;
         }
+
+        // Validação de senha
+        if (!senhaRegex.test(senha)) {
+            msg.innerHTML = "A senha deve conter pelo menos 1 letra maiúscula, 1 número e 1 caractere especial.";
+            msg.style.color = "red";
+            return;
+        }
+
+        // Confirmação de senha
+        if (senha !== senhaConfirm) {
+            msg.innerHTML = "As senhas não coincidem!";
+            msg.style.color = "red";
+            return;
+        }
+
+        // Tudo certo
+        msg.innerHTML = "Cadastro realizado com sucesso!";
+        msg.style.color = "green";
+
+        // Redirecionamento
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 1000);
     }
 </script>
+
 </html>

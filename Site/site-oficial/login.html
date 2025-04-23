@@ -48,18 +48,6 @@
 <script>
     let tentativasRestantes = 3;
     function login(){
-        const email = ipt_email.value;
-        const senha = ipt_senha.value;
-        if(email == ''){
-            email_invalida.innerHTML = 'Email Inválido*';
-            return;
-        }
-        email_invalida.innerHTML = '';
-
-        if(senha.length < 8){
-            senha_invalida.innerHTML = 'Senha Inválida*'
-        }
-
         if (tentativasRestantes <= 0) {
             msg.innerHTML = "Acesso bloqueado. Tente novamente mais tarde.";
             msg.style.color = "red";
