@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora - Pipeline</title>
+    <link rel="stylesheet" href="../css/calculadora.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+      <nav class="navBarNova">
+        <div class="nav-nova-container">
+          <div class="logo-nova">
+            <a href="home.html">PIPELINE <span>CONSULTANCY</span></a>
+          </div>
+          <ul class="nav-nova-links">
+            <li><a href="./sobrenos.html">Sobre Nós</a></li>
+            <li><a href="./petroquimica.html">Petroquímica</a></li>
+            <li><a href="./calculadora.html">Orçamento</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <section class="hero">
+        <!-- Coluna esquerda: inputs e botão -->
+        <div class="hero-container-left">
+            <p>Evasão Anual (litros):</p>
+            <input type="number" id="ipt_vazao" placeholder="Digite a evasão anual"><br>
+
+            <p>Fluxo Anual Total (litros):</p>
+            <input type="number" id="ipt_fluxo" placeholder="Digite o fluxo anual total"><br>
+
+            <p>Preço do barril de petróleo (R$):</p>
+            <input type="number" id="ipt_preco" placeholder="Digite o preço do barril"><br><br>
+
+            <button onclick="calcularPerda()">Analisar</button>
+        </div>
+
+        <!-- Coluna direita: imagem do barril posicionada no canto superior direito -->
+        <div id="divCalc" class="hero-container-right">
+            <img src="../img/barril.png" alt="Barril de petróleo">
+        </div>
+    </section>
+    <script>
+        function calcularPerda() {
+            // Obtem os valores dos inputs via querySelector
+            const vazao = Number(ipt_vazao.value);
+            const fluxo = Number(ipt_fluxo.value);
+            const preco = Number(ipt_preco.value);
+
+            if (isNaN(vazao) || isNaN(fluxo) || isNaN(preco) || fluxo === 0) {
+                divCalc.innerHTML = `
+          <div class="txtFinal">
+            <p style="color:#ff4d4d;">Por favor, preencha corretamente todos os campos.</p>
+          </div>`;
+                return;
+            }
+
+            const porcentagem = ((vazao / fluxo) * 100).toFixed(2);
+            const perdaBarris = (vazao / 159).toFixed(0); // 159 L é a capacidade de um barril
+            const perdaFinanceira = (perdaBarris * preco).toFixed(2);
+            const economia = (perdaFinanceira * 0.15).toFixed(2);
+
+            // Monta a tabela de resultados com formatação automática dos valores
+            divCalc.innerHTML = `
+                Sua empresa tem um fluxo anual de ${fluxo} L e uma vazão de <span style="background-color: red;">${vazao}</span> L.
+                Isso representa uma perda de <span style="background-color: red;">R$ ${perdaFinanceira}</span> que equivale a <span style="background-color: red;">${perdaBarris}</span> barris perdidos.
+                Essa vazão equivale a ${porcentagem}% do fluxo total.
+                Nosso sistema pode reduzir essa perda em até <b>R$ ${economia}!
+                `;
+        }
+    </script>
+</body>
+
+</html>

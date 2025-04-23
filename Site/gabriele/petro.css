@@ -1,0 +1,255 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #222;
+    color: white;
+}
+
+
+/* CABEÇALHO*/
+.header {
+    position: fixed;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    transition: top 0.3s ease-in-out;
+}
+
+.nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    height: 48px;
+}
+
+.navigation .l {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+}
+
+.l a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.etr {
+    padding: 0.5rem 1rem;
+    border: 1px solid #f6c500;
+    border-radius: 4px;
+    color: #f6c500;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* SEÇÃO INICIAL*/
+
+.i {
+    background: url("../img/backgroundPetro.png") no-repeat center center;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content:flex-start;
+}
+.ic {
+    text-align: center;
+    color: black;
+    text-align: left;
+    margin-left: 100px;
+}
+
+.ic h1 {
+    font-size: 40px;
+}
+
+.ic p {
+    font-size: 20px;
+}
+
+/* SEÇÃO: O que é a Petroquímica?*/
+
+.texto {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 80px auto;
+    padding: 0 70px;
+    align-items: center;
+    justify-content: center;
+}
+
+.texto .containert {
+    flex: 1 1 350px;
+    margin: 50px;
+}
+
+.texto h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: white;
+}
+
+.texto p {
+    font-size: 15px;
+    color: white;
+    text-align: justify;
+}
+
+
+/* SEÇÃO GERAL: .section*/
+
+.importancia {
+    background-color: white;
+    max-width: 1500px;
+    margin: 0;
+    padding: 0 50px;
+    height: 400px;
+}
+
+.importancia h2 {
+    color: #111;
+    text-align: center;
+    padding: 50px;
+    margin-bottom: 5px;
+    font-size: 30px;
+}
+
+
+/* Cards – A importância da Indústria*/
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1px));
+    gap: 40px;
+    color: #111;
+}
+
+.card {
+    background: white;
+    border: 1px solid #222;
+    border-radius: 8px;
+    padding: 20px;
+    text-align:left;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+    font-size: 25px;
+}
+
+.card p {
+    font-size: 15px;
+}
+
+
+/* Seção: Como funciona o Mercado Petroquímico?*/
+.mercado {
+    background-color: #222;
+    max-width: 1500px;
+    margin: 0;
+    padding: 0 50px;
+    height: 700px;
+}
+
+.mercado h2 {
+    color: white;
+    text-align: left;
+    padding: 50px;
+    margin-bottom: 5px;
+    font-size: 30px;
+}
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat;
+    gap: 40px;
+    color: #111;
+}
+
+.step {
+    flex: 1 1 300px;
+    background-color: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.step h4 {
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.step p {
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.4;
+}
+
+
+/* Seção: Desafios e Sustentabilidade                   */
+
+.desafios-sustentabilidade {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.desafios,
+.sustentaveis {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.desafios h3,
+.sustentaveis h3 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.desafios ul,
+.sustentaveis ul {
+    list-style: disc;
+    margin-left: 1.5rem;
+}
+
+.desafios ul li,
+.sustentaveis ul li {
+    margin-bottom: 0.5rem;
+    font-weight: 300;
+}
+
+
+/* RODAPÉ*/
+
+.footer {
+    background-color: #303030;
+    padding: 2rem 1rem;
+    text-align: center;
+    color:white;
+}
+
+.footer p {
+    font-size: 0.9rem;
+    font-weight: 300;
+}
