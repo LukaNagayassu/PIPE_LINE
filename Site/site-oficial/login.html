@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/css/style.css">
     <title>Login | PipeLine</title>
 </head>
+
 <body>
     <div class="nav">
         <div class="container">
             <a href="index.html">
-                <img class="logo" src="./assets/images/logoNomeSemFundo.png"/>
+                <img class="logo" src="./assets/images/logoNomeSemFundo.png" />
             </a>
             <div class="links">
                 <a href="./sobre-nos.html" class="link">Sobre Nós</a>
@@ -35,7 +37,7 @@
                     </label>
                     <input type="password" id="ipt_senha">
                     <span id="msg"></span>
-                    <button onclick="login()" id="btnEntrar">Entrar</button>
+                    <button onclick="entrar()" id="btnEntrar">Entrar</button>
                     <a href="cadastro.html">Fazer Cadastro</a>
                 </div>
             </div>
@@ -47,7 +49,10 @@
 
 <script>
     let tentativasRestantes = 3;
-    function login(){
+    function entrar() {
+        const email = ipt_email.value;
+        const senha = ipt_senha.value;
+
         if (tentativasRestantes <= 0) {
             msg.innerHTML = "Acesso bloqueado. Tente novamente mais tarde.";
             msg.style.color = "red";
@@ -55,7 +60,7 @@
         }
 
         if (email === "pipeline@gmail.com" && senha === "123456") {
-            window.location.href = "./dashboard/dashHome.html"; 
+            window.location.href = "./dashboard/dashHome.html";
         } else {
             tentativasRestantes--;
 
@@ -70,6 +75,7 @@
                 btnEntrar.style.cursor = "not-allowed";
             }
         }
-}
+    }
 </script>
+
 </html>

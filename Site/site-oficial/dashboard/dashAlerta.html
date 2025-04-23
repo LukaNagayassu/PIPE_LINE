@@ -142,7 +142,7 @@
 
         // Calcula o peso (alertaAlto*2 + alertaBaixo)
         for (let i = 0; i < dados.length; i++) {
-            dados[i].peso = dados[i].alertaAlto * 2 + dados[i].alertaBaixo;
+            dados[i].peso = dados[i].alertaBaixo * 2 + dados[i].alertaAlto;
         }
 
         // Ordena pelo peso (maior primeiro)
