@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/css/style.css">
     <title>Cadastro | PipeLine</title>
 </head>
-<body>
+
+<body onload="listar()">
     <div class="nav">
         <div class="container">
             <a href="index.html">
-                <img class="logo" src="./assets/images/logoNomeSemFundo.png"/>
+                <img class="logo" src="./assets/images/logoNomeSemFundo.png" />
             </a>
             <div class="links">
                 <a href="./sobre-nos.html" class="link">Sobre Nós</a>
@@ -22,12 +24,16 @@
     </div>
     <section class="sessao-login">
         <div class="container">
-            
+
             <div class="lado cadastro">
             </div>
             <div class="lado form">
                 <h1>Cadastro</h1>
                 <div class="formulario">
+                    <label for="ipt_codigo">Codigo Ativação:
+                        <span id="codigo_invalido"></span>
+                    </label>
+                    <input type="text" id="ipt_codigo">
                     <label for="ipt_nome">Nome:
                         <span id="nome_invalido"></span>
                     </label>
@@ -51,7 +57,7 @@
                         Senha:
                         <span id="senha_invalido"></span>
                     </label>
-                    <input type="password" id="ipt_senha" onchange="validarSenha()">
+                    <input type="password" id="ipt_senha">
                     <label for="ipt_senha_confirm">
                         Confirmação de Senha:
                         <span id="senha_confirm_invalido"></span>
@@ -67,6 +73,9 @@
 </body>
 
 <script>
+
+    let listaEmpresasCadastradas = [];
+
     function cadastro() {
         const nome = ipt_nome.value;
         const telefone = ipt_telefone.value;
@@ -74,6 +83,7 @@
         const senha = ipt_senha.value;
         const senhaConfirm = ipt_senha_confirm.value;
         const cargo = slt_cargo.value;
+        const codigoVar = ipt_codigo.value;
 
         // Expressões regulares
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -107,15 +117,73 @@
             return;
         }
 
-        // Tudo certo
-        msg.innerHTML = "Cadastro realizado com sucesso!";
-        msg.style.color = "green";
+        for (let i = 0; i < listaEmpresasCadastradas.length; i++) {
+            if (listaEmpresasCadastradas[i].codigo_ativacao == codigoVar) {
+                idEmpresaVincular = listaEmpresasCadastradas[i].idEmpresa
+                console.log("Código de ativação válido.");
+                break;
+            } else {
+                msg.innerHTML = "(Mensagem de erro para código inválido)";
+            }
+        }
 
-        // Redirecionamento
-        setTimeout(() => {
-            window.location.href = "login.html";
-        }, 1000);
+        fetch("/usuarios/cadastrar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                nomeServer: nome,
+                telefoneServer: telefone,
+                emailServer: email,
+                senhaServer: senha,
+                cargoServer: cargo,
+                idEmpresaVincularServer: idEmpresaVincular
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+
+                    msg.innerHTML =
+                        "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
+
+                    setTimeout(() => {
+                        window.location = "login.html";
+                    }, "2000");
+
+                } else {
+                    throw "Houve um erro ao tentar realizar o cadastro!";
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
+        return false;
     }
+
+    function listar() {
+        fetch("/empresas/listar", {
+            method: "GET",
+        })
+            .then(function (resposta) {
+                resposta.json().then((empresas) => {
+                    empresas.forEach((empresa) => {
+                        listaEmpresasCadastradas.push(empresa);
+
+                        console.log("listaEmpresasCadastradas")
+                        console.log(listaEmpresasCadastradas[0].codigo_ativacao)
+                    });
+                });
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+    }
+
+
 </script>
 
 </html>
