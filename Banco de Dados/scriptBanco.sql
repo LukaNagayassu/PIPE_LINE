@@ -36,6 +36,7 @@ CREATE TABLE Funcionario (
     senha VARCHAR(30),
     cargo VARCHAR(20),
     fkEmpresa INT,
+    CONSTRAINT chk_cargo CHECK (cargo IN ('Suporte', 'Analista', 'Gestor')),
     FOREIGN KEY (fkEmpresa) REFERENCES Empresa(idEmpresa)
 );
 
