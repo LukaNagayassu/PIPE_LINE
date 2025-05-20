@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline Consultancy | Suporte</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=send,smart_toy" />
+    <link rel="stylesheet" href="../assets/css/dashSuporte.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="sidebar">
+        <img src="../assets/images/logoNomeSemFundo.png" alt="">
+
+        <div class="user-section">
+            <img src="../assets/images/user.webp" alt="Usuário" class="user-icon">
+            <p class="user-role">Suporte</p>
+        </div>
+
+        <div class="logout-section">
+            <button class="logout-btn" onclick="sair()">Sair</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="dashboard">
+            
+        </div>
+        <div class="bob-ia" id="chat_bot">
+            <button onclick="mudarChat()" class="material-symbols-outlined icon">
+                smart_toy
+            </button>
+            <div class="chat" id="chat">
+                <h1>Bob <span>IA</span></h1>
+                <div class="mensagem-container" id="msg_content">
+                    <div class="msg usuario">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti neque impedit, minus, accusantium, id quis ea adipisci ipsa cum beatae soluta inventore molestias! Tempore minus iure dicta? Dicta, aut ut!</p>
+                    </div>
+                </div>
+                <div class="input-mensagem">
+                    <input type="text" id="pergunta" placeholder="Mensagem...">
+                    <button onclick="gerarResposta()" class="material-symbols-outlined">
+                        send
+                    </button>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>
+
+<script>
+    function mudarChat(){
+        if(chat.style.height == '0px'){
+            chat.style.height = '400px';
+        } else {
+            chat.style.height = '0px';
+        }
+    }
+
+    async function gerarResposta() {
+        const pergunta = document.getElementById('pergunta').value;
+
+        const response = await fetch('/bobia/perguntar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ pergunta })
+        });
+
+        const data = await response.json();
+
+        resposta.style.display = 'block';
+        
+        msg_content.innerHTML = `
+            <div class="msg usuario">
+                <h3>Você</h3>
+                ${pergunta}
+            </div>
+            <div class="msg ia">
+                <h3>BobIA</h3>
+                ${data.resultado}
+            </div>
+        `
+        document.getElementById('resposta').innerText = data.resultado;
+    }
+
+    function sair() { window.location.href = '../index.html' }
+</script>
