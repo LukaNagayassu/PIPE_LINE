@@ -171,7 +171,7 @@ body {
     border-top-right-radius: 12px;
     border-top-left-radius: 12px;
     padding-inline: 24px;
-    transition: .5s height;
+    transition: 1.3s height;
 }
 .bob-ia .chat h1{
     color: #FFF;
