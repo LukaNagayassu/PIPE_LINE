@@ -104,7 +104,8 @@ INSERT INTO Empresa (email, cnpj, nomeFantasia, razaoSocial, telefone, codigo_at
 -- Inserção de registros na tabela Funcionario
 INSERT INTO Funcionario (nome, telefone, email, senha, cargo, fkEmpresa) VALUES 
 ('Carlos Silva', '11987654321', 'carlos@petrobras.com', 'senha123', 'Analista', 1),
-('Mariana Souza', '21987651234', 'mariana@exxon.com', 'senha456', 'Gestor', 2);
+('Mariana Souza', '21987651234', 'mariana@exxon.com', 'senha456', 'Gestor', 2),
+('Gustavo Gomes', '21987651236', 'gustavo@suporte.com', 'senha123', 'Suporte', null);
 
 -- Inserção de registros na tabela Estacao
 INSERT INTO Estacao (nome, tipoEstacao, statusEstacao, fkEndereco, fkEmpresa) VALUES 
@@ -141,8 +142,10 @@ BEGIN
     DECLARE dutoId INT;
     DECLARE diametro INT;
     DECLARE horaAtual INT;
+    DECLARE diaAtual INT;
     DECLARE distanciaGerada FLOAT;
     DECLARE dadoId INT;
+    DECLARE diasNoMes INT;
 
     -- Cursor para percorrer os sensores com seus respectivos dutos
     DECLARE sensor_cursor CURSOR FOR
@@ -150,7 +153,11 @@ BEGIN
         FROM Sensor s
         JOIN Duto d ON s.fkDuto = d.idDuto;
 
+    -- Handler para quando não houver mais dados no cursor
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    -- Agora podemos usar SET
+    SET diasNoMes = DAY(LAST_DAY(CURDATE()));
 
     OPEN sensor_cursor;
 
@@ -160,27 +167,35 @@ BEGIN
             LEAVE read_loop;
         END IF;
 
-        SET horaAtual = 0;
-        WHILE horaAtual < 24 DO
-            -- Gerar distância entre 15% e 95% da altura
-            SET distanciaGerada = ROUND(RAND() * ((0.95 - 0.15) * diametro) + (0.15 * diametro), 2);
+        SET diaAtual = 1;
+        WHILE diaAtual <= diasNoMes DO
+            SET horaAtual = 0;
+            WHILE horaAtual < 24 DO
+                -- Gerar distância entre 15% e 95% do diâmetro
+                SET distanciaGerada = ROUND(RAND() * ((0.95 - 0.15) * diametro) + (0.15 * diametro), 2);
 
-            -- Inserir dado na tabela DadosSensor
-            INSERT INTO DadosSensor (dtRegistro, distancia, fkSensor)
-            VALUES (CONCAT(CURDATE(), ' ', LPAD(horaAtual, 2, '0'), ':00:00'), distanciaGerada, sensorId);
+                -- Inserir dado na tabela DadosSensor com data e hora simulada
+                INSERT INTO DadosSensor (dtRegistro, distancia, fkSensor)
+                VALUES (
+                    STR_TO_DATE(CONCAT(YEAR(CURDATE()), '-', MONTH(CURDATE()), '-', LPAD(diaAtual, 2, '0'), ' ', LPAD(horaAtual, 2, '0'), ':00:00'), '%Y-%m-%d %H:%i:%s'),
+                    distanciaGerada,
+                    sensorId
+                );
 
-            SET dadoId = LAST_INSERT_ID();
+                SET dadoId = LAST_INSERT_ID();
 
-            -- Verificar e inserir alerta se necessário
-            IF distanciaGerada < (0.20 * diametro) THEN
-                INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
-                VALUES ('Baixo nível de petróleo', dadoId);
-            ELSEIF distanciaGerada > (0.90 * diametro) THEN
-                INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
-                VALUES ('Alto nível de petróleo', dadoId);
-            END IF;
+                -- Verificar e inserir alerta se necessário
+                IF distanciaGerada < (0.20 * diametro) THEN
+                    INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
+                    VALUES ('Baixo nível de petróleo', dadoId);
+                ELSEIF distanciaGerada > (0.90 * diametro) THEN
+                    INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
+                    VALUES ('Alto nível de petróleo', dadoId);
+                END IF;
 
-            SET horaAtual = horaAtual + 1;
+                SET horaAtual = horaAtual + 1;
+            END WHILE;
+            SET diaAtual = diaAtual + 1;
         END WHILE;
     END LOOP;
 
@@ -193,7 +208,7 @@ CALL InserirDadosSimulados();
 
 select * from Sensor;
 
-select * from DadosSensor;
+select * from DadosSensor order by dtRegistro desc limit 1 ;
 
 select * from Alerta;
 
