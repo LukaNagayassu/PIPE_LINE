@@ -40,10 +40,11 @@
         </div>
         
         <div class="dashboard">
-            <div class="left-panel">
+            <div class="left-panel" id="dutosContainer">
                 
             </div>
         </div>
+    </div>
     </body>
 
 </html>
@@ -56,21 +57,84 @@
     
 </script>
 
+
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/duto/dutos')
+            .then(response => response.json())
+            .then(data => {
+                const dutosContainer = document.getElementById('dutosContainer');
+                dutosContainer.innerHTML = ''; // Limpar a div
+    
+                // Criar um objeto para agrupar os dados por Duto
+                const dutos = [];
+    
+                data.forEach(item => {
+                    // Se o duto não existir no objeto dutos, cria um novo
+                    if (!dutos[item.idDuto]) {
+                        dutos[item.idDuto] = {
+                            idDuto: item.idDuto,
+                            diametro: item.diametro,
+                            sensores: []
+                        };
+                    }
+    
+                    // Adiciona o sensor ao duto relacionado
+                    dutos[item.idDuto].sensores.push({
+                        idSensor: item.idSensor,
+                        tipo: item.inicioDuto === 1 ? 'Início' : 'Fim',
+                        status: 'Crítico' // Status fixo como 'Crítico' por enquanto
+                    });
+                });
 
-
-
-</script>
-
-<div class="sensor-status-container">
-    <h3>Duto 1</h3>
-    <ul class="sensor-status-list">
-        <li style="gap: 10px;">
-            <span class="sensor-name">Sensor 1 - Inicio </span>
-            <span class="status critical">Crítico</span></li>
-        <li style="gap: 10px;">
-            <span class="sensor-name">Sensor 2 - Fim </span>
-            <span class="status critical">Crítico</span>
-        </li>
-    </ul>
-</div>
+                console.log(dutos);
+    
+                // To colocando cada duto
+                dutos.forEach(duto => {
+                    // Criar o container para o duto
+                    const dutoContainer = document.createElement('div');
+                    dutoContainer.classList.add('sensor-status-container');
+                    
+                    // Criar o título do duto
+                    const h3 = document.createElement('h3');
+                    h3.textContent = `Duto ${duto.idDuto} - Altura: ${duto.diametro}cm`;
+                    dutoContainer.appendChild(h3);
+    
+                    // Criar a lista de sensores
+                    const ul = document.createElement('ul');
+                    ul.classList.add('sensor-status-list');
+                    
+                    // Iterar sobre os sensores do duto
+                    duto.sensores.forEach(sensor => {
+                        const li = document.createElement('li');
+                        li.style.gap = '10px';
+    
+                        // Criar o nome do sensor
+                        const spanSensorName = document.createElement('span');
+                        spanSensorName.classList.add('sensor-name');
+                        spanSensorName.textContent = `Sensor ${sensor.idSensor} - ${sensor.tipo}`;
+    
+                        // Criar o status do sensor
+                        const spanStatus = document.createElement('span');
+                        spanStatus.classList.add('status', 'critical'); // Todos como 'Crítico' por enquanto
+                        spanStatus.textContent = sensor.status;
+    
+                        // Adicionar os elementos a lista
+                        li.appendChild(spanSensorName);
+                        li.appendChild(spanStatus);
+                        ul.appendChild(li);
+                    });
+    
+                    // Adicionar a lista de sensores ao container do duto
+                    dutoContainer.appendChild(ul);
+    
+                    // Adicionar o container do duto ao container principal
+                    dutosContainer.appendChild(dutoContainer);
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao carregar os dados dos dutos:', error);
+            });
+    });
+    </script>
+    
