@@ -139,7 +139,6 @@ body {
     color: white;
     box-shadow: 0 0 10px #ffff00a8;
     width: 10vw;
-    margin-top: 20vh;
     position: absolute;
     margin-left: 10vw;
     text-align: center;
@@ -153,7 +152,6 @@ body {
     background-color: #333;
     color: white;
     box-shadow: 0 0 10px #ffff00a8;
-    margin-top: 20vh;
     position: absolute;
     margin-left: 35vw;
     width: 10vw;
@@ -184,8 +182,8 @@ body {
     align-items: center;
     flex-direction: column;
     box-shadow: 0 0 10px #ffff00a8;
-    margin-top: 12vh;
     margin-left: 4vw;
+    padding: 10px;
 }
 
 .chart-container {

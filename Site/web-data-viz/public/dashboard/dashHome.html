@@ -111,8 +111,27 @@
         const duto = document.getElementById("dutoSelect").value;
         const tempo = document.getElementById("timeSelect").value;
 
-        if (tempo === "Tempo real") {
+        clearInterval(intervalo);
 
+        if (chart1) {
+            chart1.destroy();
+            chart1 = null;
+        }
+        if (chart2) {
+            chart2.destroy();
+            chart2 = null;
+        }
+        if (window.chart) {
+            window.chart.destroy();
+            window.chart = null;
+        }
+
+        const canvas2 = document.getElementById("realtimeChart2");
+        if (canvas2) {
+            canvas2.remove();
+        }
+
+        if (tempo === "Tempo real") {
             iniciarGraficoTempoReal(duto);
             return;
         }
