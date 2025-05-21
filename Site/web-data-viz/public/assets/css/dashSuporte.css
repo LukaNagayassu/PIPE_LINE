@@ -141,7 +141,6 @@ body {
     right: 62px;
     display: flex;
     flex-direction: column;
-    transition: .3s bottom;
 }
 .bob-ia .icon{
     outline: none;
