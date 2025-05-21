@@ -31,15 +31,20 @@
 
     <div class="main-content">
         <div class="filters">
-            <select id="sensorSelect">
-                <option value="" disabled>Escolha um sensor</option>
-                <option value="Sensor 1" selected>Sensor 1</option>
-                <option value="Sensor 2">Sensor 2</option>
-                <option value="Sensor 3">Sensor 3</option>
+            <select id="statusSelect">
+                <option value="1">Critico</option>
+                <option value="2">Alerta</option>
+                <option value="3">Estavel</option>
+            </select>
+
+            <select id="dutoSelect">
+                <option value="1">Duto 1</option>
+                <option value="2">Duto 2</option>
+                <option value="3">Duto 3</option>
+                <option value="3">Duto 3</option>
             </select>
 
             <select id="timeSelect">
-                <option value="" disabled>Escolha o tempo</option>
                 <option value="Tempo real" selected>Tempo real</option>
                 <option value="Horas do Dia">Horas do Dia</option>
                 <option value="Dias da Semana">Dias da Semana</option>
@@ -48,35 +53,6 @@
 
         <div class="dashboard">
             <div class="left-panel">
-                <div class="indicator-row">
-                    <div class="indicator-wrapper">
-                        <div class="indicator" style="color: rgb(251, 38, 38); box-shadow: 0 0 10px rgb(255, 0, 0); ">
-                            <span>Quantidade de dutos críticos</span>
-                            <p>3</p>
-                        </div>
-                        <div class="indicator" style="color: yellow; box-shadow: 0 0 10px rgb(255, 255, 0);">
-                            <span>Quantidade de dutos em alerta</span>
-                            <p>4</p>
-                        </div>
-                    </div>
-
-                    <div class="middle-panel">
-                        <div class="pizza-container">
-                            <p style="font-size: 1.2rem;">🖲️ <strong>Situação dos Sensores</strong></p>
-                            <canvas id="pizzaChart" width="300" height="120"></canvas>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="chart-area">
-                    <div class="chart-container">
-                        <h3 class="chart-title">🛢️ Fluxo do Petróleo</h3>
-                        <canvas id="realtimeChart" height="90" width="240"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="right-panel">
                 <div class="sensor-status-container">
                     <h3>📡 Status dos Sensores</h3>
                     <ul class="sensor-status-list">
@@ -102,6 +78,15 @@
                         </li>
                 </div>
             </div>
+
+            <div class="right-panel">
+                <div class="chart-area">
+                    <div class="chart-container">
+                        <h3 class="chart-title">🛢️ Fluxo do Petróleo</h3>
+                        <canvas id="realtimeChart" height="90" width="240"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
 </body>
 
@@ -114,215 +99,244 @@
     function redirecionarComparar() { window.location.href = 'dashComparacao.html' };
     function sair() { window.location.href = '../index.html' }
 
-    // Obtém o contexto do canvas onde será desenhado o gráfico de linha (gráfico de fluxo de petróleo)
-    const ctx = document.getElementById('realtimeChart').getContext('2d');
+</script>
 
-    // Define os intervalos de valores mínimos e máximos para cada sensor
-    const sensores = {
-        "Sensor 1": { min: 15, max: 40 },
-        "Sensor 2": { min: 25, max: 60 },
-        "Sensor 3": { min: 30, max: 80 }
-    };
+<script>
+    let chart1, chart2;
+    let dados1 = [], labels1 = [];
+    let dados2 = [], labels2 = [];
+    let intervalo;
 
-    // Captura os elementos dos <select> de sensor e tempo
-    const selectSensor = document.getElementById('sensorSelect');
-    const selectTempo = document.getElementById('timeSelect');
+    async function atualizarGrafico() {
+        const duto = document.getElementById("dutoSelect").value;
+        const tempo = document.getElementById("timeSelect").value;
 
-    // Estrutura base dos dados do gráfico de linha
-    var data = {
-        labels: [],  // Eixo X: será preenchido com horários ou dias
-        datasets: [
-            {
-                // Linha principal com os valores de distância do sensor
-                label: 'Distância',
-                borderColor: 'yellow',
-                backgroundColor: 'rgba(0,0,255,0.1)',
-                data: [],
-                tension: 0.4 // Suaviza a curva do gráfico
-            },
-            {
-                // Linha de referência para o valor máximo
-                label: 'Máximo',
-                borderColor: 'red',
-                borderDash: [5, 5], // Linha tracejada
-                data: [],
-                fill: false,
-                pointRadius: 0 // Sem pontos visíveis
-            },
-            {
-                // Linha de referência para o valor mínimo
-                label: 'Mínimo',
-                borderColor: 'green',
-                borderDash: [5, 5], // Linha tracejada
-                data: [],
-                fill: false,
-                pointRadius: 0
+        if (tempo === "Tempo real") {
+
+            iniciarGraficoTempoReal(duto);
+            return;
+        }
+
+        const resposta = await fetch(`/dash?duto=${duto}&tempo=${tempo}`);
+        const resultado = await resposta.json();
+
+        const sensor1 = resultado.sensor1;
+        const sensor2 = resultado.sensor2;
+        const dados = resultado.dados;
+
+        // Separar os dados de cada sensor
+        let dadosSensor1 = [];
+        let dadosSensor2 = [];
+
+        for (let i = 0; i < dados.length; i++) {
+            let dado = dados[i];
+            if (dado.fkSensor === sensor1) {
+                dadosSensor1.push(dado);
+            } else if (dado.fkSensor === sensor2) {
+                dadosSensor2.push(dado);
             }
-        ]
-    };
+        }
 
-    // Configurações do gráfico de linha (Chart.js)
-    const config = {
-        type: 'line',  // Tipo de gráfico
-        data: data,    // Dados definidos acima
-        options: {
-            responsive: true,
-            animation: false, // Desativa animação para atualização rápida
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Horário',
-                        color: 'white'
+        // Obter todos os labels únicos (horas ou dias)
+        let labels = [];
+
+        for (let i = 0; i < dados.length; i++) {
+            let labelAtual = dados[i].label;
+            if (!labels.includes(labelAtual)) {
+                labels.push(labelAtual);
+            }
+        }
+
+        // Criar os valores dos sensores com base nos labels
+        let valores1 = [];
+        let valores2 = [];
+
+        for (let i = 0; i < labels.length; i++) {
+            let labelAtual = labels[i];
+
+            // Procurar se existe valor do sensor 1 com esse label
+            let encontrado1 = false;
+            for (let j = 0; j < dadosSensor1.length; j++) {
+                if (dadosSensor1[j].label === labelAtual) {
+                    valores1.push(dadosSensor1[j].media);
+                    encontrado1 = true;
+                    break;
+                }
+            }
+            if (!encontrado1) {
+                valores1.push(null);
+            }
+
+            // Procurar se existe valor do sensor 2 com esse label
+            let encontrado2 = false;
+            for (let j = 0; j < dadosSensor2.length; j++) {
+                if (dadosSensor2[j].label === labelAtual) {
+                    valores2.push(dadosSensor2[j].media);
+                    encontrado2 = true;
+                    break;
+                }
+            }
+            if (!encontrado2) {
+                valores2.push(null);
+            }
+        }
+
+        // Destruir gráfico antigo se já existir
+        if (window.chart) window.chart.destroy();
+
+        // Criar novo gráfico
+        const ctx = document.getElementById("realtimeChart").getContext("2d");
+        window.chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: `Sensor ${sensor1}`,
+                        data: valores1,
+                        borderColor: 'yellow',
+                        backgroundColor: 'rgba(255,255,0,0.1)',
+                        fill: true,
+                        tension: 0.3
                     },
-                    ticks: { color: 'white' },
-                    grid: { color: 'rgba(255,255,255,0.2)' }
+                    {
+                        label: `Sensor ${sensor2}`,
+                        data: valores2,
+                        borderColor: 'cyan',
+                        backgroundColor: 'rgba(0,255,255,0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                        ticks: { color: 'white' }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: 'white' }
+                    }
                 },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Distância (cm)',
-                        color: 'white'
-                    },
-                    ticks: { color: 'white' },
-                    grid: { color: 'rgba(255,255,255,0.2)' },
-                    beginAtZero: false,  // Não começa no zero
-                    suggestedMin: 0      // Valor mínimo sugerido para o eixo Y
+                plugins: {
+                    legend: {
+                        labels: { color: 'white' }
+                    }
                 }
+            }
+        });
+    }
+
+    async function iniciarGraficoTempoReal(duto) {
+        clearInterval(intervalo);
+        if (chart1) chart1.destroy();
+        if (chart2) chart2.destroy();
+        document.getElementById("realtimeChart2")?.remove();
+
+        // Passo 1: Buscar sensores
+        const respostaSensores = await fetch(`/dash/sensor?duto=${duto}`);
+        const { sensor1, sensor2 } = await respostaSensores.json();
+
+        // Criar canvas do segundo gráfico
+        const canvas2 = document.createElement('canvas');
+        canvas2.id = "realtimeChart2";
+        canvas2.width = 240;
+        canvas2.height = 90;
+        document.querySelector(".chart-area").appendChild(canvas2);
+
+        const ctx1 = document.getElementById("realtimeChart").getContext("2d");
+        const ctx2 = canvas2.getContext("2d");
+
+        chart1 = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: `Sensor ${sensor1}`,
+                    data: [],
+                    borderColor: 'yellow',
+                    backgroundColor: 'rgba(255,255,0,0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
             },
-            plugins: {
-                legend: {
-                    labels: {
-                        color: 'white'  // Cor da legenda
-                    }
+            options: {
+                scales: {
+                    x: { ticks: { color: 'white' } },
+                    y: { beginAtZero: true, ticks: { color: 'white' } }
+                },
+                plugins: {
+                    legend: { labels: { color: 'white' } }
                 }
             }
-        }
-    };
+        });
 
-    // Configuração do gráfico de pizza (situação dos sensores)
-    const ctxPizza = document.getElementById('pizzaChart').getContext('2d');
-
-    // Criação do gráfico de pizza
-    new Chart(ctxPizza, {
-        type: 'pie',
-        data: {
-            labels: ['Crítico', 'Alerta', 'Estável'], // Legendas das fatias
-            datasets: [{
-                // Quantidade de cada categoria
-                data: [3, 4, 3  ],
-                backgroundColor: [
-                    'rgba(255, 59, 48, 0.4)',   // Crítico — translúcido
-                    'rgba(255, 213, 0, 0.4)',   // Alerta — translúcido
-                    'rgba(50, 205, 50, 0.4)'    // Estável — translúcido
-                ],
-                borderColor: [
-                    '#FF3B30',   // Crítico — sólido
-                    '#FFD500',   // Alerta — sólido
-                    '#32CD32'    // Estável — sólido
-                ],
-                borderWidth: 3
-            }]
-        },
-        options: {
-            plugins: {
-                legend: {
-                    labels: {
-                        color: 'white' // Cor das legendas
-                    }
+        chart2 = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: `Sensor ${sensor2}`,
+                    data: [],
+                    borderColor: 'cyan',
+                    backgroundColor: 'rgba(0,255,255,0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                scales: {
+                    x: { ticks: { color: 'white' } },
+                    y: { beginAtZero: true, ticks: { color: 'white' } }
+                },
+                plugins: {
+                    legend: { labels: { color: 'white' } }
                 }
             }
-        }
-    });
+        });
 
-    // Instancia o gráfico de linha
-    const realtimeChart = new Chart(ctx, config);
+        // Passo 2: Buscar dados dos sensores a cada 2 segundos
+        intervalo = setInterval(async () => {
+            const res = await fetch(`/dash/tempo-real?duto=${duto}`);
+            const dados = await res.json();
 
-    // Variável para controlar o intervalo de atualização em tempo real
-    var intervalo;
+            const dado1 = dados.find(d => d.fkSensor === sensor1);
+            const dado2 = dados.find(d => d.fkSensor === sensor2);
 
-    // Função que gera um novo dado e atualiza o gráfico
-    function gerarDado() { // sensor que tem o min e o max do valor do select do sensor
-        const sensor = sensores[selectSensor.value]; // Pega o intervalo de min e max do sensor selecionado
-        const min = sensor.min;
-        const max = sensor.max;
-        const now = new Date(); // pega a data atual 
-        const hora = now.toLocaleTimeString('pt-BR'); // Pega o horário atual formatado 
-        // Gera valor aleatório dentro do intervalo ajustado (+-5 para flutuação)
-        const valor = Math.floor(Math.random() * (max - min + 10)) + (min - 5);
+            if (dado1) {
+                const label1 = formatarHora(dado1.dtRegistro);
 
-        // Adiciona horário no eixo X
-        data.labels.push(hora);
-        // Adiciona valor do sensor no dataset principal
-        data.datasets[0].data.push(valor);
-        // Adiciona valores fixos de referência no dataset de máximo e mínimo
-        data.datasets[1].data.push(max);
-        data.datasets[2].data.push(min);
-
-        // Mantém o gráfico com no máximo 20 pontos (remove o mais antigo)
-        if (data.labels.length > 20) {
-            data.labels.shift();  // Remove O primeiro valor do grafico 
-            data.datasets.forEach(dataset => dataset.data.shift()); // Remove valor do vetor de distancia
-        }
-
-        // Atualiza o gráfico na tela
-        realtimeChart.update();
-    }
-
-    // Função que inicializa ou atualiza o gráfico conforme seleção de sensor e tempo
-    function iniciarGrafico() {
-        clearInterval(intervalo); // Limpa o intervalo anterior para evitar múltiplas execuções simultâneas
-
-        // Limpa os dados existentes no gráfico
-        data.labels = []; // LABELS => SEMPRE EIXO X ( ZERANDO O EIXO X)
-        data.datasets.forEach(ds => ds.data = []); // zerando o vetor com os valores de distancia
-
-        const sensor = sensores[selectSensor.value]; // Obtém os limites do sensor atual
-        const min = sensor.min; 
-        const max = sensor.max;
-
-        // Verifica o tipo de tempo selecionado e gera os dados correspondentes
-        if (selectTempo.value === "Tempo real") {
-            // Atualiza o gráfico a cada 1.5 segundos com novo valor aleatório
-            intervalo = setInterval(gerarDado, 1500);
-
-        } else if (selectTempo.value === "Horas do Dia") {
-            // Simula dados para cada hora cheia do dia
-            for (let h = 0; h < 24; h++) {
-                const horaFormatada = `${h.toString().padStart(2, '0')}:00`; // Formata '01:00', '02:00'...
-                data.labels.push(horaFormatada);
-                const valor = Math.floor(Math.random() * (max - min + 10)) + (min - 5);
-                data.datasets[0].data.push(valor);
-                data.datasets[1].data.push(max);
-                data.datasets[2].data.push(min);
+                if (chart1.data.labels.length >= 20) {
+                    chart1.data.labels.shift();
+                    chart1.data.datasets[0].data.shift();
+                }
+                chart1.data.labels.push(label1);
+                chart1.data.datasets[0].data.push(dado1.valor);
+                chart1.update();
             }
-            realtimeChart.update();//atualizações dos dados inserido do grafico
 
-        } else if (selectTempo.value === "Dias da Semana") {
-            // Simula dados para cada dia da semana
-            const dias = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-            dias.forEach(dia => {
-                data.labels.push(dia);
-                const valor = Math.floor(Math.random() * (max - min + 10)) + (min - 5);
-                data.datasets[0].data.push(valor);
-                data.datasets[1].data.push(max);
-                data.datasets[2].data.push(min);
-            });
-            realtimeChart.update();
-        }
+            if (dado2) {
+                const label2 = formatarHora(dado2.dtRegistro);
+
+                if (chart2.data.labels.length >= 20) {
+                    chart2.data.labels.shift();
+                    chart2.data.datasets[0].data.shift();
+                }
+                chart2.data.labels.push(label2);
+                chart2.data.datasets[0].data.push(dado2.valor);
+                chart2.update();
+            }
+        }, 2000);
     }
 
-    // Evento executado quando a página termina de carregar
-    window.onload = () => {
-        // Define valores padrões
-        selectSensor.value = "Sensor 1";
-        selectTempo.value = "Horas do Dia";
-        // Inicia o gráfico com as configurações padrões
-        iniciarGrafico();
+    const formatarHora = (dataISO) => {
+        const data = new Date(dataISO);
+        return data.toLocaleTimeString(); // ou toLocaleString() se quiser data completa
     };
 
-    // Adiciona eventos para atualizar o gráfico quando mudar o sensor ou o tempo
-    selectSensor.addEventListener('change', iniciarGrafico);
-    selectTempo.addEventListener('change', iniciarGrafico);
 
+    document.getElementById("dutoSelect").addEventListener("change", atualizarGrafico);
+    document.getElementById("timeSelect").addEventListener("change", atualizarGrafico);
+    window.onload = atualizarGrafico;
 </script>
