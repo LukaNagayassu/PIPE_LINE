@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body>
+<body onload="carregarDutos()">
     <div class="sidebar">
         <img src="../assets/images/logoNomeSemFundo.png" alt="">
 
@@ -50,26 +50,22 @@
 </html>
 
 <script>
-
     function redirecionarHome() { window.location.href = 'dashHome.html' };
     function redirecionarAlerta() { window.location.href = 'dashAlerta.html' };
     function sair() { window.location.href = '../index.html' }
-
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    function carregarDutos(statusSelecionado = document.getElementById('statusSelect').value) {
         fetch('/duto/dutos')
             .then(response => response.json())
             .then(data => {
                 const dutosContainer = document.getElementById('dutosContainer');
                 dutosContainer.innerHTML = ''; // Limpar a div
 
-                // Criar um objeto para agrupar os dados por Duto
                 const dutos = [];
 
                 data.forEach(item => {
-                    // Se o duto não existir no objeto dutos, cria um novo
                     if (!dutos[item.idDuto]) {
                         dutos[item.idDuto] = {
                             idDuto: item.idDuto,
@@ -78,7 +74,6 @@
                         };
                     }
 
-                    // Lógica de status com base na quantidade de alertas
                     let statusSensor = '';
                     if (item.qtdAlertasSemana > 5) {
                         statusSensor = 'Crítico';
@@ -88,7 +83,6 @@
                         statusSensor = 'Estável';
                     }
 
-                    // Adiciona o sensor ao duto relacionado
                     dutos[item.idDuto].sensores.push({
                         idSensor: item.idSensor,
                         tipo: item.inicioDuto === 1 ? 'Início' : 'Fim',
@@ -96,40 +90,36 @@
                     });
                 });
 
-                console.log(dutos);
-
-                const statusSelecionado = document.getElementById('statusSelect').value;
-
-                // Mostrar cada duto
                 dutos.forEach(duto => {
                     const sensores = duto.sensores.map(s => s.status);
-
                     let exibir = false;
 
-                    if (statusSelecionado == '1') { // Crítico
+                    if (statusSelecionado == '1') {
                         exibir = sensores.includes('Crítico');
-                    } else if (statusSelecionado == '2') { // Alerta
+                    } else if (statusSelecionado == '2') {
                         exibir = sensores.every(status => status === 'Alerta' || status === 'Estável') &&
-                        sensores.includes('Alerta');
-                    } else if (statusSelecionado == '3') { // Estável
+                            sensores.includes('Alerta');
+                    } else if (statusSelecionado == '3') {
                         exibir = sensores.every(status => status === 'Estável');
                     }
 
                     if (exibir) {
-                        // Criar o container para o duto
                         const dutoContainer = document.createElement('div');
                         dutoContainer.classList.add('sensor-status-container');
 
-                        // Criar o título do duto
+                        // Evento de clique para armazenar no sessionStorage e redirecionar
+                        dutoContainer.addEventListener('click', () => {
+                            sessionStorage.setItem('dutoSelecionado', duto.idDuto);
+                            window.location.href = 'graficoHome.html'; // ajuste para a rota real
+                        });
+
                         const h3 = document.createElement('h3');
                         h3.textContent = `Duto ${duto.idDuto} - Altura: ${duto.diametro}cm`;
                         dutoContainer.appendChild(h3);
 
-                        // Criar a lista de sensores
                         const ul = document.createElement('ul');
                         ul.classList.add('sensor-status-list');
 
-                        // Iterar sobre os sensores do duto
                         duto.sensores.forEach(sensor => {
                             const li = document.createElement('li');
                             li.style.gap = '10px';
@@ -159,15 +149,16 @@
                         dutoContainer.appendChild(ul);
                         dutosContainer.appendChild(dutoContainer);
                     }
+
                 });
             })
             .catch(error => {
                 console.error('Erro ao carregar os dados dos dutos:', error);
             });
-    });
+    }
 
-    document.getElementById('statusSelect').addEventListener('change', () => {
-    document.dispatchEvent(new Event('DOMContentLoaded'));
+    document.getElementById('statusSelect').addEventListener('change', (event) => {
+        carregarDutos(event.target.value);
     });
 
 </script>

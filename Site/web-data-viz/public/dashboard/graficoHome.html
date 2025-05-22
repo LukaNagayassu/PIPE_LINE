@@ -3,7 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Document</title>
+    <style>
+        /* Estilização do body com fundo cinza e centralização */
+        body {
+          margin: 0;
+          padding: 0;
+          background-color: #222; /* cinza claro */
+          font-family: Arial, sans-serif;
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+    
+        /* Centralizar selects no topo */
+        select {
+          margin: 10px;
+          padding: 8px;
+          font-size: 16px;
+        }
+    
+        /* Área do gráfico centralizada */
+        .chart-area {
+          background-color: #474747;
+          padding: 30px;
+          border-radius: 12px;
+          box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 90vh;
+          width: 50vw;
+        }
+    
+        canvas {
+          max-width: 600px;
+          max-height: 400px;
+        }
+    
+        /* Botão de voltar */
+        .botao-voltar {
+          margin-top: 30px;
+          padding: 10px 20px;
+          background-color: #444;
+          color: white;
+          text-decoration: none;
+          border-radius: 5px;
+          font-weight: bold;
+          transition: background-color 0.3s;
+        }
+    
+        .botao-voltar:hover {
+          background-color: #222;
+        }
+      </style>
 </head>
 <body>
     <select id="dutoSelect">
@@ -19,18 +76,14 @@
         <option value="Dias da Semana">Dias da Semana</option>
     </select>
 
-    <div class="right-panel">
-        <div class="chart-area">
-            <div class="chart-container">
-                <h3 class="chart-title">🛢️ Fluxo do Petróleo</h3>
-                <canvas id="realtimeChart" height="90" width="240"></canvas>
-            </div>
-        </div>
-    </div>
+    
+    <div class="chart-area"></div>
+   
 </body>
 </html>
 
 <script>
+
     let chart1, chart2;
     let dados1 = [], labels1 = [];
     let dados2 = [], labels2 = [];
@@ -186,6 +239,12 @@
         const respostaSensores = await fetch(`/dash/sensor?duto=${duto}`);
         const { sensor1, sensor2 } = await respostaSensores.json();
 
+        const canvas1 = document.createElement('canvas');
+        canvas1.id = "realtimeChart1";
+        canvas1.width = 240;
+        canvas1.height = 90;
+        document.querySelector(".chart-area").appendChild(canvas1);
+
         // Criar canvas do segundo gráfico
         const canvas2 = document.createElement('canvas');
         canvas2.id = "realtimeChart2";
@@ -193,7 +252,7 @@
         canvas2.height = 90;
         document.querySelector(".chart-area").appendChild(canvas2);
 
-        const ctx1 = document.getElementById("realtimeChart").getContext("2d");
+        const ctx1 = canvas1.getContext("2d");
         const ctx2 = canvas2.getContext("2d");
 
         chart1 = new Chart(ctx1, {
