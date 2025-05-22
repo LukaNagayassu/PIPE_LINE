@@ -1,85 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>Document</title>
-    <style>
-        /* Estilização do body com fundo cinza e centralização */
-        body {
-          margin: 0;
-          padding: 0;
-          background-color: #222; /* cinza claro */
-          font-family: Arial, sans-serif;
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-        }
-    
-        /* Centralizar selects no topo */
-        select {
-          margin: 10px;
-          padding: 8px;
-          font-size: 16px;
-        }
-    
-        /* Área do gráfico centralizada */
-        .chart-area {
-          background-color: #474747;
-          padding: 30px;
-          border-radius: 12px;
-          box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          height: 90vh;
-          width: 50vw;
-        }
-    
-        canvas {
-          max-width: 600px;
-          max-height: 400px;
-        }
-    
-        /* Botão de voltar */
-        .botao-voltar {
-          margin-top: 30px;
-          padding: 10px 20px;
-          background-color: #444;
-          color: white;
-          text-decoration: none;
-          border-radius: 5px;
-          font-weight: bold;
-          transition: background-color 0.3s;
-        }
-    
-        .botao-voltar:hover {
-          background-color: #222;
-        }
-      </style>
+    <link rel="stylesheet" href="../assets/css/grafico.css">
+    <title>Grafico Home</title>
 </head>
-<body>
-    <select id="dutoSelect">
-        <option value="1">Duto 1</option>
-        <option value="2">Duto 2</option>
-        <option value="3">Duto 3</option>
-        <option value="3">Duto 3</option>
-    </select>
-    
-    <select id="timeSelect">
-        <option value="Tempo real" selected>Tempo real</option>
-        <option value="Horas do Dia">Horas do Dia</option>
-        <option value="Dias da Semana">Dias da Semana</option>
-    </select>
 
-    
+<body>
+
+    <div class="container">
+        <select id="dutoSelect">
+            <option value="1">Duto 1</option>
+            <option value="2">Duto 2</option>
+            <option value="3">Duto 3</option>
+        </select>
+
+        <select id="timeSelect">
+            <option value="Tempo real" selected>Tempo real</option>
+            <option value="Horas do Dia">Horas do Dia</option>
+            <option value="Dias da Semana">Dias da Semana</option>
+        </select>
+    </div>
+
     <div class="chart-area"></div>
-   
+
 </body>
+
 </html>
 
 <script>
@@ -106,6 +55,12 @@
         if (window.chart) {
             window.chart.destroy();
             window.chart = null;
+        }
+
+        const canvas1 = document.getElementById("realtimeChart1");
+
+        if (canvas1) {
+            canvas1.remove();
         }
 
         const canvas2 = document.getElementById("realtimeChart2");
@@ -182,11 +137,14 @@
             }
         }
 
-        // Destruir gráfico antigo se já existir
-        if (window.chart) window.chart.destroy();
+        canvas = document.createElement('canvas');
+        canvas.id = "realtimeChart1";
+        canvas.width = 650;
+        canvas.height = 400;
+        document.querySelector(".chart-area").appendChild(canvas);
 
         // Criar novo gráfico
-        const ctx = document.getElementById("realtimeChart").getContext("2d");
+        const ctx = document.getElementById("realtimeChart1").getContext("2d");
         window.chart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -233,6 +191,7 @@
         clearInterval(intervalo);
         if (chart1) chart1.destroy();
         if (chart2) chart2.destroy();
+        document.getElementById("realtimeChart1")?.remove();
         document.getElementById("realtimeChart2")?.remove();
 
         // Passo 1: Buscar sensores
@@ -241,15 +200,15 @@
 
         const canvas1 = document.createElement('canvas');
         canvas1.id = "realtimeChart1";
-        canvas1.width = 240;
-        canvas1.height = 90;
+        canvas1.width = 600;
+        canvas1.height = 400;
         document.querySelector(".chart-area").appendChild(canvas1);
 
         // Criar canvas do segundo gráfico
         const canvas2 = document.createElement('canvas');
         canvas2.id = "realtimeChart2";
-        canvas2.width = 240;
-        canvas2.height = 90;
+        canvas2.width = 600;
+        canvas2.height = 400;
         document.querySelector(".chart-area").appendChild(canvas2);
 
         const ctx1 = canvas1.getContext("2d");
@@ -269,6 +228,7 @@
                 }]
             },
             options: {
+                responsive: false, // Desativa o modo responsivo
                 scales: {
                     x: { ticks: { color: 'white' } },
                     y: { beginAtZero: true, ticks: { color: 'white' } }
@@ -293,6 +253,7 @@
                 }]
             },
             options: {
+                responsive: false, // Desativa o modo responsivo
                 scales: {
                     x: { ticks: { color: 'white' } },
                     y: { beginAtZero: true, ticks: { color: 'white' } }
