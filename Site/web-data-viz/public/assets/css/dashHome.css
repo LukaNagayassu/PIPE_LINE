@@ -106,7 +106,6 @@ body {
     width: 100%;
     height: 100vh;
     box-sizing: border-box;
-    margin-bottom: 50px;
 }
 
 .filters {
@@ -174,12 +173,15 @@ h3{
     display: flex;
     color: white;
     height: fit-content;
+    padding: 24px 0;
     box-sizing: border-box;
     gap: 40px;
     align-items: center;
     justify-content: center;
     width: 100%;
     flex-wrap: wrap;
+    height: 85vh;
+    overflow-y: auto;
 }
 
 .sensor-status-container {
@@ -246,3 +248,77 @@ h3{
     color: white;
 }
 
+
+.modalSensor{
+    display: none;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+}
+.modalSensor .containerModal{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    height: 80%;
+    background: #222;
+    padding: 24px;
+    border-radius: 12px;
+    color: #FFF;
+    position: relative;
+    align-items: center;
+}
+.modalSensor .containerModal .fecharModal{
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    width: 42px;
+    height: 42px;
+    font-weight: bold;
+    font-size: 2em;
+    color: #FFF;
+    background: none;
+    cursor: pointer;
+    border-radius: 50%;
+}
+.modalSensor .containerModal .fecharModal:hover{
+    background: #ff3b30;
+}
+.modalSensor .containerModal .infoDuto{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
+.modalSensor .containerModal .infoDuto div{
+    display: flex;
+    flex-direction: column;
+}
+.modalSensor .containerModal .infoDuto select{
+    padding: 10px;
+    font-family: 'Epilogue';
+    border-radius: 8px;
+    background-color: #333;
+    color: white;
+    text-align: center;    
+}
+
+.chart-area {
+    background-color: #474747;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 42px;
+  }
+
+  canvas {
+    height: auto;
+    width: auto;
+  }
