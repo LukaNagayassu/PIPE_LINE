@@ -198,11 +198,32 @@
     let dados2 = [], labels2 = [];
     let intervalo;
 
-    async function atualizarGrafico(duto) {
-        const tempo = selectTempo.value;
-        document.getElementById("selectTempo").addEventListener("change", () => {
+    function limparGrafico(){
+        if(document.getElementById('realtimeChart1')){
+            document.getElementById('realtimeChart1').remove()
+        };
+        if(document.getElementById('realtimeChart2')){
+            document.getElementById('realtimeChart2').remove()
+        }
+    }
+    
+    document.addEventListener("DOMContentLoaded", () => {
+    const selectTempo = document.getElementById("selectTempo");
+    selectTempo.addEventListener("change", () => {
+            const duto = sessionStorage.getItem('dutoSelecionado');
             atualizarGrafico(duto);
         });
+    });
+
+    async function atualizarGrafico(duto) {
+        limparGrafico();
+        const tempo = selectTempo.value;
+        console.log(tempo)
+        if (tempo === "Tempo real") {
+            iniciarGraficoTempoReal(duto);
+            return;
+        }
+
 
         clearInterval(intervalo);
         
@@ -230,10 +251,6 @@
             canvas2.remove();
         }
 
-        if (tempo === "Tempo real") {
-            iniciarGraficoTempoReal(duto);
-            return;
-        }
         console.log(tempo)
         const resposta = await fetch(`/dash?duto=${duto}&tempo=${tempo}`);
         const resultado = await resposta.json();
