@@ -48,7 +48,7 @@
 
     <div class="modalSensor">
         <div class="containerModal">
-            <button class="fecharModal" onclick="fecharModal()">X</button>
+            <button class="fecharModal" onclick="fecharModal()">Fechar</button>
             <div class="infoDuto">
                 <h1 id="nomeDuto">Nome Duto</h1>
                 <div>
@@ -187,12 +187,9 @@
         atualizarGrafico(idDuto);
     }
     function fecharModal(){
-        modalSensor.style.display = 'none';
-        
+        modalSensor.style.display = 'none';   
     }
-</script>
 
-<script>
     let chart1, chart2;
     let dados1 = [], labels1 = [];
     let dados2 = [], labels2 = [];

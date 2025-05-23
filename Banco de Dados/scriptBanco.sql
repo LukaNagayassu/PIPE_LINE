@@ -152,71 +152,88 @@ DELIMITER $$
 
 CREATE PROCEDURE InserirDadosSimulados()
 BEGIN
-    DECLARE done INT DEFAULT FALSE;
-    DECLARE sensorId INT;
-    DECLARE dutoId INT;
-    DECLARE diametro INT;
-    DECLARE horaAtual INT;
-    DECLARE diaAtual INT;
-    DECLARE distanciaGerada FLOAT;
-    DECLARE dadoId INT;
-    DECLARE diasNoMes INT;
-    DECLARE chance FLOAT;
+    -- Variáveis de controle
+    DECLARE done INT DEFAULT FALSE;                -- Controla o fim do cursor
+    DECLARE sensorId INT;                          -- Armazena o id do sensor atual
+    DECLARE dutoId INT;                            -- Armazena o id do duto atual
+    DECLARE diametro INT;                          -- Armazena o diâmetro do duto atual
+    DECLARE horaAtual INT;                          -- Controla a hora no loop
+    DECLARE diaAtual INT;                           -- Controla o dia no loop
+    DECLARE distanciaGerada FLOAT;                  -- Armazena o valor da distância gerada
+    DECLARE dadoId INT;                             -- Armazena o último id de dado inserido
+    DECLARE chance FLOAT;                           -- Chance para gerar alerta
 
     -- Pega o dia e hora atuais
-    DECLARE diaHoje INT DEFAULT DAY(CURDATE());
-    DECLARE horaAgora INT DEFAULT HOUR(NOW());
+    DECLARE diaHoje INT DEFAULT DAY(CURDATE());     -- Dia atual (1-31)
+    DECLARE horaAgora INT DEFAULT HOUR(NOW());      -- Hora atual (0-23)
 
-    -- Cursor para percorrer os sensores com seus respectivos dutos
+    -- Cursor que seleciona todos os sensores junto com seus dutos e diâmetros
     DECLARE sensor_cursor CURSOR FOR
         SELECT s.idSensor, d.idDuto, d.diametro
         FROM Sensor s
         JOIN Duto d ON s.fkDuto = d.idDuto;
 
+    -- Handler que muda 'done' para TRUE quando não há mais registros no cursor
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
-    SET diasNoMes = DAY(LAST_DAY(CURDATE()));
-
+    -- Abre o cursor para começar a percorrer os sensores
     OPEN sensor_cursor;
 
+    -- Loop principal que percorre cada sensor
     read_loop: LOOP
+        -- Lê o próximo registro do cursor e joga nas variáveis sensorId, dutoId e diametro
         FETCH sensor_cursor INTO sensorId, dutoId, diametro;
+
+        -- Se não há mais registros, sai do loop
         IF done THEN
             LEAVE read_loop;
         END IF;
 
+        -- Loop para gerar dados para cada dia até hoje
         SET diaAtual = 1;
         WHILE diaAtual <= diaHoje DO
+            -- Loop para gerar dados de cada hora do dia
             SET horaAtual = 0;
-
-            -- Se for o dia atual, limita até a hora atual
             WHILE horaAtual < IF(diaAtual = diaHoje, horaAgora + 1, 24) DO
+
+                -- Gera uma distância aleatória baseada no diâmetro do duto
+                -- A distância fica entre 15% e 95% do diâmetro
                 SET distanciaGerada = ROUND(RAND() * ((0.95 - 0.15) * diametro) + (0.15 * diametro), 2);
 
+                -- Monta a data e hora do registro usando TIMESTAMP (mais simples que STR_TO_DATE)
                 INSERT INTO DadosSensor (dtRegistro, distancia, fkSensor)
                 VALUES (
-                    STR_TO_DATE(CONCAT(YEAR(CURDATE()), '-', MONTH(CURDATE()), '-', LPAD(diaAtual, 2, '0'), ' ', LPAD(horaAtual, 2, '0'), ':00:00'), '%Y-%m-%d %H:%i:%s'),
+                    TIMESTAMP(CONCAT(YEAR(CURDATE()), '-', MONTH(CURDATE()), '-', LPAD(diaAtual, 2, '0'), ' ', LPAD(horaAtual, 2, '0'), ':00:00')),
                     distanciaGerada,
                     sensorId
                 );
 
+                -- Guarda o id do dado recém inserido
                 SET dadoId = LAST_INSERT_ID();
 
+                -- Avalia se deve gerar um alerta
                 SET chance = RAND();
+                -- Se a distância for menor que 18% do diâmetro, chance de 30% de gerar alerta de baixo nível
                 IF distanciaGerada < (0.18 * diametro) AND chance < 0.3 THEN
                     INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
                     VALUES ('Baixo nível de petróleo', dadoId);
+
+                -- Se a distância for maior que 92% do diâmetro, chance de 30% de gerar alerta de alto nível
                 ELSEIF distanciaGerada > (0.92 * diametro) AND chance < 0.3 THEN
                     INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
                     VALUES ('Alto nível de petróleo', dadoId);
                 END IF;
 
+                -- Avança para a próxima hora
                 SET horaAtual = horaAtual + 1;
             END WHILE;
+
+            -- Avança para o próximo dia
             SET diaAtual = diaAtual + 1;
         END WHILE;
     END LOOP;
 
+    -- Fecha o cursor após finalizar o loop
     CLOSE sensor_cursor;
 END $$
 

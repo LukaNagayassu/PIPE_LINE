@@ -273,20 +273,24 @@ h3{
 }
 .modalSensor .containerModal .fecharModal{
     position: absolute;
-    right: 24px;
+    right: 35px;
     top: 24px;
-    width: 42px;
-    height: 42px;
+    width: auto;
+    height: auto;
+    padding: 10px;
     font-weight: bold;
-    font-size: 2em;
+    font-size: 0.9em;
     color: #FFF;
     background: none;
     cursor: pointer;
-    border-radius: 50%;
+    border-radius: 10px;
+    font-family: 'Epilogue';
 }
+
 .modalSensor .containerModal .fecharModal:hover{
     background: #ff3b30;
 }
+
 .modalSensor .containerModal .infoDuto{
     display: flex;
     align-items: center;
