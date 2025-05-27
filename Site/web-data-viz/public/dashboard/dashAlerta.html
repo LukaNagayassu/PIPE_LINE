@@ -9,11 +9,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body>
+<body onload="obterRanking(), obterHistorico(), carregarDutos(),carregarGraficoAlertas()">
 
     <div class="sidebar">
         <img src="../assets/images/logoNomeSemFundo.png" alt="">
-        
+
         <div class="user-section">
             <img src="../assets/images/user.webp" alt="Usuário" class="user-icon">
             <p class="user-role">Analista</p>
@@ -22,7 +22,6 @@
         <div class="menu">
             <button class="menu-btn" onclick="redirecionarHome()">Home</button>
             <button class="menu-btn" onclick="redirecionarAlerta()">Alertas</button>
-            <button class="menu-btn" onclick="redirecionarComparar()">Comparação</button>
         </div>
 
         <div class="logout-section">
@@ -31,55 +30,32 @@
     </div>
 
     <div class="main-content">
-        <div class="top-bar">
-            <select id="periodoSelect" onchange="atualizarDashboard()">
-                <option value="dia">Hoje</option>
-                <option value="semana">Esta Semana</option>
-                <option value="mes">Este Mês</option>
-            </select>
-        </div>
-
         <div class="painel-alertas">
             <!-- Ranking -->
             <div class="ranking-box">
-                <h3>🏆 Top 3 Sensores com Mais Alertas</h3>
+                <h3>🏆 Top 3 Sensores com Mais Alertas na Semana Atual</h3>
                 <div id="rankingContainer"></div>
             </div>
 
             <!-- Histórico -->
-            <!-- Histórico -->
             <div class="historico-box">
-                <h3>📋 Histórico de Alertas</h3>
-                <div id="historicoContainer" class="scroll-box">
-                    <div class="historico-item">
-                        <input type="checkbox" onchange="resolverAlerta(this)">
-                        ⚠️ Alerta de Vazamento | Sensor 1 | Duto 1 | 17/04/2025 16:00
-                    </div>
-                    <div class="historico-item">
-                        <input type="checkbox" onchange="resolverAlerta(this)">
-                        🚨 Alerta de Entupimento | Sensor 2 | Duto 1 | 17/04/2025 15:50
-                    </div>
-                    <div class="historico-item">
-                        <input type="checkbox" onchange="resolverAlerta(this)">
-                        ⚠️ Alerta de Vazamento | Sensor 4 | Duto 2 | 17/04/2025 15:40
-                    </div>
-                    <div class="historico-item">
-                        <input type="checkbox" onchange="resolverAlerta(this)">
-                        ⚠️ Alerta de Vazamento | Sensor 8 | Duto 4 | 17/04/2025 15:30
-                    </div>
-                    <div class="historico-item">
-                        <input type="checkbox" onchange="resolverAlerta(this)">
-                        🚨 Alerta de Entupimento | Sensor 9 | Duto 5 | 17/04/2025 15:30
-                    </div>
-                    <div class="historico-item">
-                        <input type="checkbox" onchange="resolverAlerta(this)">
-                        🚨 Alerta de Entupimento | Sensor 11 | Duto 6 | 17/04/2025 15:30
-                    </div>
-                </div>
+                <h3>📋 Histórico de Alertas da Semana Atual</h3>
+                <div id="historicoContainer" class="scroll-box"></div>
             </div>
 
             <!-- Notificação flutuante -->
             <div id="notificacaoResolvido" class="notificacao-resolvido"></div>
+        </div>
+
+        <div class="top-bar">
+            <h3>Escolha o Duto:</h3>
+            <select id="dutoSelect" onchange="carregarGraficoAlertas()"></select>
+            <h3>Escolha o periodo:</h3>
+            <select id="periodoSelect" onchange="carregarGraficoAlertas()">
+                <option value="dia">Hoje</option>
+                <option value="semana">Esta Semana</option>
+                <option value="mes">Este Mês</option>
+            </select>
         </div>
 
         <div class="grafico">
@@ -94,158 +70,197 @@
 
 <script>
 
-    // Arrays fixos de dados mockados para cada período
-    const dadosDia = [
-        { sensor: "Sensor 1", alertaAlto: 5, alertaBaixo: 2 },
-        { sensor: "Sensor 2", alertaAlto: 3, alertaBaixo: 1 },
-        { sensor: "Sensor 3", alertaAlto: 7, alertaBaixo: 4 },
-        { sensor: "Sensor 4", alertaAlto: 2, alertaBaixo: 3 }
-    ];
-
-    const dadosSemana = [
-        { sensor: "Sensor 1", alertaAlto: 15, alertaBaixo: 10 },
-        { sensor: "Sensor 2", alertaAlto: 12, alertaBaixo: 8 },
-        { sensor: "Sensor 3", alertaAlto: 20, alertaBaixo: 11 },
-        { sensor: "Sensor 4", alertaAlto: 10, alertaBaixo: 7 }
-    ];
-
-    const dadosMes = [
-        { sensor: "Sensor 1", alertaAlto: 50, alertaBaixo: 30 },
-        { sensor: "Sensor 2", alertaAlto: 40, alertaBaixo: 25 },
-        { sensor: "Sensor 3", alertaAlto: 60, alertaBaixo: 35 },
-        { sensor: "Sensor 4", alertaAlto: 35, alertaBaixo: 20 }
-    ];
-
-    // Função para atualizar o dashboard
-    function atualizarDashboard() {
-        const periodo = document.getElementById("periodoSelect").value;
-
-        let dadosSelecionados = [];
-
-        // Decide qual array usar
-        if (periodo === "dia") {
-            dadosSelecionados = dadosDia;
-        } else if (periodo === "semana") {
-            dadosSelecionados = dadosSemana;
-        } else if (periodo === "mes") {
-            dadosSelecionados = dadosMes;
-        }
-
-        atualizarRanking(dadosSelecionados);
-        atualizarGrafico(dadosSelecionados);
-    }
-
-    // Função para atualizar o ranking
-    function atualizarRanking(dados) {
-        const rankingContainer = document.getElementById("rankingContainer");
-        rankingContainer.innerHTML = "";
-
-        // Calcula o peso (alertaAlto*2 + alertaBaixo)
-        for (let i = 0; i < dados.length; i++) {
-            dados[i].peso = dados[i].alertaBaixo * 2 + dados[i].alertaAlto;
-        }
-
-        // Ordena pelo peso (maior primeiro)
-        dados.sort((a, b) => b.peso - a.peso);
-
-        // Adiciona os 3 primeiros no ranking
-        for (let i = 0; i < 3; i++) {
-            const item = dados[i];
-            const div = document.createElement("div");
-            div.className = "ranking-item";
-            div.innerHTML = `<strong>${i + 1}º - ${item.sensor}</strong><br>
-            Alertas Vazamento: ${item.alertaAlto} | Alertas Entupimento: ${item.alertaBaixo} | <b>Peso:</b> ${item.peso}`;
-            rankingContainer.appendChild(div);
-        }
-    }
-
-    // Função para atualizar o gráfico
-    function atualizarGrafico(dados) {
-        const ctx = document.getElementById('graficoAlertas').getContext('2d');
-
-        const labels = dados.map(d => d.sensor);
-        const alertasAltos = dados.map(d => d.alertaAlto);
-        const alertasBaixos = dados.map(d => d.alertaBaixo);
-
-        const data = {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Alertas Vazamento',
-                    data: alertasAltos,
-                    backgroundColor: 'rgba(255, 0, 0, 0.3)',
-                    borderColor: 'red',
-                    borderWidth: 2
-                },
-                {
-                    label: 'Alertas Entupimento',
-                    data: alertasBaixos,
-                    backgroundColor: 'rgba(255, 165, 0, 0.3)',
-                    borderColor: 'orange',
-                    borderWidth: 2
-                }
-            ]
-        };
-
-        const options = {
-            responsive: true,
-            scales: {
-                x: {
-                    ticks: { color: 'white' },
-                    grid: { color: 'rgba(255,255,255,0.2)' }
-                },
-                y: {
-                    beginAtZero: true,
-                    ticks: { color: 'white' },
-                    grid: { color: 'rgba(255,255,255,0.2)' }
-                }
-            },
-            plugins: {
-                legend: { labels: { color: 'white' } }
-            }
-        };
-
-        // Atualiza ou cria o gráfico
-        if (window.graficoInstance) {
-            window.graficoInstance.data = data;
-            window.graficoInstance.update();
-        } else {
-            window.graficoInstance = new Chart(ctx, {
-                type: 'bar',
-                data,
-                options
-            });
-        }
-    }
-
-
-    function resolverAlerta(checkbox) {
-        const alerta = checkbox.parentElement;
-        const notificacao = document.getElementById("notificacaoResolvido");
-
-        if (checkbox.checked) {
-            alerta.remove();
-
-            // Remove qualquer emoji no começo da string (inclusive ⚠️ ou 🚨)
-            let alertaSemEmoji = alerta.textContent.replace(/^[^\w]+/, '').trim();
-
-            notificacao.innerHTML = `✅ ${alertaSemEmoji}`;
-            notificacao.classList.add("mostrar");
-
-            setTimeout(() => {
-                notificacao.classList.remove("mostrar");
-                notificacao.innerHTML = "";
-            }, 5000);
-        }
-    }
-
-
-    // Inicializa ao carregar
-    window.onload = atualizarDashboard;
-
     function redirecionarHome() { window.location.href = 'dashHome.html' };
     function redirecionarAlerta() { window.location.href = 'dashAlerta.html' };
     function redirecionarComparar() { window.location.href = 'dashComparacao.html' };
     function sair() { window.location.href = '../index.html' }
+
+</script>
+
+<script>
+
+    function carregarDutos() {
+        fetch('/alerta/buscarDutos')
+            .then(res => res.json())
+            .then(data => {
+                const select = document.getElementById("dutoSelect");
+                select.innerHTML = "";
+
+                data.forEach(duto => {
+                    const option = document.createElement("option");
+                    option.value = duto.idDuto;
+                    option.textContent = `Duto ${duto.idDuto}`;
+                    select.appendChild(option);
+                });
+
+                if (data.length > 0) {
+                    carregarGraficoAlertas();
+                }
+            })
+            .catch(err => {
+                console.error("Erro ao carregar dutos:", err);
+            });
+    }
+
+    function obterRanking() {
+
+        fetch("/alerta/ranking")
+            .then(response => response.json())
+            .then(data => {
+                const rankingContainer = document.getElementById("rankingContainer");
+                rankingContainer.innerHTML = "";
+                data.forEach((item, i) => {
+                    const div = document.createElement("div");
+                    div.className = "ranking-item";
+                    div.innerHTML = `<strong>${i + 1}º - Sensor ${item.idSensor} - Duto ${item.fkDuto}</strong><br>
+                Alertas Vazamento: ${item.alertaVazamento} |
+                Alertas Entupimento: ${item.alertaEntupimento} |
+                <b>Peso:</b> ${item.peso}`;
+                    rankingContainer.appendChild(div);
+                });
+            });
+
+    }
+
+    function obterHistorico() {
+
+        fetch("/alerta/historico")
+            .then(response => response.json())
+            .then(data => {
+                const historicoContainer = document.getElementById("historicoContainer");
+                historicoContainer.innerHTML = "";
+                data.forEach(item => {
+                    const tipoEmoji = item.tipoAlerta === "Entupimento" ? "🚨" : "⚠️";
+                    const dataHora = new Date(item.dtRegistro).toLocaleString("pt-BR");
+                    const div = document.createElement("div");
+                    div.className = "historico-item";
+                    div.innerHTML = `
+                    <input type="checkbox" data-id="${item.idAlerta}" onchange="resolverAlerta(this)">
+                    ${tipoEmoji} Alerta de ${item.tipoAlerta} | Sensor ${item.idSensor} | Duto ${item.fkDuto} | ${dataHora}
+                `;
+                    historicoContainer.appendChild(div);
+                });
+            });
+
+    }
+
+    function resolverAlerta(checkbox) {
+        const alerta = checkbox.parentElement;
+        const idAlerta = checkbox.getAttribute("data-id");
+        const notificacao = document.getElementById("notificacaoResolvido");
+
+        if (checkbox.checked) {
+            fetch(`/alerta/resolver/${idAlerta}`, { method: "PUT" })
+                .then(response => {
+                    if (!response.ok) throw new Error("Erro ao resolver alerta");
+                    alerta.remove();
+
+                    // Remove emojis e mostra mensagem de confirmação
+                    let alertaSemEmoji = alerta.textContent.replace(/^[^\w]+/, '').trim();
+                    notificacao.innerHTML = `✅ ${alertaSemEmoji}`;
+                    notificacao.classList.add("mostrar");
+
+                    setTimeout(() => {
+                        notificacao.classList.remove("mostrar");
+                        notificacao.innerHTML = "";
+                    }, 5000);
+                })
+                .catch(error => {
+                    console.error("Erro ao resolver alerta:", error);
+                    alert("Ocorreu um erro ao resolver o alerta.");
+                    checkbox.checked = false;
+                });
+        }
+    }
+
+
+    let graficoAlertasInstance = null;
+
+    function carregarGraficoAlertas() {
+        const idDuto = document.getElementById("dutoSelect").value;
+        const periodo = document.getElementById("periodoSelect").value;
+
+        fetch(`/alerta/grafico/${idDuto}/${periodo}`)
+            .then(response => response.json())
+            .then(data => {
+
+                const labels = data.map(item => `Sensor ${item.idSensor}`);
+                const vazamentos = data.map(item => item.vazamento);
+                const entupimentos = data.map(item => item.entupimento);
+
+                const totalVazamentos = vazamentos.reduce((a, b) => a + b, 0);
+                const totalEntupimentos = entupimentos.reduce((a, b) => a + b, 0);
+
+                if (totalVazamentos == 0 && totalEntupimentos == 0) {
+                    alert("Não há alertas registrados para os filtros selecionados.");
+                }
+
+                const ctx = document.getElementById("graficoAlertas").getContext("2d");
+
+                if (graficoAlertasInstance) {
+                    graficoAlertasInstance.destroy();
+                }
+
+                graficoAlertasInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Vazamento',
+                                data: vazamentos,
+                                backgroundColor: 'rgba(255, 0, 0, 0.3)',
+                                borderColor: 'red',
+                                borderWidth: 2
+                            },
+                            {
+                                label: 'Entupimento',
+                                data: entupimentos,
+                                backgroundColor: 'rgba(255, 165, 0, 0.3)',
+                                borderColor: 'orange',
+                                borderWidth: 2
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    color: 'white' 
+                                }
+                            },
+                            title: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: 'white' 
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.2)' 
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0,
+                                    color: 'white' 
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.2)' 
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("Erro ao carregar gráfico de alertas:", error);
+            });
+    }
 
 </script>
