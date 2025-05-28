@@ -21,6 +21,8 @@ var empresasRouter = require("./src/routes/empresas");
 var dashRouter = require("./src/routes/dash");
 var dutoRouter = require("./src/routes/duto");
 var alertaRouter = require("./src/routes/alerta");
+var bobiaRouter = require("./src/routes/bobia");
+const { blob } = require("stream/consumers");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -34,6 +36,7 @@ app.use("/empresas", empresasRouter);
 app.use("/dash", dashRouter);
 app.use("/duto", dutoRouter);
 app.use("/alerta", alertaRouter);
+app.use("/bobia", bobiaRouter);
 
 
 app.listen(PORTA_APP, function () {

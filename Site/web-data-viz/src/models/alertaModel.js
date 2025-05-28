@@ -24,7 +24,7 @@ function obterRankingSensoresSemana() {
     return database.executar(query);
 }
 
-function obterHistoricoSemanaAtual() {
+function obterHistoricoDiaAtual() {
     const query = `
         SELECT 
             a.idAlerta,
@@ -37,7 +37,7 @@ function obterHistoricoSemanaAtual() {
         JOIN DadosSensor ds ON a.fkDadoSensor = ds.idDado
         JOIN Sensor s ON ds.fkSensor = s.idSensor
         WHERE a.statusAlerta = 'Não resolvido'
-        AND WEEK(ds.dtRegistro, 1) = WEEK(CURDATE(), 1)
+        AND DATE(ds.dtRegistro) = CURDATE()
         AND YEAR(ds.dtRegistro) = YEAR(CURDATE())
         ORDER BY ds.dtRegistro DESC;
     `;
@@ -87,7 +87,7 @@ function listarDutos() {
 
 module.exports = {
     obterRankingSensoresSemana,
-    obterHistoricoSemanaAtual,
+    obterHistoricoDiaAtual,
     marcarComoResolvido,
     graficoAlertas,
     listarDutos

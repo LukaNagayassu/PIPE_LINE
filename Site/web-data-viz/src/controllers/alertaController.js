@@ -10,7 +10,7 @@ function obterRanking(req, res) {
 }
 
 function obterHistorico(req, res) {
-    alertaModel.obterHistoricoSemanaAtual()
+    alertaModel.obterHistoricoDiaAtual()
         .then(resultado => res.json(resultado))
         .catch(erro => {
             console.error("Erro ao obter histórico de alertas:", erro);

@@ -326,7 +326,7 @@
         // Criar novo gráfico
         const ctx = document.getElementById("realtimeChart1").getContext("2d");
         window.chart = new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: {
                 labels: labels,
                 datasets: [
@@ -335,6 +335,7 @@
                         data: valores1,
                         borderColor: 'yellow',
                         backgroundColor: 'rgba(255,255,0,0.1)',
+                        borderWidth: 2,
                         fill: true,
                         tension: 0.3
                     },
@@ -343,6 +344,7 @@
                         data: valores2,
                         borderColor: 'cyan',
                         backgroundColor: 'rgba(0,255,255,0.1)',
+                        borderWidth: 2,
                         fill: true,
                         tension: 0.3
                     }
