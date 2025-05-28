@@ -108,7 +108,7 @@ body {
 
 .top-bar {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     margin-bottom: 20px;
     gap: 15px;
@@ -125,6 +125,8 @@ select {
 }
 
 .ranking, .grafico {
+    width: 80%;
+    margin: auto;
     background-color: #111;
     padding: 20px;
     margin-bottom: 30px;
@@ -145,7 +147,7 @@ select {
 }
 
 canvas {
-    max-width: 100%;
+    width: 100%;
 }
 
 .painel-alertas {
