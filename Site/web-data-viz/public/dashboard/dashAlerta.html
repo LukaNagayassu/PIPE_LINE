@@ -184,6 +184,8 @@
             .then(response => response.json())
             .then(data => {
 
+                console.log(data)
+
                 const labels = data.map(item => `Sensor ${item.idSensor}`);
                 const vazamentos = data.map(item => item.vazamento);
                 const entupimentos = data.map(item => item.entupimento);
@@ -193,6 +195,7 @@
 
                 if (totalVazamentos == 0 && totalEntupimentos == 0) {
                     alert("Não há alertas registrados para os filtros selecionados.");
+                    return;
                 }
 
                 const ctx = document.getElementById("graficoAlertas").getContext("2d");

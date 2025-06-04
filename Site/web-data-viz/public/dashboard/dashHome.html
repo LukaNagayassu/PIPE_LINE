@@ -74,6 +74,7 @@
 </script>
 
 <script>
+    
     function carregarDutos(statusSelecionado = document.getElementById('statusSelect').value) {
         fetch('/duto/dutos')
             .then(response => response.json())
@@ -108,6 +109,8 @@
                     });
                 });
 
+                console.log(dutos)
+
                 dutos.forEach(duto => {
                     const sensores = duto.sensores.map(s => s.status);
                     let exibir = false;
@@ -116,7 +119,7 @@
                         exibir = sensores.includes('Crítico');
                     } else if (statusSelecionado == '2') {
                         exibir = sensores.every(status => status === 'Alerta' || status === 'Estável') &&
-                            sensores.includes('Alerta');
+                        sensores.includes('Alerta');
                     } else if (statusSelecionado == '3') {
                         exibir = sensores.every(status => status === 'Estável');
                     }
@@ -181,11 +184,13 @@
 
     const modalSensor = document.querySelector('.modalSensor');
     const nomeDuto = document.querySelector('#nomeDuto');
+
     function abrirModalSensor(idDuto){
         nomeDuto.innerHTML = `Duto ${idDuto}`
         modalSensor.style.display = 'flex';
         atualizarGrafico(idDuto);
     }
+
     function fecharModal(){
         modalSensor.style.display = 'none';   
     }
@@ -215,12 +220,11 @@
     async function atualizarGrafico(duto) {
         limparGrafico();
         const tempo = selectTempo.value;
-        console.log(tempo)
+
         if (tempo === "Tempo real") {
             iniciarGraficoTempoReal(duto);
             return;
         }
-
 
         clearInterval(intervalo);
         
@@ -248,13 +252,17 @@
             canvas2.remove();
         }
 
-        console.log(tempo)
         const resposta = await fetch(`/dash?duto=${duto}&tempo=${tempo}`);
         const resultado = await resposta.json();
+
+        console.log(resposta)
+        console.log(resultado)
 
         const sensor1 = resultado.sensor1;
         const sensor2 = resultado.sensor2;
         const dados = resultado.dados;
+
+        console.log(dados)
 
         // Separar os dados de cada sensor
         let dadosSensor1 = [];
@@ -269,6 +277,7 @@
             }
         }
 
+
         // Obter todos os labels únicos (horas ou dias)
         let labels = [];
 
@@ -278,6 +287,8 @@
                 labels.push(labelAtual);
             }
         }
+
+        console.log(labels)
 
         // Criar os valores dos sensores com base nos labels
         let valores1 = [];
@@ -323,7 +334,6 @@
         canvas.height = 300;
         document.querySelector(".chart-area").appendChild(canvas);
 
-        // Criar novo gráfico
         const ctx = document.getElementById("realtimeChart1").getContext("2d");
         window.chart = new Chart(ctx, {
             type: 'bar',
@@ -376,7 +386,7 @@
         document.getElementById("realtimeChart1")?.remove();
         document.getElementById("realtimeChart2")?.remove();
 
-        // Passo 1: Buscar sensores
+        // Buscar Sensores
         const respostaSensores = await fetch(`/dash/sensor?duto=${duto}`);
         const { sensor1, sensor2 } = await respostaSensores.json();
 
@@ -386,7 +396,6 @@
         canvas1.height = 300;
         document.querySelector(".chart-area").appendChild(canvas1);
 
-        // Criar canvas do segundo gráfico
         const canvas2 = document.createElement('canvas');
         canvas2.id = "realtimeChart2";
         canvas2.width = 400;
@@ -410,7 +419,7 @@
                 }]
             },
             options: {
-                responsive: false, // Desativa o modo responsivo
+                responsive: false,
                 scales: {
                     x: { ticks: { color: 'white' } },
                     y: { beginAtZero: true, ticks: { color: 'white' } }
@@ -435,7 +444,7 @@
                 }]
             },
             options: {
-                responsive: false, // Desativa o modo responsivo
+                responsive: false, 
                 scales: {
                     x: { ticks: { color: 'white' } },
                     y: { beginAtZero: true, ticks: { color: 'white' } }
@@ -446,7 +455,7 @@
             }
         });
 
-        // Passo 2: Buscar dados dos sensores a cada 2 segundos
+        // Buscar dados dos sensores a cada 2 segundos
         intervalo = setInterval(async () => {
             const res = await fetch(`/dash/tempo-real?duto=${duto}`);
             const dados = await res.json();
@@ -482,7 +491,7 @@
 
     const formatarHora = (dt) => {
         const data = new Date(dt);
-        return data.toLocaleTimeString(); // ou toLocaleString() se quiser data completa
-    };
+        return data.toLocaleTimeString();
+    }
 
 </script> 
