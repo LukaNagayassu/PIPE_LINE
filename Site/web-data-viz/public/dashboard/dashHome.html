@@ -36,7 +36,7 @@
                 <option value="3">Estavel</option>
             </select>
 
-            <h3></h3>
+            <h3 id="mensagem"></h3>
         </div>
 
         <div class="dashboard">
@@ -58,7 +58,9 @@
                         <option value="Horas do Dia">Horas do Dia</option>
                         <option value="Dias da Semana">Dias da Semana</option>
                     </select>
+
                 </div>
+                <div class="msg" id="msg"></div>
             </div>
             <div class="chart-area"></div>
         </div>
@@ -74,8 +76,13 @@
 </script>
 
 <script>
-    
+
+    let exibir = false;
+    const mensagem = document.getElementById('mensagem')
+
     function carregarDutos(statusSelecionado = document.getElementById('statusSelect').value) {
+        mensagem.innerHTML = '';
+
         fetch('/duto/dutos')
             .then(response => response.json())
             .then(data => {
@@ -109,17 +116,14 @@
                     });
                 });
 
-                console.log(dutos)
-
                 dutos.forEach(duto => {
                     const sensores = duto.sensores.map(s => s.status);
-                    let exibir = false;
 
                     if (statusSelecionado == '1') {
                         exibir = sensores.includes('Crítico');
                     } else if (statusSelecionado == '2') {
                         exibir = sensores.every(status => status === 'Alerta' || status === 'Estável') &&
-                        sensores.includes('Alerta');
+                            sensores.includes('Alerta');
                     } else if (statusSelecionado == '3') {
                         exibir = sensores.every(status => status === 'Estável');
                     }
@@ -169,13 +173,33 @@
 
                         dutoContainer.appendChild(ul);
                         dutosContainer.appendChild(dutoContainer);
+
+                        if (statusSelecionado == 1) {
+                            mensagem.innerHTML = `Quantidade de dutos em estado crítico: ${dutos.length}`;
+                        } else if (statusSelecionado == 2) {
+                            mensagem.innerHTML = `Não tem dutos com status em alerta: ${dutos.length}`;
+                        } else if (statusSelecionado == 3) {
+                            mensagem.innerHTML = `Não tem dutos com status estável: ${dutos.length}`;
+                        }
                     }
 
                 });
+
+                if (exibir == false) {
+                    if (statusSelecionado == 1) {
+                        mensagem.innerHTML = 'Não tem dutos com status: Crítico.';
+                    } else if (statusSelecionado == 2) {
+                        mensagem.innerHTML = 'Não tem dutos com status: Alertas.';
+                    } else if (statusSelecionado == 3) {
+                        mensagem.innerHTML = 'Não tem dutos com status: Estável.';
+                    }
+                }
+
             })
             .catch(error => {
                 console.error('Erro ao carregar os dados dos dutos:', error);
             });
+
     }
 
     document.getElementById('statusSelect').addEventListener('change', (event) => {
@@ -185,14 +209,14 @@
     const modalSensor = document.querySelector('.modalSensor');
     const nomeDuto = document.querySelector('#nomeDuto');
 
-    function abrirModalSensor(idDuto){
+    function abrirModalSensor(idDuto) {
         nomeDuto.innerHTML = `Duto ${idDuto}`
         modalSensor.style.display = 'flex';
         atualizarGrafico(idDuto);
     }
 
-    function fecharModal(){
-        modalSensor.style.display = 'none';   
+    function fecharModal() {
+        modalSensor.style.display = 'none';
     }
 
     let chart1, chart2;
@@ -200,18 +224,18 @@
     let dados2 = [], labels2 = [];
     let intervalo;
 
-    function limparGrafico(){
-        if(document.getElementById('realtimeChart1')){
+    function limparGrafico() {
+        if (document.getElementById('realtimeChart1')) {
             document.getElementById('realtimeChart1').remove()
         };
-        if(document.getElementById('realtimeChart2')){
+        if (document.getElementById('realtimeChart2')) {
             document.getElementById('realtimeChart2').remove()
         }
     }
-    
+
     document.addEventListener("DOMContentLoaded", () => {
-    const selectTempo = document.getElementById("selectTempo");
-    selectTempo.addEventListener("change", () => {
+        const selectTempo = document.getElementById("selectTempo");
+        selectTempo.addEventListener("change", () => {
             const duto = sessionStorage.getItem('dutoSelecionado');
             atualizarGrafico(duto);
         });
@@ -226,8 +250,23 @@
             return;
         }
 
+        const data = new Date();
+
+        // Pega o dia atual com dois dígitos
+        let dia_atual = String(data.getDate()).padStart(2, '0');
+
+        // Pega o mês atual com dois dígitos (Janeiro = 0, então soma +1)
+        let mes_atual = String(data.getMonth() + 1).padStart(2, '0');
+
+        // Pega o ano
+        let ano_atual = data.getFullYear();
+
+        // Exibir a data no HTML
+        let msg = document.getElementById('msg');
+        msg.innerHTML = `Data: ${dia_atual}/${mes_atual}/${ano_atual}`;
+
         clearInterval(intervalo);
-        
+
         if (chart1) {
             chart1.destroy();
             chart1 = null;
@@ -324,10 +363,10 @@
             }
         }
 
-        if(document.getElementById("realtimeChart1")){
+        if (document.getElementById("realtimeChart1")) {
             document.getElementById("realtimeChart1").remove();
         }
-        
+
         canvas = document.createElement('canvas');
         canvas.id = "realtimeChart1";
         canvas.width = 850;
@@ -363,10 +402,28 @@
             options: {
                 scales: {
                     x: {
+                        title: {
+                            display: true,
+                            text: 'Tempo',
+                            color: 'white',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
                         ticks: { color: 'white' }
                     },
                     y: {
                         beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Distância (em cm)',
+                            color: 'white',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
                         ticks: { color: 'white' }
                     }
                 },
@@ -376,10 +433,26 @@
                     }
                 }
             }
+
         });
     }
 
     async function iniciarGraficoTempoReal(duto) {
+        const data = new Date();
+
+        // Pega o dia atual com dois dígitos
+        let dia_atual = String(data.getDate()).padStart(2, '0');
+
+        // Pega o mês atual com dois dígitos (Janeiro = 0, então soma +1)
+        let mes_atual = String(data.getMonth() + 1).padStart(2, '0');
+
+        // Pega o ano
+        let ano_atual = data.getFullYear();
+
+        // Exibir a data no HTML
+        let msg = document.getElementById('msg');
+        msg.innerHTML = `Data: ${dia_atual}/${mes_atual}/${ano_atual}`;
+
         clearInterval(intervalo);
         if (chart1) chart1.destroy();
         if (chart2) chart2.destroy();
@@ -421,13 +494,39 @@
             options: {
                 responsive: false,
                 scales: {
-                    x: { ticks: { color: 'white' } },
-                    y: { beginAtZero: true, ticks: { color: 'white' } }
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Tempo',
+                            color: 'white',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
+                        ticks: { color: 'white' }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Distância (em cm)',
+                            color: 'white',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
+                        ticks: { color: 'white' }
+                    }
                 },
                 plugins: {
-                    legend: { labels: { color: 'white' } }
+                    legend: {
+                        labels: { color: 'white' }
+                    }
                 }
             }
+
         });
 
         chart2 = new Chart(ctx2, {
@@ -444,15 +543,41 @@
                 }]
             },
             options: {
-                responsive: false, 
+                responsive: false,
                 scales: {
-                    x: { ticks: { color: 'white' } },
-                    y: { beginAtZero: true, ticks: { color: 'white' } }
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Tempo',
+                            color: 'white',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
+                        ticks: { color: 'white' }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Distância (em cm)',
+                            color: 'white',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
+                        ticks: { color: 'white' }
+                    }
                 },
                 plugins: {
-                    legend: { labels: { color: 'white' } }
+                    legend: {
+                        labels: { color: 'white' }
+                    }
                 }
             }
+
         });
 
         // Buscar dados dos sensores a cada 2 segundos
@@ -494,4 +619,4 @@
         return data.toLocaleTimeString();
     }
 
-</script> 
+</script>
