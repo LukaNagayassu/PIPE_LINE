@@ -320,18 +320,29 @@
             }
         }
 
-
-        // Obter todos os labels únicos (horas ou dias)
         let labels = [];
 
+        const diasEmPortugues = {
+            "Sunday": "Domingo",
+            "Monday": "Segunda-feira",
+            "Tuesday": "Terça-feira",
+            "Wednesday": "Quarta-feira",
+            "Thursday": "Quinta-feira",
+            "Friday": "Sexta-feira",
+            "Saturday": "Sábado"
+        };
+
+        // Atualiza os dados e extrai as labels
         for (let i = 0; i < dados.length; i++) {
-            let labelAtual = dados[i].label;
-            if (!labels.includes(labelAtual)) {
-                labels.push(labelAtual);
+            let labelOriginal = dados[i].label;
+            let labelTraduzido = diasEmPortugues[labelOriginal] || labelOriginal; 
+
+            dados[i].label = labelTraduzido;
+
+            if (!labels.includes(labelTraduzido)) {
+                labels.push(labelTraduzido);
             }
         }
-
-        console.log(labels)
 
         // Criar os valores dos sensores com base nos labels
         let valores1 = [];
@@ -339,6 +350,7 @@
 
         for (let i = 0; i < labels.length; i++) {
             let labelAtual = labels[i];
+
 
             // Procurar se existe valor do sensor 1 com esse label
             let encontrado1 = false;
