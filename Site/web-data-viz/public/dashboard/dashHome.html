@@ -90,6 +90,7 @@
                 dutosContainer.innerHTML = ''; // Limpar a div
 
                 const dutos = [];
+                let qtd_dutos = 0;
 
                 data.forEach(item => {
                     if (!dutos[item.idDuto]) {
@@ -129,6 +130,8 @@
                     }
 
                     if (exibir) {
+                        qtd_dutos++;
+
                         const dutoContainer = document.createElement('div');
                         dutoContainer.classList.add('sensor-status-container');
 
@@ -169,23 +172,24 @@
                             li.appendChild(spanSensorName);
                             li.appendChild(spanStatus);
                             ul.appendChild(li);
+
+                            if (statusSelecionado == 1) {
+                                mensagem.innerHTML = `Quantidade de dutos em estado crítico: ${qtd_dutos}`;
+                            } else if (statusSelecionado == 2) {
+                                mensagem.innerHTML = `Quantidade de dutos em alerta: ${qtd_dutos}`;
+                            } else if (statusSelecionado == 3) {
+                                mensagem.innerHTML = `Quantidade de dutos em estável: ${qtd_dutos}`;
+                            }
                         });
 
                         dutoContainer.appendChild(ul);
                         dutosContainer.appendChild(dutoContainer);
 
-                        if (statusSelecionado == 1) {
-                            mensagem.innerHTML = `Quantidade de dutos em estado crítico: ${dutos.length}`;
-                        } else if (statusSelecionado == 2) {
-                            mensagem.innerHTML = `Não tem dutos com status em alerta: ${dutos.length}`;
-                        } else if (statusSelecionado == 3) {
-                            mensagem.innerHTML = `Não tem dutos com status estável: ${dutos.length}`;
-                        }
                     }
 
                 });
 
-                if (exibir == false) {
+                if (qtd_dutos == 0) {
                     if (statusSelecionado == 1) {
                         mensagem.innerHTML = 'Não tem dutos com status: Crítico.';
                     } else if (statusSelecionado == 2) {
