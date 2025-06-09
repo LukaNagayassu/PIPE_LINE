@@ -346,7 +346,8 @@
             const vazamentos = [];
             const agrupados = {};
 
-            dados.forEach(({ data, tipoAlerta, total }) => {
+
+            dados.forEach(({ data, tipoAlerta, total }) => {    
                 if (!agrupados[data]) {
                     agrupados[data] = { Entupimento: 0, Vazamento: 0 };
                 }
