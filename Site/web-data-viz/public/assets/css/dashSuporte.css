@@ -134,3 +134,14 @@ body {
 .main-content .dashboard a:hover{
     background: yellow;
 }
+.btn_manual{
+    align-self: flex-end;
+    padding: 12px;
+    font-size: 1em;
+    position: absolute;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    background: yellow;
+    border: none;
+}
