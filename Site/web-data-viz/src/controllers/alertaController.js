@@ -41,7 +41,6 @@ function graficoAlertas(req, res){
 
 }
 
-
 async function obterDutos(req, res) {
     try {
         const resultado = await alertaModel.listarDutos();
@@ -52,12 +51,33 @@ async function obterDutos(req, res) {
     }
 }
 
+function listarSensoresComDuto(req, res) {
+    alertaModel.listarSensoresComDuto()
+        .then(resultado => res.json(resultado))
+        .catch(erro => {
+            console.error("Erro ao listar sensores com duto:", erro);
+            res.status(500).json({ erro: "Erro ao buscar sensores" });
+        });
+}
+
+function alertasUltimos10Dias(req, res) {
+    const { idSensor } = req.params;
+
+    alertaModel.alertasUltimos10DiasPorSensor(idSensor)
+        .then(resultado => res.json(resultado))
+        .catch(erro => {
+            console.error("Erro ao buscar alertas dos últimos 10 dias:", erro);
+            res.status(500).json({ erro: "Erro ao buscar alertas" });
+        });
+}
 
 module.exports = {
     obterRanking,
     obterHistorico,
     resolverAlerta,
     graficoAlertas,
-    obterDutos
+    obterDutos,
+    listarSensoresComDuto,
+    alertasUltimos10Dias
 };
 

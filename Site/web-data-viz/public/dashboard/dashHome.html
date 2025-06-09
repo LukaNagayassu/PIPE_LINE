@@ -5,10 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pipeline Consultancy | DashBoard Home</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=send,smart_toy" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=send,smart_toy" />
     <link rel="stylesheet" href="../assets/css/dashHome.css">
     <link rel="stylesheet" href="../assets/css/dashIA.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+
 </head>
 
 <body onload="carregarDutos()">
@@ -233,7 +236,20 @@
     const modalSensor = document.querySelector('.modalSensor');
     const nomeDuto = document.querySelector('#nomeDuto');
 
-    function abrirModalSensor(idDuto) {
+    let max = 0;
+    let min = 0;
+
+    async function abrirModalSensor(idDuto) {
+        await fetch(`/duto/maxmin/${idDuto}`).then(async (resposta) => {
+            if(resposta.ok){
+                const resultado = await resposta.json();
+                max = resultado[0].distanciaMax;
+                min = resultado[0].distanciaMin;
+                console.log(max, min)
+            }
+        });
+
+
         nomeDuto.innerHTML = `Duto ${idDuto}`
         modalSensor.style.display = 'flex';
         atualizarGrafico(idDuto);
@@ -355,7 +371,7 @@
         // Atualiza os dados e extrai as labels
         for (let i = 0; i < dados.length; i++) {
             let labelOriginal = dados[i].label;
-            let labelTraduzido = diasEmPortugues[labelOriginal] || labelOriginal; 
+            let labelTraduzido = diasEmPortugues[labelOriginal] || labelOriginal;
 
             dados[i].label = labelTraduzido;
 
@@ -466,16 +482,47 @@
                 plugins: {
                     legend: {
                         labels: { color: 'white' }
+                    },
+                    annotation: {
+                        annotations: {
+                            maximoRecomendado: {
+                                type: 'line',
+                                yMin: max,
+                                yMax: max,
+                                borderColor: 'rgb(255, 99, 132)',
+                                borderWidth: 2,
+                                borderDash: [6, 6], // Deixa a linha tracejada
+                                label: {
+                                    display: true,
+                                    content: 'Máx. Recomendado',
+                                    position: 'start',
+                                    backgroundColor: 'rgba(255, 99, 132, 0.8)'
+                                }
+                            },
+                            minimoRecomendado: {
+                                type: 'line',
+                                yMin: min,
+                                yMax: min,
+                                borderColor: 'rgb(54, 162, 235)',
+                                borderWidth: 2,
+                                borderDash: [6, 6],
+                                label: {
+                                    display: true,
+                                    content: 'Mín. Recomendado',
+                                    position: 'start',
+                                    backgroundColor: 'rgba(54, 162, 235, 0.8)'
+                                }
+                            }
+                        }
                     }
-                }
+                }    
             }
-
         });
     }
 
     async function iniciarGraficoTempoReal(duto) {
         const data = new Date();
-
+        
         // Pega o dia atual com dois dígitos
         let dia_atual = String(data.getDate()).padStart(2, '0');
 
@@ -523,7 +570,7 @@
                     data: [],
                     borderColor: 'yellow',
                     backgroundColor: 'rgba(255,255,0,0.1)',
-                    fill: true,
+                    fill: false,
                     tension: 0.3
                 }]
             },
@@ -559,6 +606,38 @@
                 plugins: {
                     legend: {
                         labels: { color: 'white' }
+                    },
+                    annotation: {
+                        annotations: {
+                            maximoRecomendado: {
+                                type: 'line',
+                                yMin: max,
+                                yMax: max,
+                                borderColor: 'rgb(255, 99, 132)',
+                                borderWidth: 2,
+                                borderDash: [6, 6], // Deixa a linha tracejada
+                                label: {
+                                    display: true,
+                                    content: 'Máx. Recomendado',
+                                    position: 'start',
+                                    backgroundColor: 'rgba(255, 99, 132, 0.8)'
+                                }
+                            },
+                            minimoRecomendado: {
+                                type: 'line',
+                                yMin: min,
+                                yMax: min,
+                                borderColor: 'rgb(54, 162, 235)',
+                                borderWidth: 2,
+                                borderDash: [6, 6],
+                                label: {
+                                    display: true,
+                                    content: 'Mín. Recomendado',
+                                    position: 'start',
+                                    backgroundColor: 'rgba(54, 162, 235, 0.8)'
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -574,7 +653,7 @@
                     data: [],
                     borderColor: 'cyan',
                     backgroundColor: 'rgba(0,255,255,0.1)',
-                    fill: true,
+                    fill: false,
                     tension: 0.3
                 }]
             },
@@ -610,6 +689,38 @@
                 plugins: {
                     legend: {
                         labels: { color: 'white' }
+                    },
+                    annotation: {
+                        annotations: {
+                            maximoRecomendado: {
+                                type: 'line',
+                                yMin: max,
+                                yMax: max,
+                                borderColor: 'rgb(255, 99, 132)',
+                                borderWidth: 2,
+                                borderDash: [6, 6], // Deixa a linha tracejada
+                                label: {
+                                    display: true,
+                                    content: 'Máx. Recomendado',
+                                    position: 'start',
+                                    backgroundColor: 'rgba(255, 99, 132, 0.8)'
+                                }
+                            },
+                            minimoRecomendado: {
+                                type: 'line',
+                                yMin: min,
+                                yMax: min,
+                                borderColor: 'rgb(54, 162, 235)',
+                                borderWidth: 2,
+                                borderDash: [6, 6],
+                                label: {
+                                    display: true,
+                                    content: 'Mín. Recomendado',
+                                    position: 'start',
+                                    backgroundColor: 'rgba(54, 162, 235, 0.8)'
+                                }
+                            }
+                        }
                     }
                 }
             }

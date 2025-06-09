@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pipeline Consultancy | DashBoard Home</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=send,smart_toy" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=send,smart_toy" />
     <link rel="stylesheet" href="../assets/css/dashAlerta.css">
     <link rel="stylesheet" href="../assets/css/dashIA.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -33,11 +34,13 @@
     </div>
 
     <div class="main-content">
+
         <div class="painel-alertas">
             <!-- Histórico -->
             <div class="historico-box">
                 <h3>📋 Histórico de Alertas do Dia Atual</h3>
                 <div id="historicoContainer" class="scroll-box"></div>
+                <button onclick="historicoGeral()">Ver Historico Geral</button>
             </div>
 
             <!-- Ranking -->
@@ -65,23 +68,41 @@
             <h2>📊 Quantidade de Alertas por Sensor</h2>
             <canvas id="graficoAlertas"></canvas>
         </div>
-        
-    <div class="bob-ia" id="chat_bot">
-        <button onclick="mudarChat()" class="material-symbols-outlined icon">
-            smart_toy
-        </button>
-        <div class="chat" id="chat">
-            <h1>Bob <span>IA</span></h1>
-            <div class="mensagem-container" id="msg_content">
-            </div>
-            <div class="input-mensagem">
-                <input type="text" id="pergunta" placeholder="Mensagem...">
-                <button onclick="gerarResposta()" class="material-symbols-outlined">
-                    send
-                </button>
+
+        <div class="bob-ia" id="chat_bot">
+            <button onclick="mudarChat()" class="material-symbols-outlined icon">
+                smart_toy
+            </button>
+            <div class="chat" id="chat">
+                <h1>Bob <span>IA</span></h1>
+                <div class="mensagem-container" id="msg_content">
+                </div>
+                <div class="input-mensagem">
+                    <input type="text" id="pergunta" placeholder="Mensagem...">
+                    <button onclick="gerarResposta()" class="material-symbols-outlined">
+                        send
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+
+    <div class="modalHistorico">
+        <div class="containerModal">
+            <button class="fecharModal" onclick="fecharModal()">Fechar</button>
+            <div class="infoDuto">
+                <h2 id="nomeDuto">Alertas dos Ultimos 10 dias</h2>
+                <div
+                    style="display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 10px;">
+                    <label for="selectDuto">Selecione o Sensor:</label>
+                    <select id="selectDutoSensor"></select>
+                </div>
+                <div class="msg" id="msg"></div>
+            </div>
+            <div class="chart-area" style="height: auto;">
+                <canvas id="graficoHistorico" style="height: 500px; width: 1000px; margin-top: 20px;"></canvas>
+            </div>
+        </div>
     </div>
 </body>
 
@@ -250,7 +271,7 @@
                             legend: {
                                 position: 'top',
                                 labels: {
-                                    color: 'white' 
+                                    color: 'white'
                                 }
                             },
                             title: {
@@ -260,20 +281,20 @@
                         scales: {
                             x: {
                                 ticks: {
-                                    color: 'white' 
+                                    color: 'white'
                                 },
                                 grid: {
-                                    color: 'rgba(255, 255, 255, 0.2)' 
+                                    color: 'rgba(255, 255, 255, 0.2)'
                                 }
                             },
                             y: {
                                 beginAtZero: true,
                                 ticks: {
                                     precision: 0,
-                                    color: 'white' 
+                                    color: 'white'
                                 },
                                 grid: {
-                                    color: 'rgba(255, 255, 255, 0.2)' 
+                                    color: 'rgba(255, 255, 255, 0.2)'
                                 }
                             }
                         }
@@ -283,6 +304,160 @@
             .catch(error => {
                 console.error("Erro ao carregar gráfico de alertas:", error);
             });
+    }
+
+    async function carregarSensoresModal() {
+        const select = document.querySelector('#selectDutoSensor');
+        select.innerHTML = '';
+
+        try {
+            const resposta = await fetch('/alerta/sensores');
+            const sensores = await resposta.json();
+
+            sensores.forEach(sensor => {
+                const option = document.createElement('option');
+                option.value = sensor.idSensor;
+                option.text = sensor.descricao;
+                select.appendChild(option);
+            });
+
+            // Carrega gráfico para o primeiro sensor automaticamente
+            if (sensores.length > 0) {
+                plotarGrafico(sensores[0].idSensor);
+            }
+
+            select.addEventListener('change', () => {
+                plotarGrafico(select.value);
+            });
+
+        } catch (erro) {
+            document.querySelector('#msg').innerText = "Erro ao carregar sensores";
+            console.error("Erro:", erro);
+        }
+    }
+
+    async function plotarGrafico(idSensor) {
+        try {
+            const resposta = await fetch(`/alerta/ultimos10dias/${idSensor}`);
+            const dados = await resposta.json();
+
+            const datas = [];
+            const entupimentos = [];
+            const vazamentos = [];
+            const agrupados = {};
+
+            dados.forEach(({ data, tipoAlerta, total }) => {
+                if (!agrupados[data]) {
+                    agrupados[data] = { Entupimento: 0, Vazamento: 0 };
+                }
+                agrupados[data][tipoAlerta] = total;
+            });
+
+            Object.entries(agrupados).forEach(([data, contagem]) => {
+                datas.push(data);
+                entupimentos.push(contagem.Entupimento || 0);
+                vazamentos.push(contagem.Vazamento || 0);
+            });
+
+            if (window.alertaChart) {
+                window.alertaChart.destroy();
+            }
+
+            const ctx = document.getElementById('graficoHistorico').getContext('2d');
+            window.alertaChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: datas,
+                    datasets: [
+                        {
+                            label: 'Entupimento',
+                            backgroundColor: 'rgba(255, 0, 0, 0.2)', // vermelho transparente
+                            borderColor: 'red',
+                            borderWidth: 2,
+                            data: entupimentos
+                        },
+                        {
+                            label: 'Vazamento',
+                            backgroundColor: 'rgba(255, 255, 0, 0.2)', // amarelo transparente
+                            borderColor: 'yellow',
+                            borderWidth: 2,
+                            data: vazamentos
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Data',
+                                color: 'white',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255,255,255,0.1)'
+                            },
+                            stacked: false
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Quantidade de alertas',
+                                color: 'white',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                color: 'white',
+                                stepSize: 1
+                            },
+                            grid: {
+                                color: 'rgba(255,255,255,0.1)'
+                            },
+                            stacked: false
+                        }
+                    }
+                }
+            });
+
+        } catch (erro) {
+            document.querySelector('#msg').innerText = "Erro ao carregar alertas";
+            console.error("Erro ao plotar gráfico:", erro);
+        }
+    }
+
+    function historicoGeral() {
+        abrirModalHistorico()
+        carregarSensoresModal()
+    }
+
+    const modalHistorico = document.querySelector('.modalHistorico');
+    const nomeDuto = document.querySelector('#nomeDuto');
+
+    function abrirModalHistorico() {
+        modalHistorico.style.display = 'flex';
+    }
+
+    function fecharModal() {
+        modalHistorico.style.display = 'none';
     }
 
 </script>

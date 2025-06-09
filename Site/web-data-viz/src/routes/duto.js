@@ -4,5 +4,6 @@ const dutoController = require('../controllers/dutoController');
 
 // Rota para buscar os dutos e sensores
 router.get('/dutos', dutoController.obterDutos);
+router.get('/maxmin/:idDuto', dutoController.obterMaxMin);
 
 module.exports = router;

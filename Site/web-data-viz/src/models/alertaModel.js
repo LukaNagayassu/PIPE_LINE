@@ -85,11 +85,41 @@ function listarDutos() {
     return database.executar(instrucao);
 }
 
+function listarSensoresComDuto() {
+    const query = `
+        SELECT 
+            s.idSensor, 
+            s.fkDuto, 
+            CONCAT('Duto ', s.fkDuto, ' - Sensor ', s.idSensor) AS descricao
+        FROM Sensor s
+        ORDER BY s.fkDuto, s.idSensor;
+    `;
+    return database.executar(query);
+}
+
+function alertasUltimos10DiasPorSensor(idSensor) {
+    const query = `
+        SELECT 
+            DATE_FORMAT(ds.dtRegistro, '%Y/%m/%d') AS data,
+            a.tipoAlerta,
+            COUNT(*) AS total
+        FROM Alerta a
+        JOIN DadosSensor ds ON a.fkDadoSensor = ds.idDado
+        WHERE ds.fkSensor = ${idSensor}
+            AND ds.dtRegistro >= CURDATE() - INTERVAL 10 DAY
+        GROUP BY data, a.tipoAlerta
+        ORDER BY data ASC;
+    `;
+    return database.executar(query);
+}
+
 module.exports = {
     obterRankingSensoresSemana,
     obterHistoricoDiaAtual,
     marcarComoResolvido,
     graficoAlertas,
-    listarDutos
+    listarDutos,
+    listarSensoresComDuto,
+    alertasUltimos10DiasPorSensor
 };
 

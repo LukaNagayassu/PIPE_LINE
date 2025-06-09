@@ -22,6 +22,19 @@ function obterDutosSensoresEAlertas() {
     return database.executar(query);
 }
 
+function obterMaxMin(idDuto) {
+    const query = `
+       SELECT 
+            d.distanciaMax,
+            d.distanciaMin
+        FROM Duto d
+        WHERE d.idDuto = ${idDuto}
+    `;
+
+    return database.executar(query);
+}
+
 module.exports = {
-    obterDutosSensoresEAlertas
+    obterDutosSensoresEAlertas,
+    obterMaxMin
 };

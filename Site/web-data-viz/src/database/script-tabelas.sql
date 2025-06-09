@@ -230,7 +230,7 @@ AFTER INSERT ON DadosSensor
 FOR EACH ROW
 BEGIN
     DECLARE diametroDuto INT;
-
+    
     -- Recupera o diâmetro do duto associado ao sensor
     SELECT d.diametro INTO diametroDuto
     FROM Sensor s
