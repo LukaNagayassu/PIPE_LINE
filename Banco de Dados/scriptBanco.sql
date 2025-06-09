@@ -58,7 +58,9 @@ CREATE TABLE Estacao (
 -- Criação da tabela Duto
 CREATE TABLE Duto (
     idDuto INT PRIMARY KEY AUTO_INCREMENT,        
-    diametro INT,                  
+    diametro INT,
+    distanciaMax INT,
+    distanciaMin INT,                  
     fkEstacao INT,
     FOREIGN KEY (fkEstacao) REFERENCES Estacao(idEstacao)
 );
@@ -112,18 +114,18 @@ INSERT INTO Estacao (nome, tipoEstacao, statusEstacao, fkEndereco, fkEmpresa) VA
 ('Estação Norte', 'Bombeamento', 'Ativa', 1, 1),
 ('Estação Sul', 'Monitoramento', 'Ativa', 2, 2);
 
--- Inserção de registros na tabela Duto
-INSERT INTO Duto (diametro, fkEstacao) VALUES 
-(120, 1),
-(80, 2),
-(100, 1),
-(90, 2),
-(140, 1),
-(150, 1),
-(85, 2),
-(105, 1),
-(95, 2),
-(135, 1);
+INSERT INTO Duto (diametro, distanciaMax, distanciaMin, fkEstacao) VALUES 
+(120, 110, 21, 1),
+(80, 73, 14, 2),
+(100, 92, 18, 1),
+(90, 82, 16, 2),
+(140, 128, 25, 1),
+(150, 138, 27, 1),
+(85, 78, 15, 2),
+(105, 96, 18, 1),
+(95, 87, 17, 2),
+(135, 124, 24, 1);
+
 
 -- Inserção de registros na tabela Sensor
 INSERT INTO Sensor (inicioDuto, fkDuto) VALUES 
@@ -153,54 +155,43 @@ DELIMITER $$
 CREATE PROCEDURE InserirDadosSimulados()
 BEGIN
     -- Variáveis de controle
-    DECLARE done INT DEFAULT FALSE;                -- Controla o fim do cursor
-    DECLARE sensorId INT;                          -- Armazena o id do sensor atual
-    DECLARE dutoId INT;                            -- Armazena o id do duto atual
-    DECLARE diametro INT;                          -- Armazena o diâmetro do duto atual
-    DECLARE horaAtual INT;                          -- Controla a hora no loop
-    DECLARE diaAtual INT;                           -- Controla o dia no loop
-    DECLARE distanciaGerada FLOAT;                  -- Armazena o valor da distância gerada
-    DECLARE dadoId INT;                             -- Armazena o último id de dado inserido
-    DECLARE chance FLOAT;                           -- Chance para gerar alerta
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE sensorId INT;
+    DECLARE dutoId INT;
+    DECLARE diametro INT;
+    DECLARE horaAtual INT;
+    DECLARE diaAtual INT;
+    DECLARE distanciaGerada FLOAT;
+    DECLARE dadoId INT;
 
     -- Pega o dia e hora atuais
-    DECLARE diaHoje INT DEFAULT DAY(CURDATE());     -- Dia atual (1-31)
-    DECLARE horaAgora INT DEFAULT HOUR(NOW());      -- Hora atual (0-23)
+    DECLARE diaHoje INT DEFAULT DAY(CURDATE());
+    DECLARE horaAgora INT DEFAULT HOUR(NOW());
 
-    -- Cursor que seleciona todos os sensores junto com seus dutos e diâmetros
+    -- Cursor que seleciona todos os sensores com seus dutos e diâmetros
     DECLARE sensor_cursor CURSOR FOR
         SELECT s.idSensor, d.idDuto, d.diametro
         FROM Sensor s
         JOIN Duto d ON s.fkDuto = d.idDuto;
 
-    -- Handler que muda 'done' para TRUE quando não há mais registros no cursor
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
-    -- Abre o cursor para começar a percorrer os sensores
     OPEN sensor_cursor;
 
-    -- Loop principal que percorre cada sensor
     read_loop: LOOP
-        -- Lê o próximo registro do cursor e joga nas variáveis sensorId, dutoId e diametro
         FETCH sensor_cursor INTO sensorId, dutoId, diametro;
-
-        -- Se não há mais registros, sai do loop
         IF done THEN
             LEAVE read_loop;
         END IF;
 
-        -- Loop para gerar dados para cada dia até hoje
         SET diaAtual = 1;
         WHILE diaAtual <= diaHoje DO
-            -- Loop para gerar dados de cada hora do dia
             SET horaAtual = 0;
             WHILE horaAtual < IF(diaAtual = diaHoje, horaAgora + 1, 24) DO
 
-                -- Gera uma distância aleatória baseada no diâmetro do duto
-                -- A distância fica entre 15% e 95% do diâmetro
-                SET distanciaGerada = ROUND(RAND() * ((0.95 - 0.15) * diametro) + (0.15 * diametro), 2);
+                -- Gera distância entre 2% e 99% do diâmetro
+                SET distanciaGerada = ROUND(RAND() * ((0.99 - 0.02) * diametro) + (0.02 * diametro), 2);
 
-                -- Monta a data e hora do registro usando TIMESTAMP (mais simples que STR_TO_DATE)
                 INSERT INTO DadosSensor (dtRegistro, distancia, fkSensor)
                 VALUES (
                     TIMESTAMP(CONCAT(YEAR(CURDATE()), '-', MONTH(CURDATE()), '-', LPAD(diaAtual, 2, '0'), ' ', LPAD(horaAtual, 2, '0'), ':00:00')),
@@ -208,31 +199,23 @@ BEGIN
                     sensorId
                 );
 
-                -- Guarda o id do dado recém inserido
                 SET dadoId = LAST_INSERT_ID();
 
-                -- Avalia se deve gerar um alerta
-                -- Se a distância for menor que 18% do diâmetro
-                IF distanciaGerada < (0.18 * diametro)  THEN
+                -- Geração de alertas com novos limites
+                IF distanciaGerada < (0.15 * diametro) THEN
                     INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
                     VALUES ('Entupimento', dadoId);
-
-                -- Se a distância for maior que 92% do diâmetro
-                ELSEIF distanciaGerada > (0.92 * diametro)  THEN
+                ELSEIF distanciaGerada > (0.90 * diametro) THEN
                     INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
                     VALUES ('Vazamento', dadoId);
                 END IF;
 
-                -- Avança para a próxima hora
                 SET horaAtual = horaAtual + 1;
             END WHILE;
-
-            -- Avança para o próximo dia
             SET diaAtual = diaAtual + 1;
         END WHILE;
     END LOOP;
 
-    -- Fecha o cursor após finalizar o loop
     CLOSE sensor_cursor;
 END $$
 
@@ -240,36 +223,31 @@ DELIMITER ;
 
 CALL InserirDadosSimulados();
 
-select * from Sensor;
+DELIMITER $$
 
-select * from DadosSensor order by dtRegistro desc limit 1 ;
+CREATE TRIGGER tr_gerar_alerta
+AFTER INSERT ON DadosSensor
+FOR EACH ROW
+BEGIN
+    DECLARE diametroDuto INT;
 
-select * from Alerta;
+    -- Recupera o diâmetro do duto associado ao sensor
+    SELECT d.diametro INTO diametroDuto
+    FROM Sensor s
+    JOIN Duto d ON s.fkDuto = d.idDuto
+    WHERE s.idSensor = NEW.fkSensor;
 
-SELECT 
-     s.idSensor,
-     s.inicioDuto,
-     s.fkDuto AS idDuto,
-     d.diametro,
-     COALESCE(COUNT(a.idAlerta), 0) AS qtdAlertasSemana
-FROM Sensor s
-JOIN Duto d ON s.fkDuto = d.idDuto
-LEFT JOIN DadosSensor ds 
-    ON ds.fkSensor = s.idSensor
-AND WEEK(ds.dtRegistro, 1) = WEEK(CURDATE(), 1) 
-AND YEAR(ds.dtRegistro) = YEAR(CURDATE())
-LEFT JOIN Alerta a 
-    ON a.fkDadoSensor = ds.idDado
-GROUP BY s.idSensor;
-        
-        
-SELECT 
-    s.idSensor,
-    COALESCE(SUM(CASE WHEN a.tipoAlerta = 'Vazamento' THEN 1 ELSE 0 END), 0) AS vazamento,
-    COALESCE(SUM(CASE WHEN a.tipoAlerta = 'Entupimento' THEN 1 ELSE 0 END), 0) AS entupimento
-FROM Sensor s
-LEFT JOIN DadosSensor ds ON s.idSensor = ds.fkSensor AND MONTH(ds.dtRegistro) = MONTH(CURDATE()) AND YEAR(ds.dtRegistro) = YEAR(CURDATE())
-LEFT JOIN Alerta a ON a.fkDadoSensor = ds.idDado
-WHERE s.fkDuto = 4
-GROUP BY s.idSensor
-ORDER BY s.idSensor;
+    -- Verifica se a distância é menor que 15% do diâmetro (entupimento)
+    IF NEW.distancia < (0.15 * diametroDuto) THEN
+        INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
+        VALUES ('Entupimento', NEW.idDado);
+
+    -- Verifica se a distância é maior que 90% do diâmetro (vazamento)
+    ELSEIF NEW.distancia > (0.90 * diametroDuto) THEN
+        INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
+        VALUES ('Vazamento', NEW.idDado);
+    END IF;
+END$$
+
+DELIMITER ;
+
