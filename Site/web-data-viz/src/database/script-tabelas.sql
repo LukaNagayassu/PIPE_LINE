@@ -87,7 +87,7 @@ CREATE TABLE Alerta (
     statusAlerta VARCHAR(20) DEFAULT 'Não resolvido',
     fkDadoSensor INT,
     FOREIGN KEY (fkDadoSensor) REFERENCES DadosSensor(idDado),
-    CONSTRAINT chk_tipoAlerta CHECK (tipoAlerta IN ('Baixo nível de petróleo', 'Alto nível de petróleo')),
+    CONSTRAINT chk_tipoAlerta CHECK (tipoAlerta IN ('Entupimento', 'Vazamento')),
     CONSTRAINT chk_statusAlerta CHECK (statusAlerta IN ('Resolvido', 'Não resolvido'))
 );
 
@@ -212,16 +212,15 @@ BEGIN
                 SET dadoId = LAST_INSERT_ID();
 
                 -- Avalia se deve gerar um alerta
-                SET chance = RAND();
-                -- Se a distância for menor que 18% do diâmetro, chance de 30% de gerar alerta de baixo nível
-                IF distanciaGerada < (0.18 * diametro) AND chance < 0.3 THEN
+                -- Se a distância for menor que 18% do diâmetro
+                IF distanciaGerada < (0.18 * diametro)  THEN
                     INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
-                    VALUES ('Baixo nível de petróleo', dadoId);
+                    VALUES ('Entupimento', dadoId);
 
-                -- Se a distância for maior que 92% do diâmetro, chance de 30% de gerar alerta de alto nível
-                ELSEIF distanciaGerada > (0.92 * diametro) AND chance < 0.3 THEN
+                -- Se a distância for maior que 92% do diâmetro
+                ELSEIF distanciaGerada > (0.92 * diametro)  THEN
                     INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
-                    VALUES ('Alto nível de petróleo', dadoId);
+                    VALUES ('Vazamento', dadoId);
                 END IF;
 
                 -- Avança para a próxima hora
@@ -246,3 +245,31 @@ select * from Sensor;
 select * from DadosSensor order by dtRegistro desc limit 1 ;
 
 select * from Alerta;
+
+SELECT 
+     s.idSensor,
+     s.inicioDuto,
+     s.fkDuto AS idDuto,
+     d.diametro,
+     COALESCE(COUNT(a.idAlerta), 0) AS qtdAlertasSemana
+FROM Sensor s
+JOIN Duto d ON s.fkDuto = d.idDuto
+LEFT JOIN DadosSensor ds 
+    ON ds.fkSensor = s.idSensor
+AND WEEK(ds.dtRegistro, 1) = WEEK(CURDATE(), 1) 
+AND YEAR(ds.dtRegistro) = YEAR(CURDATE())
+LEFT JOIN Alerta a 
+    ON a.fkDadoSensor = ds.idDado
+GROUP BY s.idSensor;
+        
+        
+SELECT 
+    s.idSensor,
+    COALESCE(SUM(CASE WHEN a.tipoAlerta = 'Vazamento' THEN 1 ELSE 0 END), 0) AS vazamento,
+    COALESCE(SUM(CASE WHEN a.tipoAlerta = 'Entupimento' THEN 1 ELSE 0 END), 0) AS entupimento
+FROM Sensor s
+LEFT JOIN DadosSensor ds ON s.idSensor = ds.fkSensor AND MONTH(ds.dtRegistro) = MONTH(CURDATE()) AND YEAR(ds.dtRegistro) = YEAR(CURDATE())
+LEFT JOIN Alerta a ON a.fkDadoSensor = ds.idDado
+WHERE s.fkDuto = 4
+GROUP BY s.idSensor
+ORDER BY s.idSensor;
