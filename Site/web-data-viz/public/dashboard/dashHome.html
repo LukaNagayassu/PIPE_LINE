@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pipeline Consultancy | DashBoard Home</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=send,smart_toy" />
     <link rel="stylesheet" href="../assets/css/dashHome.css">
+    <link rel="stylesheet" href="../assets/css/dashIA.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -21,6 +23,7 @@
         <div class="menu">
             <button class="menu-btn" onclick="redirecionarHome()">Home</button>
             <button class="menu-btn" onclick="redirecionarAlerta()">Alertas</button>
+            <button class="menu-btn" onclick="redirecionarSuporte()">Suporte</button>
         </div>
 
         <div class="logout-section">
@@ -65,6 +68,22 @@
             <div class="chart-area"></div>
         </div>
     </div>
+    <div class="bob-ia" id="chat_bot">
+        <button onclick="mudarChat()" class="material-symbols-outlined icon">
+            smart_toy
+        </button>
+        <div class="chat" id="chat">
+            <h1>Bob <span>IA</span></h1>
+            <div class="mensagem-container" id="msg_content">
+            </div>
+            <div class="input-mensagem">
+                <input type="text" id="pergunta" placeholder="Mensagem...">
+                <button onclick="gerarResposta()" class="material-symbols-outlined">
+                    send
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
@@ -72,6 +91,7 @@
 <script>
     function redirecionarHome() { window.location.href = 'dashHome.html' };
     function redirecionarAlerta() { window.location.href = 'dashAlerta.html' };
+    function redirecionarSuporte() { window.location.href = 'dashSuporte.html' };
     function sair() { window.location.href = '../index.html' }
 </script>
 
@@ -636,3 +656,5 @@
     }
 
 </script>
+
+<script src="../js/bobIA.js"></script>

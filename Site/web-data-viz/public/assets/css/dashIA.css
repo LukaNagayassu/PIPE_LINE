@@ -1,0 +1,111 @@
+
+.bob-ia{
+    position: absolute;
+    bottom: 0px;
+    right: 62px;
+    display: flex;
+    flex-direction: column;
+}
+.bob-ia .icon{
+    outline: none;
+    border: none;
+    background: #525050;
+    color: #FFF;
+    padding: 12px;
+    margin-right: 24px;
+    font-size: 2.5em;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
+    align-self: flex-end;
+    cursor: pointer;
+    transition: .3s;
+}
+.bob-ia .icon:hover{
+    color: yellow;
+}
+
+.bob-ia .chat{
+    overflow: hidden;
+    height: 0px;
+    width: 340px;
+    display: flex;
+    flex-direction: column;
+    background: #525050;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
+    padding-inline: 24px;
+    transition: 1.3s height;
+}
+.bob-ia .chat h1{
+    color: #FFF;
+    margin: 0;
+    margin-top: 24px;
+    gap: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+}
+.bob-ia .chat h1 span{
+    font-size: 0.5em;
+    background: #1b1b1b;
+    padding: 6px 4px 4px 6px;
+    border-radius: 6px;
+    height: fit-content;
+}
+.bob-ia .chat .mensagem-container{
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+}
+.bob-ia .chat .mensagem-container .msg{
+    padding: 8px 12px;
+    width: 250px;
+    border-radius: 8px;
+}
+.bob-ia .chat .mensagem-container .msg h3{
+    margin: 0;
+    margin-bottom: 12px;
+}
+.bob-ia .chat .mensagem-container .msg.usuario{
+    background: #222;
+    align-self: flex-end;
+    color: #FFF;
+}
+.bob-ia .chat .mensagem-container .msg.ia{
+    background: yellow;
+    color: #000;
+}
+.bob-ia .chat .mensagem-container .msg.ia h3{
+    color: #000;
+}
+.bob-ia .chat .input-mensagem{
+    display: flex;
+    width: 100%;
+    margin: 12px 0;
+    border-radius: 8px;
+    background: #222;
+}
+.bob-ia .chat .input-mensagem input{
+    flex: 1;
+    padding: 12px;
+    background: transparent;
+    border-radius: 8px;
+    border: none;
+    color: #FFF;
+    font-size: 1em;
+    outline: none;
+}
+.bob-ia .chat .input-mensagem button{
+    background: transparent;
+    border: none;
+    color: #FFF;
+    cursor: pointer;
+}
+
+.bob-ia .chat .input-mensagem button:hover{
+    color: yellow;
+}
