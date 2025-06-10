@@ -45,6 +45,12 @@
             </div>
         </div>
     </section>
+    <div class="modal" id="modalLogin">
+        <div class="containerModal">
+            <h1>Login Realizado Com Sucesso!</h1>
+            <p>Redirecionando para a tela de Dash :D</p>
+        </div>
+    </div>
 </body>
 
 <script>
@@ -85,15 +91,11 @@
                         sessionStorage.FK_EMPRESA = json.fkEmpresa;
                         sessionStorage.CARGO= json.cargo;
 
-                        if(sessionStorage.CARGO == 'Suporte'){
-                            setTimeout(function () {
-                                window.location = "./dashboard/dashSuporte.html";
-                            }, 1000); // apenas para exibir o loading
-                        } else{
+                        modalLogin.style.display = 'flex';
                             setTimeout(function () {
                                 window.location = "./dashboard/dashHome.html";
                             }, 1000);
-                        }
+                        
 
                     });
 

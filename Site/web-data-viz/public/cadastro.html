@@ -71,6 +71,13 @@
 
         </div>
     </section>
+
+    <div class="modal" id="modalCadastro">
+        <div class="containerModal">
+            <h1>Cadastro Realizado Com Sucesso!</h1>
+            <p>Redirecionando para o login :D</p>
+        </div>
+    </div>
 </body>
 
 <script>
@@ -147,8 +154,7 @@
 
                 if (resposta.ok) {
 
-                    msg.innerHTML =
-                        "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
+                    modalCadastro.style.display = 'flex';
 
                     setTimeout(() => {
                         window.location = "login.html";
