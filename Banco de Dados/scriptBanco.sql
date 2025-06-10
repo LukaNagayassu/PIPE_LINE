@@ -189,8 +189,8 @@ BEGIN
             SET horaAtual = 0;
             WHILE horaAtual < IF(diaAtual = diaHoje, horaAgora + 1, 24) DO
 
-                -- Gera distância entre 2% e 99% do diâmetro
-                SET distanciaGerada = ROUND(RAND() * ((0.99 - 0.02) * diametro) + (0.02 * diametro), 2);
+                -- Gera distância entre 10% e 90% do diâmetro
+                SET distanciaGerada = ROUND(RAND() * ((0.90 - 0.1) * diametro) + (0.1 * diametro), 2);
 
                 INSERT INTO DadosSensor (dtRegistro, distancia, fkSensor)
                 VALUES (
@@ -202,7 +202,7 @@ BEGIN
                 SET dadoId = LAST_INSERT_ID();
 
                 -- Geração de alertas com novos limites
-                IF distanciaGerada < (0.15 * diametro) THEN
+                IF distanciaGerada < (0.10 * diametro) THEN
                     INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
                     VALUES ('Entupimento', dadoId);
                 ELSEIF distanciaGerada > (0.90 * diametro) THEN
