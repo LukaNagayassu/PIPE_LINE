@@ -237,8 +237,8 @@ BEGIN
     JOIN Duto d ON s.fkDuto = d.idDuto
     WHERE s.idSensor = NEW.fkSensor;
 
-    -- Verifica se a distância é menor que 15% do diâmetro (entupimento)
-    IF NEW.distancia < (0.15 * diametroDuto) THEN
+    -- Verifica se a distância é menor que 10% do diâmetro (entupimento)
+    IF NEW.distancia < (0.10 * diametroDuto) THEN
         INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
         VALUES ('Entupimento', NEW.idDado);
 
