@@ -190,7 +190,7 @@ BEGIN
             WHILE horaAtual < IF(diaAtual = diaHoje, horaAgora + 1, 24) DO
 
                 -- Gera distância entre 6% e 94% do diâmetro
-                SET distanciaGerada = ROUND(RAND() * ((0.94 - 0.06) * diametro) + (0.06 * diametro), 2);
+                SET distanciaGerada = ROUND(RAND() * ((0.92 - 0.085) * diametro) + (0.06 * diametro), 2);
 
                 INSERT INTO DadosSensor (dtRegistro, distancia, fkSensor)
                 VALUES (
