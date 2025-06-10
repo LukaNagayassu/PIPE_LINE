@@ -162,6 +162,36 @@ h3 {
     text-align: center;
 }
 
+.filters .kpi{
+    display: flex;
+    gap: 12px;
+}
+.filters .kpi .item{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px;
+    gap: 4px;
+    background-color: #474747;
+    border-radius: 4px;
+}
+.filters .kpi .item p{
+    margin: 0;
+    color: #FFF;
+}
+.filters .kpi .item h3{
+    margin: 0;
+}
+.filters .kpi .item:has(#qtde_estavel){
+    background-color: #0e6b0e;
+}
+.filters .kpi .item:has(#qtde_alerta){
+    background-color: #c99014;
+}
+.filters .kpi .item:has(#qtde_critico){
+    background-color: #b91414;
+}
+
 /* Painel principal */
 .dashboard {
     display: flex;

@@ -41,8 +41,24 @@
                 <option value="2">Alerta</option>
                 <option value="3">Estavel</option>
             </select>
-
-            <h3 id="mensagem"></h3>
+            <div class="kpi">
+                <div class="item">
+                    <p>Quantidade Dutos:</p>
+                    <h3 id="qtde_total">10</h3>
+                </div>
+                <div class="item">
+                    <p>Quantidade Dutos Critico:</p>
+                    <h3 id="qtde_critico">10</h3>
+                </div>
+                <div class="item">
+                    <p>Quantidade Dutos Alerta:</p>
+                    <h3 id="qtde_alerta">10</h3>
+                </div>
+                <div class="item">
+                    <p>Quantidade Dutos Estavel:</p>
+                    <h3 id="qtde_estavel">10</h3>
+                </div>
+            </div>
         </div>
 
         <div class="dashboard">
@@ -99,12 +115,70 @@
 </script>
 
 <script>
+    async function kpi(){
+        await fetch('/duto/dutos').then(response => response.json()).then(data =>{
+            qtde_total.innerText = data.length;
+            console.log(data);
+            const dutos = [];
+            data.forEach(item => {
+                if (!dutos[item.idDuto]) {
+                    dutos[item.idDuto] = {
+                        idDuto: item.idDuto,
+                        diametro: item.diametro,
+                        sensores: []
+                    };
+                }
+
+                let statusSensor = '';
+                if (item.qtdAlertasSemana > 5) {
+                    statusSensor = 'Crítico';
+                } else if (item.qtdAlertasSemana == 5) {
+                    statusSensor = 'Alerta';
+                } else {
+                    statusSensor = 'Estável';
+                }
+
+                dutos[item.idDuto].sensores.push({
+                    idSensor: item.idSensor,
+                    tipo: item.inicioDuto === 1 ? 'Início' : 'Fim',
+                    status: statusSensor
+                });
+            });
+            let qtdeCritico = 0;
+            let qtdeAlerta = 0;
+            let qtdeEstavel = 0;
+            dutos.forEach((duto) => {
+                const sensores = duto.sensores.map(s => s.status);
+                let dutoCritico = false;
+                let dutoAlerta = false;
+                let dutoEstavel = false;
+                sensores.forEach((sensor) => {
+                    if(sensor == 'Crítico'){
+                        dutoCritico = true;
+                    } else if(sensor == 'Alerta'){
+                        dutoAlerta = true;;
+                    } else if(sensor == 'Estável'){
+                        dutoEstavel = true;
+                    }
+                });
+                if(dutoCritico){
+                    qtdeCritico++;
+                } else if(dutoAlerta){
+                    qtdeAlerta++;
+                } else if(dutoEstavel){
+                    qtdeEstavel++;
+                }
+            });
+            qtde_estavel.innerText = qtdeEstavel;
+            qtde_alerta.innerText = qtdeAlerta;
+            qtde_critico.innerText = qtdeCritico;
+        })
+    }
+    kpi();
 
     let exibir = false;
-    const mensagem = document.getElementById('mensagem')
 
     function carregarDutos(statusSelecionado = document.getElementById('statusSelect').value) {
-        mensagem.innerHTML = '';
 
         fetch('/duto/dutos')
             .then(response => response.json())
@@ -195,14 +269,6 @@
                             li.appendChild(spanSensorName);
                             li.appendChild(spanStatus);
                             ul.appendChild(li);
-
-                            if (statusSelecionado == 1) {
-                                mensagem.innerHTML = `Quantidade de dutos em estado crítico: ${qtd_dutos}`;
-                            } else if (statusSelecionado == 2) {
-                                mensagem.innerHTML = `Quantidade de dutos em alerta: ${qtd_dutos}`;
-                            } else if (statusSelecionado == 3) {
-                                mensagem.innerHTML = `Quantidade de dutos em estável: ${qtd_dutos}`;
-                            }
                         });
 
                         dutoContainer.appendChild(ul);
@@ -214,11 +280,11 @@
 
                 if (qtd_dutos == 0) {
                     if (statusSelecionado == 1) {
-                        mensagem.innerHTML = 'Não tem dutos com status: Crítico.';
+                        dutosContainer.innerHTML = 'Não tem dutos com status: Crítico.';
                     } else if (statusSelecionado == 2) {
-                        mensagem.innerHTML = 'Não tem dutos com status: Alertas.';
+                        dutosContainer.innerHTML = 'Não tem dutos com status: Alertas.';
                     } else if (statusSelecionado == 3) {
-                        mensagem.innerHTML = 'Não tem dutos com status: Estável.';
+                        dutosContainer.innerHTML = 'Não tem dutos com status: Estável.';
                     }
                 }
 
