@@ -117,7 +117,7 @@
 <script>
     async function kpi(){
         await fetch('/duto/dutos').then(response => response.json()).then(data =>{
-            qtde_total.innerText = data.length;
+            qtde_total.innerText = data.length/2;
             console.log(data);
             const dutos = [];
             data.forEach(item => {
