@@ -189,8 +189,8 @@ BEGIN
             SET horaAtual = 0;
             WHILE horaAtual < IF(diaAtual = diaHoje, horaAgora + 1, 24) DO
 
-                -- Gera distância entre 10% e 90% do diâmetro
-                SET distanciaGerada = ROUND(RAND() * ((0.90 - 0.1) * diametro) + (0.1 * diametro), 2);
+                -- Gera distância entre 6% e 94% do diâmetro
+                SET distanciaGerada = ROUND(RAND() * ((0.94 - 0.06) * diametro) + (0.06 * diametro), 2);
 
                 INSERT INTO DadosSensor (dtRegistro, distancia, fkSensor)
                 VALUES (
@@ -202,10 +202,10 @@ BEGIN
                 SET dadoId = LAST_INSERT_ID();
 
                 -- Geração de alertas com novos limites
-                IF distanciaGerada < (0.10 * diametro) THEN
+                IF distanciaGerada < (0.14 * diametro) THEN
                     INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
                     VALUES ('Entupimento', dadoId);
-                ELSEIF distanciaGerada > (0.90 * diametro) THEN
+                ELSEIF distanciaGerada > (0.86 * diametro) THEN
                     INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
                     VALUES ('Vazamento', dadoId);
                 END IF;
@@ -237,13 +237,13 @@ BEGIN
     JOIN Duto d ON s.fkDuto = d.idDuto
     WHERE s.idSensor = NEW.fkSensor;
 
-    -- Verifica se a distância é menor que 10% do diâmetro (entupimento)
-    IF NEW.distancia < (0.10 * diametroDuto) THEN
+    -- Verifica se a distância é menor que 6% do diâmetro (entupimento)
+    IF NEW.distancia < (0.06 * diametroDuto) THEN
         INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
         VALUES ('Entupimento', NEW.idDado);
 
-    -- Verifica se a distância é maior que 90% do diâmetro (vazamento)
-    ELSEIF NEW.distancia > (0.90 * diametroDuto) THEN
+    -- Verifica se a distância é maior que 86% do diâmetro (vazamento)
+    ELSEIF NEW.distancia > (0.86 * diametroDuto) THEN
         INSERT INTO Alerta (tipoAlerta, fkDadoSensor)
         VALUES ('Vazamento', NEW.idDado);
     END IF;
