@@ -45,11 +45,11 @@
                     <label for="slt_cargo">
                         Cargo:
                     </label>
-                    <select id="slt_cargo">
+                    <!-- <select id="slt_cargo">
                         <option value="Analista">Analista</option>
                         <option value="Suporte">Suporte</option>
                         <option value="Gestor">Gestor</option>
-                    </select>
+                    </select> -->
                     <label for="ipt_email">Email:
                         <span id="email_invalida"></span>
                     </label>
@@ -90,7 +90,7 @@
         const email = ipt_email.value;
         const senha = ipt_senha.value;
         const senhaConfirm = ipt_senha_confirm.value;
-        const cargo = slt_cargo.value;
+        const cargo = "Analista";
         const codigoVar = ipt_codigo.value;
 
         // Expressões regulares
